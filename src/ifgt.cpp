@@ -26,7 +26,7 @@ arma::vec ifgt(const arma::mat& X, const arma::mat& Y, double h, double epsilon,
 arma::vec ifgt(const arma::mat& X, const arma::mat& Y, double h, double epsilon,
                const arma::mat& q, const Parameters& params)
 {
-    Clusters clusters = cluster(X, params.k);
+    Clusters clusters(X, params.k);
     return ifgt(X, Y, h, epsilon, q, params, clusters);
 }
 
