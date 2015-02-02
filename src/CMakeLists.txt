@@ -1,5 +1,6 @@
 set(src
     choose_parameters.cpp
+    choose_truncation_number.cpp
     )
 
 
