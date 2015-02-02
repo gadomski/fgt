@@ -12,6 +12,10 @@ set(LIBRARY_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/lib)
 option(BUILD_TESTS "Build test suite" ON)
 
 
+# Dependencies
+find_package(Armadillo 4.500.1 REQUIRED)
+
+
 # Targets
 set(IFGT_LIB_TARGET ifgt-lib)
 set(IFGT_LIB_NAME ifgt)
