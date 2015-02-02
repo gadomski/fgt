@@ -16,8 +16,14 @@ namespace
 
 
     static const int TruncationNumberUpperLimit = 200;
+    static const int KLimitFactor = 20;
+
+}
 
 
+Parameters choose_parameters(int d, double h, double epsilon)
+{
+    return choose_parameters(d, h, epsilon, std::round(KLimitFactor / h));
 }
 
 
