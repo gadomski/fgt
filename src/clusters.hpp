@@ -2,13 +2,17 @@
 
 #include <armadillo>
 
+#include "KMlocal.h"
+
 
 namespace ifgt
 {
 
 
-class Clusters
-{};
+struct Clusters
+{
+    KMfilterCenters centers;
+};
 
 
 Clusters cluster(const arma::mat& X, int K);

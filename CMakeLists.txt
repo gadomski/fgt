@@ -21,8 +21,12 @@ set(IFGT_LIB_TARGET ifgt-lib)
 set(IFGT_LIB_NAME ifgt)
 set(IFGT_TEST_TARGET ifgt-test)
 
+set(KMLOCAL_LIB_TARGET kmlocal-lib)
+set(KMLOCAL_LIB_NAME kmlocal)
+
 
 # Subdirectories
+add_subdirectory(vendor/kmlocal-1.7.2)
 add_subdirectory(src)
 
 if(BUILD_TESTS)

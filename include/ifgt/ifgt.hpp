@@ -6,7 +6,7 @@ namespace ifgt
 
 
 struct Parameters;
-class Clusters;
+struct Clusters;
 
 
 arma::vec ifgt(const arma::mat& X, const arma::mat& Y, double h, double epsilon);

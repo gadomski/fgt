@@ -1,6 +1,7 @@
 set(src
     choose_parameters.cpp
     choose_truncation_number.cpp
+    clusters.cpp
     ifgt.cpp
     )
 
@@ -12,6 +13,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
     ${ARMADILLO_INCLUDE_DIRS}
+    ${kmlocal_SOURCE_DIR}/src
     )
 
 add_library(${IFGT_LIB_TARGET} ${src})
