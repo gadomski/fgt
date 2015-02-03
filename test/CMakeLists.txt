@@ -1,3 +1,8 @@
+configure_file(
+    config.hpp.in
+    ${CMAKE_CURRENT_BINARY_DIR}/config.hpp
+    )
+
 set(src
     choose_parameters_test.cpp
     choose_truncation_number_test.cpp
@@ -7,12 +12,12 @@ set(src
 set(deps
     ${IFGT_LIB_TARGET}
     gtest_main
-    ${KMLOCAL_LIB_TARGET}
     )
 
 include_directories(
-    ${gtest_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${gtest_SOURCE_DIR}/include
     ${kmlocal_SOURCE_DIR}/src
     )
 
