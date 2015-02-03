@@ -7,7 +7,7 @@ namespace ifgt
 
 struct Parameters
 {
-    int k;
+    int K;
     int p_max;
     double r;
 };

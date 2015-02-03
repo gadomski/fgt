@@ -1,8 +1,12 @@
 set(src
     choose_parameters.cpp
     choose_truncation_number.cpp
-    clusters.cpp
+    clustering.cpp
+    clustering/gonzalez.cpp
+    clustering_factory.cpp
+    constant_series.cpp
     ifgt.cpp
+    monomials.cpp
     )
 
 set(deps

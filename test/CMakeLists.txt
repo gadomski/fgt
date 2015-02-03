@@ -6,7 +6,10 @@ configure_file(
 set(src
     choose_parameters_test.cpp
     choose_truncation_number_test.cpp
-    clusters_test.cpp
+    clustering/gonzalez_test.cpp
+    constant_series_test.cpp
+    ifgt_test.cpp
+    monomials_test.cpp
     )
 
 set(deps
@@ -15,10 +18,10 @@ set(deps
     )
 
 include_directories(
+    ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}
     ${gtest_SOURCE_DIR}/include
-    ${kmlocal_SOURCE_DIR}/src
     )
 
 add_executable(${IFGT_TEST_TARGET} ${src})

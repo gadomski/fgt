@@ -1,21 +1,22 @@
 #include <armadillo>
 
+#include <ifgt/clustering.hpp>
+
 
 namespace ifgt
 {
 
 
 struct Parameters;
-class Clusters;
 
 
 arma::vec ifgt(const arma::mat& X, const arma::mat& Y, double h, double epsilon);
 arma::vec ifgt(const arma::mat& X, const arma::mat& Y, double h, double epsilon,
-               const arma::mat& q);
+               const arma::vec& q);
 arma::vec ifgt(const arma::mat& X, const arma::mat& Y, double h, double epsilon,
-               const arma::mat& q, const Parameters& params);
-arma::vec ifgt(const arma::mat& X, const arma::mat& Y, double h, double epsilon,
-               const arma::mat& q, const Parameters& params, const Clusters& clusters);
+               const arma::vec& q, const Parameters& params);
+arma::vec ifgt(const ClusteringUnqPtr& clustering, const arma::mat& Y,
+        double h, const Parameters& params);
 
 
 }
