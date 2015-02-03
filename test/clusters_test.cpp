@@ -15,7 +15,7 @@ TEST(Clusters, Interface)
     arma::mat X;
     X.load(test_data_path("cluster-test.csv"));
     int K = 20;
-    Clusters clusters = compute_clusters(X, K);
+    Clusters clusters = compute_clusters(X, K, 2);
 
     std::vector<arma::uword> expected_num_points =
         {287, 124, 107, 123, 514, 195, 122, 141, 410,

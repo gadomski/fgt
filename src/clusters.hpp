@@ -35,6 +35,7 @@ public:
     }
 
     void compute();
+    void use_starting_idx(arma::uword starting_idx);
 
 private:
 
@@ -44,11 +45,14 @@ private:
     arma::uvec m_num_points;
     arma::vec m_radii;
     double m_rx;
+    bool m_fixed_starting_idx;
+    arma::uword m_starting_idx;
 
 };
 
 
 Clusters compute_clusters(const arma::mat& X, int K);
+Clusters compute_clusters(const arma::mat& X, int K, arma::uword starting_idx);
 
 
 }

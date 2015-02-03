@@ -27,6 +27,8 @@ Clusters::Clusters(const arma::mat& X, int K)
     , m_num_points(arma::zeros<arma::uvec>(K))
     , m_radii(K)
     , m_rx()
+    , m_fixed_starting_idx(false)
+    , m_starting_idx()
 {}
 
 
@@ -40,9 +42,16 @@ void Clusters::compute()
     arma::uvec far2c(K);
     arma::vec dist(N);
 
-    std::random_device rd;
-    //arma::uword nc = rd() % N;
-    arma::uword nc = 2;
+    arma::uword nc;
+    if (m_fixed_starting_idx)
+    {
+        nc = m_starting_idx;
+    }
+    else
+    {
+        std::random_device rd;
+        nc = rd() % N;
+    }
     centers[0] = nc;
 
     for (arma::uword i = 0; i < N; ++i)
@@ -136,9 +145,25 @@ void Clusters::compute()
 }
 
 
+void Clusters::use_starting_idx(arma::uword starting_idx)
+{
+    m_fixed_starting_idx = true;
+    m_starting_idx = starting_idx;
+}
+
+
 Clusters compute_clusters(const arma::mat& X, int K)
 {
     Clusters clusters(X, K);
+    clusters.compute();
+    return clusters;
+}
+
+
+Clusters compute_clusters(const arma::mat& X, int K, arma::uword starting_idx)
+{
+    Clusters clusters(X, K);
+    clusters.use_starting_idx(starting_idx);
     clusters.compute();
     return clusters;
 }
