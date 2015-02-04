@@ -19,9 +19,9 @@ double ddist(const arma::rowvec& x, const arma::rowvec& y)
 
 
 
-Gonzalez::Gonzalez(const arma::mat& X, const arma::vec& q, int K, double h, double epsilon,
+Gonzalez::Gonzalez(const arma::mat& X, int K, double h, double epsilon,
         bool use_starting_idx, arma::uword starting_idx)
-    : Clustering(X, q, K, h, epsilon)
+    : Clustering(X, K, h, epsilon)
     , m_use_starting_idx(use_starting_idx)
     , m_starting_idx(starting_idx)
 {}

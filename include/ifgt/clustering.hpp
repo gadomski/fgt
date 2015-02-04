@@ -13,7 +13,7 @@ class Clustering
 {
 public:
 
-    Clustering(const arma::mat& X, const arma::vec& q, int K, double h, double epsilon);
+    Clustering(const arma::mat& X, int K, double h, double epsilon);
 
     virtual ~Clustering();
 
@@ -61,10 +61,6 @@ public:
     {
         return m_p_max;
     }
-    inline const arma::mat& get_C() const
-    {
-        return m_C;
-    }
     inline arma::uword get_d() const
     {
         return m_X.n_cols;
@@ -96,14 +92,13 @@ public:
     }
 
     void compute();
+    arma::mat find_C(const arma::vec& q);
 
 private:
 
     virtual void cluster() = 0;
-    void compute_C();
 
     const arma::mat& m_X;
-    const arma::vec& m_q;
     arma::uvec m_indices;
     arma::mat m_centers;
     arma::uvec m_num_points;
@@ -112,6 +107,7 @@ private:
     double m_h;
     double m_epsilon;
     arma::uword m_p_max;
+    arma::rowvec m_constant_series;
 
 };
 

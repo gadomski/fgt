@@ -19,9 +19,8 @@ TEST(GonzalezClustering, ReferenceImplementation)
     int K = 15;
     double h = 0.4;
     double epsilon = 1e-3;
-    arma::vec q = arma::ones<arma::vec>(5000);
 
-    ClusteringUnqPtr clustering(new Gonzalez(X, q, K, h, epsilon, true, 2));
+    ClusteringUnqPtr clustering(new Gonzalez(X, K, h, epsilon, true, 2));
     clustering->compute();
 
     std::vector<arma::uword> expected_num_points = {167, 167, 185, 470, 482, 168, 177, 179, 571, 356, 825, 167, 417, 362, 307};
@@ -35,7 +34,6 @@ TEST(GonzalezClustering, ReferenceImplementation)
     EXPECT_NEAR(0.0799, clustering->get_radius(0), 0.0001);
     EXPECT_NEAR(0.1838, clustering->get_rx(), 0.0001);
     EXPECT_TRUE(clustering->get_p_max() > 0);
-    EXPECT_EQ(15, clustering->get_C().n_rows);
 }
 
 

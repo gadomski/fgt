@@ -26,10 +26,10 @@ TEST(Ifgt, ReferenceImplementation)
     arma::vec q = arma::ones<arma::vec>(X.n_rows);
 
     Parameters params = choose_parameters(X.n_cols, h, epsilon, 50);
-    ClusteringUnqPtr clustering(new Gonzalez(X, q, params.K, h, epsilon, true, 2));
+    ClusteringUnqPtr clustering(new Gonzalez(X, params.K, h, epsilon, true, 2));
     clustering->compute();
 
-    arma::vec G = ifgt(clustering, Y, h, params);
+    arma::vec G = ifgt(clustering, Y, h, q, params);
 
     EXPECT_EQ(G.n_rows, 5000);
     EXPECT_NEAR(359.4559, arma::min(G), 0.0001);

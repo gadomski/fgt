@@ -9,7 +9,7 @@ class Gonzalez : public Clustering
 {
 public:
 
-    Gonzalez(const arma::mat& X, const arma::vec& q, int K, double h, double epsilon,
+    Gonzalez(const arma::mat& X, int K, double h, double epsilon,
             bool use_starting_idx, arma::uword starting_idx);
 
 private:
