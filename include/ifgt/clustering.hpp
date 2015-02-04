@@ -112,7 +112,6 @@ private:
     double m_h;
     double m_epsilon;
     arma::uword m_p_max;
-    arma::mat m_C;
 
 };
 
