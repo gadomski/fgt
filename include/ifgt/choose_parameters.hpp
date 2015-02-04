@@ -2,7 +2,7 @@
 
 #include <armadillo>
 
-#include "parameters.hpp"
+#include <ifgt/parameters.hpp>
 
 
 namespace ifgt

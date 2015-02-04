@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "choose_parameters.hpp"
+#include <ifgt/choose_parameters.hpp>
 
 #include <armadillo>
 
