@@ -1,4 +1,4 @@
-#include "clustering_factory.hpp"
+#include <ifgt/clustering_factory.hpp>
 
 #include "clustering/gonzalez.hpp"
 

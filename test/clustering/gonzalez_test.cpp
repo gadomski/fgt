@@ -3,7 +3,8 @@
 
 #include <armadillo>
 
-#include "clustering_factory.hpp"
+#include <ifgt/clustering_factory.hpp>
+
 #include "config.hpp"
 
 

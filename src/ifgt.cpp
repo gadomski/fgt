@@ -1,7 +1,8 @@
 #include <ifgt/ifgt.hpp>
 
+#include <ifgt/clustering_factory.hpp>
+
 #include "choose_parameters.hpp"
-#include "clustering_factory.hpp"
 #include "monomials.hpp"
 
 
