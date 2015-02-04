@@ -44,7 +44,7 @@ void Clustering::compute()
 
 void Clustering::compute_C()
 {
-    m_C = arma::zeros<arma::mat>(m_centers.n_rows, get_p_max_total(m_X.n_cols, m_p_max)); 
+    m_C = arma::zeros<arma::mat>(m_centers.n_rows, get_p_max_total(m_X.n_cols, m_p_max));
     double h2 = m_h * m_h;
 
     for (arma::uword i = 0; i < m_X.n_rows; ++i)
