@@ -23,6 +23,7 @@ set(IFGT_TEST_TARGET ifgt-test)
 
 
 # Subdirectories
+add_subdirectory(include)
 add_subdirectory(src)
 
 if(BUILD_TESTS)
