@@ -4,12 +4,12 @@ configure_file(
     )
 
 set(src
-    choose_parameters_test.cpp
     choose_truncation_number_test.cpp
     clustering/gonzalez_test.cpp
     constant_series_test.cpp
     ifgt_test.cpp
     monomials_test.cpp
+    parameters_test.cpp
     )
 
 set(deps

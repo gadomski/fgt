@@ -1,4 +1,4 @@
-#include <ifgt/choose_parameters.hpp>
+#include <ifgt/parameters.hpp>
 
 #include <algorithm>
 #include <cmath>

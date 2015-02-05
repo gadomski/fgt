@@ -3,7 +3,7 @@
 
 #include <armadillo>
 
-#include <ifgt/choose_parameters.hpp>
+#include <ifgt/parameters.hpp>
 
 #include "clustering/gonzalez.hpp"
 
