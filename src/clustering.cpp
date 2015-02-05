@@ -24,24 +24,19 @@ Clustering::Clustering(const arma::mat& source, int K, double bandwidth, double 
     , m_epsilon(epsilon)
     , m_p_max(0)
     , m_constant_series()
+    , m_is_initialized(false)
 {}
 
 
-Clustering::~Clustering()
-{}
-
-
-void Clustering::compute()
+void Clustering::initialize()
 {
-    cluster();
-    // TODO could check somehow to ensure a given clustring
-    // populated everything
     m_p_max = choose_truncation_number(m_source.n_cols, m_bandwidth, m_epsilon, m_rx);
     m_constant_series = compute_constant_series(m_source.n_cols, m_p_max);
+    m_is_initialized = true;
 }
 
 
-arma::mat Clustering::compute_C(const arma::vec& q)
+arma::mat Clustering::compute_C(const arma::vec& q) const
 {
     arma::mat C = arma::zeros<arma::mat>(m_centers.n_rows, get_p_max_total(m_source.n_cols, m_p_max));
     double h2 = m_bandwidth * m_bandwidth;

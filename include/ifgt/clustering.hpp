@@ -15,8 +15,6 @@ public:
 
     Clustering(const arma::mat& source, int K, double bandwidth, double epsilon);
 
-    virtual ~Clustering();
-
     inline arma::rowvec get_source_row(arma::uword i) const
     {
         return m_source.row(i);
@@ -91,12 +89,10 @@ public:
         m_centers = centers;
     }
 
-    void compute();
-    arma::mat compute_C(const arma::vec& q);
+    void initialize();
+    arma::mat compute_C(const arma::vec& q) const;
 
 private:
-
-    virtual void cluster() = 0;
 
     const arma::mat& m_source;
     arma::uvec m_indices;
@@ -108,11 +104,9 @@ private:
     double m_epsilon;
     arma::uword m_p_max;
     arma::rowvec m_constant_series;
+    bool m_is_initialized;
 
 };
-
-
-typedef std::unique_ptr<Clustering> ClusteringUnqPtr;
 
 
 }

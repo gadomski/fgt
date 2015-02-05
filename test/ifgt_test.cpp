@@ -26,8 +26,8 @@ TEST(Ifgt, ReferenceImplementation)
     arma::vec q = arma::ones<arma::vec>(X.n_rows);
 
     Parameters params = choose_parameters(X.n_cols, h, epsilon, 50);
-    ClusteringUnqPtr clustering(new Gonzalez(X, params.K, h, epsilon, true, 2));
-    clustering->compute();
+    Clustering clustering = gonzalez_clustering(X, params.K, h, epsilon, true, 2);
+    clustering.initialize();
 
     arma::vec G = ifgt(clustering, Y, h, q, params);
 

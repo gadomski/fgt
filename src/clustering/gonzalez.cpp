@@ -19,18 +19,12 @@ double ddist(const arma::rowvec& x, const arma::rowvec& y)
 
 
 
-Gonzalez::Gonzalez(const arma::mat& source, int K, double bandwidth, double epsilon,
+Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth, double epsilon,
         bool use_starting_idx, arma::uword starting_idx)
-    : Clustering(source, K, bandwidth, epsilon)
-    , m_use_starting_idx(use_starting_idx)
-    , m_starting_idx(starting_idx)
-{}
-
-
-void Gonzalez::cluster()
 {
-    arma::uword N = get_indices().n_rows;
-    arma::uword K = get_centers().n_rows;
+    Clustering clustering(source, K, bandwidth, epsilon);
+
+    arma::uword N = source.n_rows;
     arma::uvec centers(K);
     arma::uvec cprev(N);
     arma::uvec cnext(N);
@@ -38,9 +32,9 @@ void Gonzalez::cluster()
     arma::vec dist(N);
 
     arma::uword nc;
-    if (m_starting_idx)
+    if (use_starting_idx)
     {
-        nc = m_starting_idx;
+        nc = starting_idx;
     }
     else
     {
@@ -51,7 +45,7 @@ void Gonzalez::cluster()
 
     for (arma::uword i = 0; i < N; ++i)
     {
-        dist(i) = (i == nc) ? 0.0 : ddist(get_source_row(i), get_source_row(nc));
+        dist(i) = (i == nc) ? 0.0 : ddist(source.row(i), source.row(nc));
         cnext(i) = i + 1;
         cprev(i) = i - 1;
     }
@@ -61,16 +55,16 @@ void Gonzalez::cluster()
 
     nc = std::max_element(dist.begin(), dist.end()) - dist.begin();
     far2c(0) = nc;
-    set_radius(0, dist(nc));
+    clustering.set_radius(0, dist(nc));
 
     for (int i = 1; i < K; ++i)
     {
-        nc = far2c(get_radius_idxmax(i));
+        nc = far2c(clustering.get_radius_idxmax(i));
 
         centers(i) = nc;
-        set_radius(i, 0.0);
+        clustering.set_radius(i, 0.0);
         dist(nc) = 0.0;
-        set_index(nc, i);
+        clustering.set_index(nc, i);
         far2c(i) = nc;
 
         cnext(cprev(nc)) = cnext(nc);
@@ -81,10 +75,10 @@ void Gonzalez::cluster()
         for (int j = 0; j < i; ++j)
         {
             arma::uword ct_j = centers(j);
-            double dc2cq = ddist(get_source_row(ct_j), get_source_row(nc)) / 4;
-            if (dc2cq < get_radius(j))
+            double dc2cq = ddist(source.row(ct_j), source.row(nc)) / 4;
+            if (dc2cq < clustering.get_radius(j))
             {
-                set_radius(j, 0.0);
+                clustering.set_radius(j, 0.0);
                 far2c(j) = ct_j;
                 arma::uword k = cnext(ct_j);
                 while (k != ct_j)
@@ -93,14 +87,14 @@ void Gonzalez::cluster()
                     double dist2c_k = dist(k);
                     if (dc2cq < dist2c_k)
                     {
-                        double dd = ddist(get_source_row(k), get_source_row(nc));
+                        double dd = ddist(source.row(k), source.row(nc));
                         if (dd < dist2c_k)
                         {
                             dist(k) = dd;
-                            set_index(k, i);
-                            if (get_radius(i) < dd)
+                            clustering.set_index(k, i);
+                            if (clustering.get_radius(i) < dd)
                             {
-                                set_radius(i, dd);
+                                clustering.set_radius(i, dd);
                                 far2c(i) = k;
                             }
                             cnext(cprev(k)) = nextk;
@@ -110,15 +104,15 @@ void Gonzalez::cluster()
                             cnext(nc) = k;
                             cprev(k) = nc;
                         }
-                        else if (get_radius(j) < dist2c_k)
+                        else if (clustering.get_radius(j) < dist2c_k)
                         {
-                            set_radius(j, dist2c_k);
+                            clustering.set_radius(j, dist2c_k);
                             far2c(j) = k;
                         }
                     }
-                    else if (get_radius(j) < dist2c_k)
+                    else if (clustering.get_radius(j) < dist2c_k)
                     {
-                        set_radius(j, dist2c_k);
+                        clustering.set_radius(j, dist2c_k);
                         far2c(j) = k;
                     }
                     k = nextk;
@@ -127,16 +121,19 @@ void Gonzalez::cluster()
         }
     }
 
-    set_radii(arma::sqrt(get_radii()));
-    set_rx(get_max_radius());
+    clustering.set_radii(arma::sqrt(clustering.get_radii()));
+    clustering.set_rx(clustering.get_max_radius());
 
-    arma::mat center_coordinates(get_centers());
+    arma::mat center_coordinates(clustering.get_centers());
     for (arma::uword i = 0; i < N; ++i)
     {
-        increment_num_points(get_index(i));
-        center_coordinates.row(get_index(i)) += get_source_row(i);
+        clustering.increment_num_points(clustering.get_index(i));
+        center_coordinates.row(clustering.get_index(i)) += source.row(i);
     }
-    set_centers(center_coordinates / arma::repmat(get_num_points(), 1, get_d()));
+    clustering.set_centers(center_coordinates /
+            arma::repmat(clustering.get_num_points(), 1, clustering.get_d()));
+
+    return clustering;
 }
 
 
