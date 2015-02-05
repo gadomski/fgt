@@ -5,7 +5,7 @@ namespace ifgt
 {
 
 
-int choose_truncation_number(int d, double h, double epsilon, double rx);
+int choose_truncation_number(int d, double bandwidth, double epsilon, double rx);
 
 
 }

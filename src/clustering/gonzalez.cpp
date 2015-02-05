@@ -19,9 +19,9 @@ double ddist(const arma::rowvec& x, const arma::rowvec& y)
 
 
 
-Gonzalez::Gonzalez(const arma::mat& X, int K, double h, double epsilon,
+Gonzalez::Gonzalez(const arma::mat& source, int K, double bandwidth, double epsilon,
         bool use_starting_idx, arma::uword starting_idx)
-    : Clustering(X, K, h, epsilon)
+    : Clustering(source, K, bandwidth, epsilon)
     , m_use_starting_idx(use_starting_idx)
     , m_starting_idx(starting_idx)
 {}
@@ -51,7 +51,7 @@ void Gonzalez::cluster()
 
     for (arma::uword i = 0; i < N; ++i)
     {
-        dist(i) = (i == nc) ? 0.0 : ddist(get_X_row(i), get_X_row(nc));
+        dist(i) = (i == nc) ? 0.0 : ddist(get_source_row(i), get_source_row(nc));
         cnext(i) = i + 1;
         cprev(i) = i - 1;
     }
@@ -81,7 +81,7 @@ void Gonzalez::cluster()
         for (int j = 0; j < i; ++j)
         {
             arma::uword ct_j = centers(j);
-            double dc2cq = ddist(get_X_row(ct_j), get_X_row(nc)) / 4;
+            double dc2cq = ddist(get_source_row(ct_j), get_source_row(nc)) / 4;
             if (dc2cq < get_radius(j))
             {
                 set_radius(j, 0.0);
@@ -93,7 +93,7 @@ void Gonzalez::cluster()
                     double dist2c_k = dist(k);
                     if (dc2cq < dist2c_k)
                     {
-                        double dd = ddist(get_X_row(k), get_X_row(nc));
+                        double dd = ddist(get_source_row(k), get_source_row(nc));
                         if (dd < dist2c_k)
                         {
                             dist(k) = dd;
@@ -134,7 +134,7 @@ void Gonzalez::cluster()
     for (arma::uword i = 0; i < N; ++i)
     {
         increment_num_points(get_index(i));
-        center_coordinates.row(get_index(i)) += get_X_row(i);
+        center_coordinates.row(get_index(i)) += get_source_row(i);
     }
     set_centers(center_coordinates / arma::repmat(get_num_points(), 1, get_d()));
 }

@@ -18,11 +18,11 @@ namespace
 }
 
 
-int choose_truncation_number(int d, double h, double epsilon, double rx)
+int choose_truncation_number(int d, double bandwidth, double epsilon, double rx)
 {
-    double r = std::min(std::sqrt(d), h * std::sqrt(std::log(1 / epsilon)));
+    double r = std::min(std::sqrt(d), bandwidth * std::sqrt(std::log(1 / epsilon)));
     double rx2 = rx * rx;
-    double h2 = h * h;
+    double h2 = bandwidth * bandwidth;
     double error =1;
     double temp = 1;
     int p = 0;

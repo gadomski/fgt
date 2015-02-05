@@ -14,8 +14,8 @@ struct Parameters
 };
 
 
-Parameters choose_parameters(arma::uword d, double h, double epsilon);
-Parameters choose_parameters(arma::uword d, double h, double epsilon, arma::uword k_limit);
+Parameters choose_parameters(arma::uword d, double bandwidth, double epsilon);
+Parameters choose_parameters(arma::uword d, double bandwidth, double epsilon, arma::uword k_limit);
 
 
 }

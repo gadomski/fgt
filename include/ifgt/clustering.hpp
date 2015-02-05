@@ -13,13 +13,13 @@ class Clustering
 {
 public:
 
-    Clustering(const arma::mat& X, int K, double h, double epsilon);
+    Clustering(const arma::mat& source, int K, double bandwidth, double epsilon);
 
     virtual ~Clustering();
 
-    inline arma::rowvec get_X_row(arma::uword i) const
+    inline arma::rowvec get_source_row(arma::uword i) const
     {
-        return m_X.row(i);
+        return m_source.row(i);
     }
     inline const arma::uvec& get_indices() const
     {
@@ -63,7 +63,7 @@ public:
     }
     inline arma::uword get_d() const
     {
-        return m_X.n_cols;
+        return m_source.n_cols;
     }
 
     inline void set_radius(arma::uword i, double r)
@@ -98,13 +98,13 @@ private:
 
     virtual void cluster() = 0;
 
-    const arma::mat& m_X;
+    const arma::mat& m_source;
     arma::uvec m_indices;
     arma::mat m_centers;
     arma::uvec m_num_points;
     arma::vec m_radii;
     double m_rx;
-    double m_h;
+    double m_bandwidth;
     double m_epsilon;
     arma::uword m_p_max;
     arma::rowvec m_constant_series;

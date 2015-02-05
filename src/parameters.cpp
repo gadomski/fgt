@@ -23,21 +23,21 @@ namespace
 }
 
 
-Parameters choose_parameters(arma::uword d, double h, double epsilon)
+Parameters choose_parameters(arma::uword d, double bandwidth, double epsilon)
 {
-    return choose_parameters(d, h, epsilon, std::round(KLimitFactor / h));
+    return choose_parameters(d, bandwidth, epsilon, std::round(KLimitFactor / bandwidth));
 }
 
 
-Parameters choose_parameters(arma::uword d, double h, double epsilon, arma::uword k_limit)
+Parameters choose_parameters(arma::uword d, double bandwidth, double epsilon, arma::uword k_limit)
 {
     Parameters params;
     double R = std::sqrt(d);
-    double h2 = h * h;
+    double h2 = bandwidth * bandwidth;
     double complexity_min = std::numeric_limits<double>::max();
     double rx = 0.0;
 
-    params.r = std::min(R, h * std::sqrt(std::log(1 / epsilon)));
+    params.r = std::min(R, bandwidth * std::sqrt(std::log(1 / epsilon)));
     params.K = 1;
 
     for (arma::uword i = 0; i < k_limit; ++i)

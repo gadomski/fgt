@@ -11,10 +11,10 @@ ClusteringFactory::ClusteringFactory()
 {}
 
 
-ClusteringUnqPtr ClusteringFactory::create(const arma::mat& X, arma::uword k,
-        double h, double epsilon)
+ClusteringUnqPtr ClusteringFactory::create(const arma::mat& source, arma::uword k,
+        double bandwidth, double epsilon)
 {
-    ClusteringUnqPtr clustering(new Gonzalez(X, k, h, epsilon, false, arma::uword()));
+    ClusteringUnqPtr clustering(new Gonzalez(source, k, bandwidth, epsilon, false, arma::uword()));
     clustering->compute();
     return clustering;
 }

@@ -15,7 +15,7 @@ public:
     
     ClusteringFactory();
 
-    ClusteringUnqPtr create(const arma::mat& X, arma::uword k, double h, double epsilon);
+    ClusteringUnqPtr create(const arma::mat& source, arma::uword k, double bandwidth, double epsilon);
 
 };
 
