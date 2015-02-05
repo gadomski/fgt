@@ -16,11 +16,11 @@ arma::rowvec compute_monomials(arma::rowvec dx, arma::uword p_max)
     {
         for (arma::uword i = 0; i < dx.n_cols; ++i)
         {
-            arma::uword head = heads(i);
-            heads(i) = t;
+            arma::uword head = heads[i];
+            heads[i] = t;
             for (arma::uword j = head; j < tail; ++j, ++t)
             {
-                monomials(t) = dx(i) * monomials(j);
+                monomials[t] = dx[i] * monomials[j];
             }
         }
     }
