@@ -28,6 +28,7 @@ target_compile_definitions(${IFGT_LIB_TARGET} PUBLIC ARMA_64BIT_WORD)
 
 install(
     TARGETS ${IFGT_LIB_TARGET}
+    EXPORT ${IFGT_EXPORT}
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     )
