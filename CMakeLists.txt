@@ -12,6 +12,7 @@ set(LIBRARY_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/lib)
 
 
 # Options
+option(BUILD_SHARED_LIBS "Create shared libraries" ON)
 option(BUILD_TESTS "Build test suite" ON)
 
 
