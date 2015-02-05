@@ -16,7 +16,6 @@ TEST(ChooseParameters, ImplementationExample)
     int k_limit = 189;
     Parameters params = choose_parameters(d, h, epsilon, k_limit);
     EXPECT_EQ(13, params.K);
-    EXPECT_EQ(17, params.p_max);
     EXPECT_NEAR(1.1151, params.r, 0.0001);
 }
 
@@ -29,7 +28,6 @@ TEST(ChooseParameters, ReferenceImplementation)
     arma::uword k_limit = 50;
     Parameters params = choose_parameters(d, h, epsilon, k_limit);
     EXPECT_EQ(15, params.K);
-    EXPECT_EQ(8, params.p_max);
     EXPECT_NEAR(1.051304, params.r, 0.000001);
 }
 

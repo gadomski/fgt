@@ -39,7 +39,6 @@ Parameters choose_parameters(arma::uword d, double h, double epsilon, arma::uwor
 
     params.r = std::min(R, h * std::sqrt(std::log(1 / epsilon)));
     params.K = 1;
-    params.p_max = 0;
 
     for (arma::uword i = 0; i < k_limit; ++i)
     {
@@ -65,7 +64,6 @@ Parameters choose_parameters(arma::uword d, double h, double epsilon, arma::uwor
         {
             complexity_min = complexity;
             params.K = i + 1;
-            params.p_max = p;
         }
     }
 
