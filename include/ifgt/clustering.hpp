@@ -92,7 +92,7 @@ public:
     }
 
     void compute();
-    arma::mat find_C(const arma::vec& q);
+    arma::mat compute_C(const arma::vec& q);
 
 private:
 

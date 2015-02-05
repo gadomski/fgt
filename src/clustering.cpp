@@ -41,7 +41,7 @@ void Clustering::compute()
 }
 
 
-arma::mat Clustering::find_C(const arma::vec& q)
+arma::mat Clustering::compute_C(const arma::vec& q)
 {
     arma::mat C = arma::zeros<arma::mat>(m_centers.n_rows, get_p_max_total(m_X.n_cols, m_p_max));
     double h2 = m_h * m_h;

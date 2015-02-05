@@ -41,7 +41,7 @@ arma::vec ifgt(const ClusteringUnqPtr& clustering, const arma::mat& Y, double h,
     arma::vec G(Y.n_rows);
     arma::vec ry2 = arma::pow(params.r + clustering->get_radii(), 2);
     double h2 = h * h;
-    arma::mat C = clustering->find_C(q);
+    arma::mat C = clustering->compute_C(q);
     for (arma::uword j = 0; j < Y.n_rows; ++j)
     {
         G(j) = 0.0;
