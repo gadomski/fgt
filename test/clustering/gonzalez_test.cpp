@@ -1,6 +1,5 @@
 #include "clustering/gonzalez.hpp"
 
-#include "clustering_factory.hpp"
 #include "clustering.hpp"
 #include "config.hpp"
 
@@ -18,7 +17,7 @@ TEST(GonzalezClustering, ReferenceImplementation) {
     double h = 0.4;
     double epsilon = 1e-3;
 
-    Clustering clustering = gonzalez_clustering(X, K, h, epsilon, true, 2);
+    Clustering clustering = gonzalez_clustering(X, K, h, epsilon, {true, 2});
     clustering.initialize();
 
     std::vector<arma::uword> expected_num_points = {167, 167, 185, 470, 482,

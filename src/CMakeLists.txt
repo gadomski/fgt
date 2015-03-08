@@ -2,9 +2,9 @@ set(src
     choose_truncation_number.cpp
     clustering.cpp
     clustering/gonzalez.cpp
-    clustering_factory.cpp
     constant_series.cpp
     direct.cpp
+    gaussian_transform.cpp
     ifgt.cpp
     monomials.cpp
     parameters.cpp

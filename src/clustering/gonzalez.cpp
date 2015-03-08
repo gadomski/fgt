@@ -16,8 +16,7 @@ double ddist(const arma::rowvec& x, const arma::rowvec& y) {
 
 
 Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
-                               double epsilon, bool use_starting_idx,
-                               arma::uword starting_idx) {
+                               double epsilon, optional_arma_uword_t starting_index) {
     Clustering clustering(source, K, bandwidth, epsilon);
 
     arma::uword N = source.n_rows;
@@ -28,8 +27,8 @@ Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
     arma::vec dist(N);
 
     arma::uword nc;
-    if (use_starting_idx) {
-        nc = starting_idx;
+    if (starting_index.first) {
+        nc = starting_index.second;
     } else {
         std::random_device rd;
         nc = rd() % N;

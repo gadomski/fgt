@@ -1,7 +1,7 @@
-#include <fgt/ifgt.hpp>
+#include <fgt/fgt.hpp>
 
 #include "clustering.hpp"
-#include "clustering_factory.hpp"
+#include "clustering/gonzalez.hpp"
 #include "monomials.hpp"
 #include "parameters.hpp"
 
@@ -9,37 +9,38 @@
 namespace fgt {
 
 
-arma::vec ifgt(const arma::mat& source, const arma::mat& target,
-               double bandwidth, double epsilon) {
-    arma::vec q = arma::ones<arma::vec>(source.n_rows);
-    return ifgt(source, target, bandwidth, epsilon, q);
+Ifgt::Ifgt(const arma::mat& source, double bandwidth, double epsilon,
+           int k_limit)
+    : GaussianTransform(source, bandwidth),
+      m_epsilon(epsilon),
+      m_k_limit(k_limit),
+      m_clustering_starting_index(std::make_pair(false, 0)) {}
+
+
+optional_arma_uword_t Ifgt::get_clustering_starting_index() const {
+    return m_clustering_starting_index;
 }
 
 
-arma::vec ifgt(const arma::mat& source, const arma::mat& target,
-               double bandwidth, double epsilon, const arma::vec& q) {
-    Parameters params = choose_parameters(source.n_cols, bandwidth, epsilon);
-    return ifgt(source, target, bandwidth, epsilon, q, params);
+Ifgt& Ifgt::set_clustering_starting_index(arma::uword index) {
+    m_clustering_starting_index = std::make_pair(true, index);
+    return *this;
 }
 
 
-arma::vec ifgt(const arma::mat& source, const arma::mat& target,
-               double bandwidth, double epsilon, const arma::vec& q,
-               const Parameters& params) {
-    ClusteringFactory factory;
+arma::vec Ifgt::compute(const arma::mat& target,
+                        const arma::vec& weights) const {
+    const arma::mat& source = get_source();
+    double bandwidth = get_bandwidth();
+    Parameters params = choose_parameters(source.n_cols, bandwidth, m_epsilon);
     Clustering clustering =
-        factory.compute(source, params.K, bandwidth, epsilon);
-    return ifgt(clustering, target, bandwidth, q, params);
-}
-
-
-arma::vec ifgt(const Clustering& clustering, const arma::mat& target,
-               double bandwidth, const arma::vec& q, const Parameters& params) {
+        gonzalez_clustering(source, params.K, bandwidth, m_epsilon,
+                            get_clustering_starting_index());
     // TODO check source.n_cols == target.n_cols
     arma::vec G(target.n_rows);
     arma::vec ry2 = arma::pow(params.r + clustering.get_radii(), 2);
     double h2 = bandwidth * bandwidth;
-    arma::mat C = clustering.compute_C(q);
+    arma::mat C = clustering.compute_C(weights);
     for (arma::uword j = 0; j < target.n_rows; ++j) {
         G(j) = 0.0;
         for (arma::uword k = 0; k < params.K; ++k) {

@@ -1,19 +1,17 @@
-#include <fgt/direct.hpp>
+#include <fgt/fgt.hpp>
 
 
 namespace fgt {
 
 
-arma::vec direct(const arma::mat& source, const arma::mat& target,
-                 double bandwidth) {
-    arma::vec weights = arma::ones<arma::vec>(source.n_rows);
-    return direct(source, target, bandwidth, weights);
-}
+Direct::Direct(const arma::mat& source, double bandwith)
+    : GaussianTransform(source, bandwith) {}
 
 
-arma::vec direct(const arma::mat& source, const arma::mat& target,
-                 double bandwidth, const arma::vec& weights) {
-    double bandwidth2 = bandwidth * bandwidth;
+arma::vec Direct::compute(const arma::mat& target,
+                          const arma::vec& weights) const {
+    double bandwidth2 = get_bandwidth() * get_bandwidth();
+    const arma::mat& source = get_source();
     arma::vec g = arma::zeros<arma::vec>(target.n_rows);
     for (arma::uword j = 0; j < target.n_rows; ++j) {
         g(j) = arma::as_scalar(

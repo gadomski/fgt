@@ -1,4 +1,4 @@
-#include <fgt/direct.hpp>
+#include <fgt/fgt.hpp>
 
 #include "config.hpp"
 
@@ -10,17 +10,18 @@ namespace fgt {
 
 
 TEST(Direct, ReferenceImplementation) {
-    arma::mat X, Y;
-    X.load(test_data_path("X.csv"));
-    Y.load(test_data_path("Y.csv"));
-    X = X.rows(0, 99);
-    Y = Y.rows(0, 99);
-    double h = 0.4;
+    arma::mat source, target;
+    source.load(test_data_path("X.csv"));
+    target.load(test_data_path("Y.csv"));
+    source = source.rows(0, 99);
+    target = target.rows(0, 99);
+    double bandwidth = 0.4;
 
-    arma::vec G = direct(X, Y, h);
+    Direct direct(source, bandwidth);
+    arma::vec g = direct.compute(target);
 
-    EXPECT_EQ(G.n_rows, 100);
-    EXPECT_DOUBLE_EQ(4.3701728529168333, arma::min(G));
-    EXPECT_DOUBLE_EQ(93.72376652714631, arma::max(G));
+    EXPECT_EQ(g.n_rows, 100);
+    EXPECT_DOUBLE_EQ(4.3701728529168333, arma::min(g));
+    EXPECT_DOUBLE_EQ(93.72376652714631, arma::max(g));
 }
 }

@@ -1,4 +1,4 @@
-#include <fgt/ifgt.hpp>
+#include <fgt/fgt.hpp>
 
 #include "clustering/gonzalez.hpp"
 #include "clustering.hpp"
@@ -13,24 +13,20 @@ namespace fgt {
 
 
 TEST(Ifgt, ReferenceImplementation) {
-    arma::mat X;
-    X.load(test_data_path("X.csv"));
-    arma::mat Y;
-    Y.load(test_data_path("Y.csv"));
-
-    double h = 0.4;
+    arma::mat source, target;
+    source.load(test_data_path("X.csv"));
+    target.load(test_data_path("Y.csv"));
+    double bandwidth = 0.4;
     double epsilon = 1e-3;
-    arma::vec q = arma::ones<arma::vec>(X.n_rows);
+    arma::vec weights = arma::ones<arma::vec>(source.n_rows);
+    int k_limit = 50;
 
-    Parameters params = choose_parameters(X.n_cols, h, epsilon, 50);
-    Clustering clustering =
-        gonzalez_clustering(X, params.K, h, epsilon, true, 2);
-    clustering.initialize();
+    Ifgt ifgt(source, bandwidth, epsilon, k_limit);
+    ifgt.set_clustering_starting_index(2);
+    arma::vec g = ifgt.compute(target, weights);
 
-    arma::vec G = ifgt(clustering, Y, h, q, params);
-
-    EXPECT_EQ(G.n_rows, 5000);
-    EXPECT_NEAR(359.4559, arma::min(G), 0.0001);
-    EXPECT_NEAR(2.2214e3, arma::max(G), 0.1);
+    EXPECT_EQ(g.n_rows, 5000);
+    EXPECT_DOUBLE_EQ(346.36423735983732, arma::min(g));
+    EXPECT_DOUBLE_EQ(2190.6088281193192, arma::max(g));
 }
 }
