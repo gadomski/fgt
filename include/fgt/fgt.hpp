@@ -6,9 +6,6 @@
 namespace fgt {
 
 
-class Clustering;
-
-
 class GaussianTransform {
 public:
     GaussianTransform(const arma::mat& source, double bandwidth);
@@ -67,6 +64,5 @@ private:
     double m_epsilon;
     int m_k_limit;
     optional_arma_uword_t m_clustering_starting_index;
-    std::unique_ptr<Clustering> m_clustering;
 };
 }
