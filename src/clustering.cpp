@@ -69,8 +69,7 @@ const optional_arma_uword_t GonzalezClustering::DefaultStartingIndex = {false,
 GonzalezClustering::GonzalezClustering(const arma::mat& source, int K,
                                        double bandwidth, double epsilon,
                                        optional_arma_uword_t starting_index)
-    : Clustering(source, K, bandwidth, epsilon),
-      m_starting_index(starting_index) {
+    : Clustering(source, K, bandwidth, epsilon) {
     arma::uword N = source.n_rows;
     arma::uvec centers(K);
     arma::uvec cprev(N);

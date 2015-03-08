@@ -61,8 +61,5 @@ public:
     GonzalezClustering(
         const arma::mat& source, int K, double bandwidth, double epsilon,
         optional_arma_uword_t starting_index = DefaultStartingIndex);
-
-private:
-    optional_arma_uword_t m_starting_index;
 };
 }
