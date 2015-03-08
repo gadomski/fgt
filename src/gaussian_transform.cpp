@@ -25,6 +25,12 @@ arma::vec GaussianTransform::compute(const arma::mat& target,
            << m_source.n_cols << " vs " << target.n_cols << ")";
         throw dimension_mismatch(ss.str());
     }
+    if (m_source.n_rows != weights.n_rows) {
+        std::stringstream ss;
+        ss << "Source and weights do not have the same number of rows ("
+            << m_source.n_rows << " vs " << weights.n_rows << ")";
+        throw dimension_mismatch(ss.str());
+    }
     return compute_impl(target, weights);
 }
 }
