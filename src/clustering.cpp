@@ -18,9 +18,10 @@ double ddist(const arma::rowvec& x, const arma::rowvec& y) {
 }
 
 
-Clustering::Clustering(const arma::mat& source, int K, double bandwidth,
+Clustering::Clustering(const arma::mat& source, arma::uword K, double bandwidth,
                        double epsilon)
     : m_source(source),
+      m_K(K),
       m_indices(arma::zeros<arma::uvec>(source.n_rows)),
       m_centers(arma::zeros<arma::mat>(K, source.n_cols)),
       m_num_points(arma::zeros<arma::uvec>(K)),
@@ -36,7 +37,11 @@ Clustering::Clustering(const arma::mat& source, int K, double bandwidth,
 }
 
 
-arma::uword Clustering::choose_truncation_number(int dimensions, double bandwidth,
+Clustering::~Clustering() {}
+
+
+arma::uword Clustering::choose_truncation_number(int dimensions,
+                                                 double bandwidth,
                                                  double epsilon, double rx) {
     double r = std::min(std::sqrt(dimensions),
                         bandwidth * std::sqrt(std::log(1 / epsilon)));
@@ -90,8 +95,13 @@ const optional_arma_uword_t GonzalezClustering::DefaultStartingIndex = {false,
 GonzalezClustering::GonzalezClustering(const arma::mat& source, int K,
                                        double bandwidth, double epsilon,
                                        optional_arma_uword_t starting_index)
-    : Clustering(source, K, bandwidth, epsilon) {
-    arma::uword N = source.n_rows;
+    : Clustering(source, K, bandwidth, epsilon),
+      m_starting_index(starting_index) {}
+
+
+void GonzalezClustering::cluster() {
+    arma::uword N = get_n_rows();
+    arma::uword K = get_K();
     arma::uvec centers(K);
     arma::uvec cprev(N);
     arma::uvec cnext(N);
@@ -99,8 +109,8 @@ GonzalezClustering::GonzalezClustering(const arma::mat& source, int K,
     arma::vec dist(N);
 
     arma::uword nc;
-    if (starting_index.first) {
-        nc = starting_index.second;
+    if (m_starting_index.first) {
+        nc = m_starting_index.second;
     } else {
         std::random_device rd;
         nc = rd() % N;
@@ -108,7 +118,8 @@ GonzalezClustering::GonzalezClustering(const arma::mat& source, int K,
     centers(0) = nc;
 
     for (arma::uword i = 0; i < N; ++i) {
-        dist(i) = (i == nc) ? 0.0 : ddist(source.row(i), source.row(nc));
+        dist(i) =
+            (i == nc) ? 0.0 : ddist(get_source_row(i), get_source_row(nc));
         cnext(i) = i + 1;
         cprev(i) = i - 1;
     }
@@ -136,7 +147,7 @@ GonzalezClustering::GonzalezClustering(const arma::mat& source, int K,
 
         for (int j = 0; j < i; ++j) {
             arma::uword ct_j = centers(j);
-            double dc2cq = ddist(source.row(ct_j), source.row(nc)) / 4;
+            double dc2cq = ddist(get_source_row(ct_j), get_source_row(nc)) / 4;
             if (dc2cq < get_radius(j)) {
                 set_radius(j, 0.0);
                 far2c(j) = ct_j;
@@ -145,7 +156,8 @@ GonzalezClustering::GonzalezClustering(const arma::mat& source, int K,
                     arma::uword nextk = cnext(k);
                     double dist2c_k = dist(k);
                     if (dc2cq < dist2c_k) {
-                        double dd = ddist(source.row(k), source.row(nc));
+                        double dd =
+                            ddist(get_source_row(k), get_source_row(nc));
                         if (dd < dist2c_k) {
                             dist(k) = dd;
                             set_index(k, i);
@@ -179,7 +191,7 @@ GonzalezClustering::GonzalezClustering(const arma::mat& source, int K,
     arma::mat center_coordinates(get_centers());
     for (arma::uword i = 0; i < N; ++i) {
         increment_num_points(get_index(i));
-        center_coordinates.row(get_index(i)) += source.row(i);
+        center_coordinates.row(get_index(i)) += get_source_row(i);
     }
     set_centers(center_coordinates /
                 arma::repmat(get_num_points(), 1, get_d()));

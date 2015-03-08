@@ -27,6 +27,7 @@ TEST(GonzalezClustering, ReferenceImplementation) {
     double epsilon = 1e-3;
 
     GonzalezClustering clustering(X, K, h, epsilon, {true, 2});
+    clustering.cluster();
 
     std::vector<arma::uword> expected_num_points = {167, 167, 185, 470, 482,
                                                     168, 177, 179, 571, 356,

@@ -85,6 +85,7 @@ arma::vec Ifgt::compute_impl(const arma::mat& target,
     Parameters params = choose_parameters(source.n_cols, bandwidth, m_epsilon);
     GonzalezClustering clustering(source, params.num_clusters, bandwidth,
                                   m_epsilon, get_clustering_starting_index());
+    clustering.cluster();
     arma::vec G(target.n_rows);
     arma::vec ry2 = arma::pow(params.radius + clustering.get_radii(), 2);
     double h2 = bandwidth * bandwidth;
