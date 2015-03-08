@@ -6,8 +6,7 @@
 #include <gtest/gtest.h>
 
 
-namespace fgt
-{
+namespace fgt {
 
 
 class MockGaussianTransform : public GaussianTransform {
@@ -16,10 +15,9 @@ public:
 
 private:
     virtual arma::vec compute_impl(const arma::mat& target,
-            const arma::vec& weights) const override {
+                                   const arma::vec& weights) const override {
         return arma::zeros<arma::vec>(target.n_rows);
     }
-
 };
 
 
@@ -29,5 +27,15 @@ TEST(GaussianTransform, IncorrectDimensions) {
     double bandwidth = 1;
     MockGaussianTransform transform(source, bandwidth);
     EXPECT_THROW(transform.compute(target), dimension_mismatch);
+}
+
+
+TEST(GaussianTransform, IncorrectWeightCount) {
+    arma::mat source(1, 2);
+    arma::mat target(1, 2);
+    arma::vec weights(2);
+    double bandwidth = 1;
+    MockGaussianTransform transform(source, bandwidth);
+    EXPECT_THROW(transform.compute(target, weights), dimension_mismatch);
 }
 }
