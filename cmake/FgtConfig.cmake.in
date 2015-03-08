@@ -1,4 +1,4 @@
 @PACKAGE_INIT@
 
-set_and_check(IFGT_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@")
-include("${CMAKE_CURRENT_LIST_DIR}/IfgtTargets.cmake")
+set_and_check(FGT_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@")
+include("${CMAKE_CURRENT_LIST_DIR}/FgtTargets.cmake")
