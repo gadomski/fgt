@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
-#include <ifgt/parameters.hpp>
+#include "parameters.hpp"
 
 #include <armadillo>
+#include <gtest/gtest.h>
 
 
 namespace ifgt

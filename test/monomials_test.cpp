@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
 #include "monomials.hpp"
 
 #include <armadillo>
+#include <gtest/gtest.h>
 
 
 namespace ifgt
@@ -21,6 +21,4 @@ TEST(Monomials, ReferenceImplementation)
     EXPECT_NEAR(0.802537, monomials.at(4), 0.000001);
     EXPECT_NEAR(1.009321, monomials.at(5), 0.000001);
 }
-
-
 }

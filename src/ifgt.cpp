@@ -1,41 +1,44 @@
 #include <ifgt/ifgt.hpp>
 
-#include <ifgt/clustering_factory.hpp>
-#include <ifgt/parameters.hpp>
-
+#include "clustering.hpp"
+#include "clustering_factory.hpp"
 #include "monomials.hpp"
+#include "parameters.hpp"
 
 
 namespace ifgt
 {
 
 
-arma::vec ifgt(const arma::mat& source, const arma::mat& target, double bandwidth, double epsilon)
+arma::vec ifgt(const arma::mat& source, const arma::mat& target,
+               double bandwidth, double epsilon)
 {
     arma::vec q = arma::ones<arma::vec>(source.n_rows);
     return ifgt(source, target, bandwidth, epsilon, q);
 }
 
 
-arma::vec ifgt(const arma::mat& source, const arma::mat& target, double bandwidth, double epsilon,
-               const arma::vec& q)
+arma::vec ifgt(const arma::mat& source, const arma::mat& target,
+               double bandwidth, double epsilon, const arma::vec& q)
 {
     Parameters params = choose_parameters(source.n_cols, bandwidth, epsilon);
     return ifgt(source, target, bandwidth, epsilon, q, params);
 }
 
 
-arma::vec ifgt(const arma::mat& source, const arma::mat& target, double bandwidth, double epsilon,
-               const arma::vec& q, const Parameters& params)
+arma::vec ifgt(const arma::mat& source, const arma::mat& target,
+               double bandwidth, double epsilon, const arma::vec& q,
+               const Parameters& params)
 {
     ClusteringFactory factory;
-    Clustering clustering = factory.compute(source, params.K, bandwidth, epsilon);
+    Clustering clustering =
+        factory.compute(source, params.K, bandwidth, epsilon);
     return ifgt(clustering, target, bandwidth, q, params);
 }
 
 
-arma::vec ifgt(const Clustering& clustering, const arma::mat& target, double bandwidth,
-               const arma::vec& q, const Parameters& params)
+arma::vec ifgt(const Clustering& clustering, const arma::mat& target,
+               double bandwidth, const arma::vec& q, const Parameters& params)
 {
     // TODO check source.n_cols == target.n_cols
     arma::vec G(target.n_rows);
@@ -52,12 +55,13 @@ arma::vec ifgt(const Clustering& clustering, const arma::mat& target, double ban
             if (distance2 <= ry2(k))
             {
                 double g = std::exp(-distance2 / h2);
-                G(j) += arma::accu(C.row(k) % compute_monomials(dy / bandwidth, clustering.get_p_max()) * g);
+                G(j) += arma::accu(
+                    C.row(k) %
+                    compute_monomials(dy / bandwidth, clustering.get_p_max()) *
+                    g);
             }
         }
     }
     return G;
 }
-
-
 }

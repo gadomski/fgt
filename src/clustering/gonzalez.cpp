@@ -1,5 +1,7 @@
 #include "clustering/gonzalez.hpp"
 
+#include "clustering.hpp"
+
 
 namespace ifgt
 {
@@ -13,14 +15,12 @@ double ddist(const arma::rowvec& x, const arma::rowvec& y)
 {
     return arma::accu(arma::pow(x - y, 2));
 }
-
-
 }
 
 
-
-Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth, double epsilon,
-        bool use_starting_idx, arma::uword starting_idx)
+Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
+                               double epsilon, bool use_starting_idx,
+                               arma::uword starting_idx)
 {
     Clustering clustering(source, K, bandwidth, epsilon);
 
@@ -130,11 +130,10 @@ Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
         clustering.increment_num_points(clustering.get_index(i));
         center_coordinates.row(clustering.get_index(i)) += source.row(i);
     }
-    clustering.set_centers(center_coordinates /
-            arma::repmat(clustering.get_num_points(), 1, clustering.get_d()));
+    clustering.set_centers(
+        center_coordinates /
+        arma::repmat(clustering.get_num_points(), 1, clustering.get_d()));
 
     return clustering;
 }
-
-
 }

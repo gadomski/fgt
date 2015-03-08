@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
 #include "constant_series.hpp"
 
 #include <armadillo>
+#include <gtest/gtest.h>
 
 
 namespace ifgt
@@ -23,6 +23,4 @@ TEST(ConstantSeries, ReferenceImplementation)
     EXPECT_DOUBLE_EQ(4.0 / 3.0, series.at(6));
     // Could keep going
 }
-
-
 }

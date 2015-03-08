@@ -5,7 +5,7 @@ namespace ifgt
 {
 
 
-inline int nchoosek(int n, int k) 
+inline int nchoosek(int n, int k)
 {
     int n_k = n - k;
     if (k < n_k)
@@ -23,6 +23,4 @@ inline int nchoosek(int n, int k)
 
     return nchsk;
 }
-
-
 }

@@ -1,5 +1,6 @@
-#include <gtest/gtest.h>
 #include "choose_truncation_number.hpp"
+
+#include <gtest/gtest.h>
 
 
 namespace ifgt
@@ -15,6 +16,4 @@ TEST(ChooseTruncationNumber, ReferenceImplementation)
     int p_max = choose_truncation_number(d, h, epsilon, rx);
     EXPECT_EQ(9, p_max);
 }
-
-
 }
