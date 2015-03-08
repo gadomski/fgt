@@ -12,6 +12,11 @@ GaussianTransform::~GaussianTransform() {}
 
 
 arma::vec GaussianTransform::compute(const arma::mat& target) const {
-    return this->compute(target, arma::ones<arma::vec>(get_source_n_rows()));
+    return compute(target, arma::ones<arma::vec>(get_source_n_rows()));
+}
+
+arma::vec GaussianTransform::compute(const arma::mat& target,
+                                     const arma::vec& weights) const {
+    return compute_impl(target, weights);
 }
 }

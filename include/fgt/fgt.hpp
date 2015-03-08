@@ -12,13 +12,15 @@ public:
     virtual ~GaussianTransform();
 
     arma::vec compute(const arma::mat& target) const;
-    virtual arma::vec compute(const arma::mat& target,
-                              const arma::vec& weights) const = 0;
+    arma::vec compute(const arma::mat& target, const arma::vec& weights) const;
     double get_bandwidth() const { return m_bandwidth; }
     const arma::mat& get_source() const { return m_source; }
     arma::uword get_source_n_rows() const { return m_source.n_rows; }
 
 private:
+    virtual arma::vec compute_impl(const arma::mat& target,
+                                   const arma::vec& weights) const = 0;
+
     const arma::mat& m_source;
     double m_bandwidth;
 };
@@ -28,9 +30,9 @@ class Direct : public GaussianTransform {
 public:
     Direct(const arma::mat& source, double bandwidth);
 
-    using GaussianTransform::compute;
-    virtual arma::vec compute(const arma::mat& target,
-                              const arma::vec& weights) const override;
+private:
+    virtual arma::vec compute_impl(const arma::mat& target,
+                                   const arma::vec& weights) const override;
 };
 
 
@@ -54,13 +56,13 @@ public:
                                         double bandwidth, double epsilon,
                                         arma::uword k_limit);
 
-    using GaussianTransform::compute;
-    virtual arma::vec compute(const arma::mat& target,
-                              const arma::vec& weights) const override;
     optional_arma_uword_t get_clustering_starting_index() const;
     Ifgt& set_clustering_starting_index(arma::uword index);
 
 private:
+    virtual arma::vec compute_impl(const arma::mat& target,
+                                   const arma::vec& weights) const override;
+
     double m_epsilon;
     int m_k_limit;
     optional_arma_uword_t m_clustering_starting_index;

@@ -8,8 +8,8 @@ Direct::Direct(const arma::mat& source, double bandwith)
     : GaussianTransform(source, bandwith) {}
 
 
-arma::vec Direct::compute(const arma::mat& target,
-                          const arma::vec& weights) const {
+arma::vec Direct::compute_impl(const arma::mat& target,
+                               const arma::vec& weights) const {
     double bandwidth2 = get_bandwidth() * get_bandwidth();
     const arma::mat& source = get_source();
     arma::vec g = arma::zeros<arma::vec>(target.n_rows);
