@@ -28,7 +28,7 @@ private:
 
 class Direct : public GaussianTransform {
 public:
-    Direct(const arma::mat& source, double bandwidth);
+    using GaussianTransform::GaussianTransform;
 
 private:
     virtual arma::vec compute_impl(const arma::mat& target,
