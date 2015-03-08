@@ -5,7 +5,7 @@ compiler:
     - gcc
 
 install:
-    - make -f dependencies.mak install-travis
+    - make -f make/dependencies.mak install-travis
 
 before_script:
     - if [[ $CXX == "g++" ]]; then
@@ -13,4 +13,4 @@ before_script:
       fi
 
 script:
-    - make -f travis.mak build test install
+    - make -f make/travis.mak build test install
