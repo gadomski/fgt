@@ -1,7 +1,6 @@
 #include <fgt/fgt.hpp>
 
 #include "clustering.hpp"
-#include "clustering/gonzalez.hpp"
 #include "monomials.hpp"
 #include "parameters.hpp"
 
@@ -33,9 +32,8 @@ arma::vec Ifgt::compute(const arma::mat& target,
     const arma::mat& source = get_source();
     double bandwidth = get_bandwidth();
     Parameters params = choose_parameters(source.n_cols, bandwidth, m_epsilon);
-    Clustering clustering =
-        gonzalez_clustering(source, params.K, bandwidth, m_epsilon,
-                            get_clustering_starting_index());
+    GonzalezClustering clustering(source, params.K, bandwidth, m_epsilon,
+                                  get_clustering_starting_index());
     // TODO check source.n_cols == target.n_cols
     arma::vec G(target.n_rows);
     arma::vec ry2 = arma::pow(params.r + clustering.get_radii(), 2);

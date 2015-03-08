@@ -1,7 +1,6 @@
 set(src
     choose_truncation_number.cpp
     clustering.cpp
-    clustering/gonzalez.cpp
     constant_series.cpp
     direct.cpp
     gaussian_transform.cpp

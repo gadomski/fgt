@@ -1,5 +1,7 @@
 #pragma once
 
+#include <fgt/typedefs.hpp>
+
 #include <armadillo>
 
 
@@ -36,7 +38,6 @@ public:
     void increment_num_points(arma::uword i) { ++m_num_points(i); }
     void set_centers(const arma::mat& centers) { m_centers = centers; }
 
-    void initialize();
     arma::mat compute_C(const arma::vec& q) const;
 
 private:
@@ -50,6 +51,18 @@ private:
     double m_epsilon;
     arma::uword m_p_max;
     arma::rowvec m_constant_series;
-    bool m_is_initialized;
+};
+
+
+class GonzalezClustering : public Clustering {
+public:
+    static const optional_arma_uword_t DefaultStartingIndex;
+
+    GonzalezClustering(
+        const arma::mat& source, int K, double bandwidth, double epsilon,
+        optional_arma_uword_t starting_index = DefaultStartingIndex);
+
+private:
+    optional_arma_uword_t m_starting_index;
 };
 }

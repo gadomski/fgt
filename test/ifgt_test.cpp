@@ -1,6 +1,5 @@
 #include <fgt/fgt.hpp>
 
-#include "clustering/gonzalez.hpp"
 #include "clustering.hpp"
 #include "config.hpp"
 #include "parameters.hpp"
