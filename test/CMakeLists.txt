@@ -8,6 +8,7 @@ set(src
     clustering_test.cpp
     constant_series_test.cpp
     direct_test.cpp
+    gaussian_transform_test.cpp
     ifgt_test.cpp
     monomials_test.cpp
     )
