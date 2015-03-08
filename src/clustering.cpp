@@ -1,6 +1,5 @@
 #include "clustering.hpp"
 
-#include "choose_truncation_number.hpp"
 #include "constant_series.hpp"
 #include "monomials.hpp"
 #include "nchoosek.hpp"
@@ -34,6 +33,28 @@ Clustering::Clustering(const arma::mat& source, int K, double bandwidth,
     m_p_max =
         choose_truncation_number(m_source.n_cols, m_bandwidth, m_epsilon, m_rx);
     m_constant_series = compute_constant_series(m_source.n_cols, m_p_max);
+}
+
+
+arma::uword Clustering::choose_truncation_number(int dimensions, double bandwidth,
+                                                 double epsilon, double rx) {
+    double r = std::min(std::sqrt(dimensions),
+                        bandwidth * std::sqrt(std::log(1 / epsilon)));
+    double rx2 = rx * rx;
+    double h2 = bandwidth * bandwidth;
+    double error = 1;
+    double temp = 1;
+    int p = 0;
+
+    while ((error > epsilon) and (p <= TruncationNumberUpperLimit)) {
+        ++p;
+        double b = std::min((rx + std::sqrt(rx2 + 2 * p * h2)) / 2, rx + r);
+        double c = rx - b;
+        temp *= 2 * rx * b / h2 / p;
+        error = temp * std::exp(-c * c / h2);
+    }
+
+    return p;
 }
 
 

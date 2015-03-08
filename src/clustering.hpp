@@ -10,8 +10,16 @@ namespace fgt {
 
 class Clustering {
 public:
+
+    static const arma::uword TruncationNumberUpperLimit = 300;
+
     Clustering(const arma::mat& source, int K, double bandwidth,
                double epsilon);
+
+    static arma::uword choose_truncation_number(int dimensions,
+                                                double bandwidth,
+                                                double epsilon, double rx);
+
 
     arma::rowvec get_source_row(arma::uword i) const { return m_source.row(i); }
     const arma::uvec& get_indices() const { return m_indices; }

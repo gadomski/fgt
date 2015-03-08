@@ -4,7 +4,6 @@ configure_file(
     )
 
 set(src
-    choose_truncation_number_test.cpp
     clustering_test.cpp
     constant_series_test.cpp
     direct_test.cpp
