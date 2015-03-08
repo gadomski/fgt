@@ -1,4 +1,4 @@
-#include <ifgt/ifgt.hpp>
+#include <fgt/ifgt.hpp>
 
 #include "clustering.hpp"
 #include "clustering_factory.hpp"
@@ -6,7 +6,7 @@
 #include "parameters.hpp"
 
 
-namespace ifgt {
+namespace fgt {
 
 
 arma::vec ifgt(const arma::mat& source, const arma::mat& target,

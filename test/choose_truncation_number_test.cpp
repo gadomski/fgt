@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 TEST(ChooseTruncationNumber, ReferenceImplementation) {

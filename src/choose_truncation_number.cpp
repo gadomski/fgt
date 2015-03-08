@@ -4,7 +4,7 @@
 #include <cmath>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 namespace {

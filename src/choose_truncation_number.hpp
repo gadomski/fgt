@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace ifgt {
+namespace fgt {
 
 
 int choose_truncation_number(int d, double bandwidth, double epsilon,

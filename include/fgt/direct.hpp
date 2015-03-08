@@ -3,7 +3,7 @@
 #include <armadillo>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 arma::vec direct(const arma::mat& source, const arma::mat& target,

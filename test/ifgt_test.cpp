@@ -1,4 +1,4 @@
-#include <ifgt/ifgt.hpp>
+#include <fgt/ifgt.hpp>
 
 #include "clustering/gonzalez.hpp"
 #include "clustering.hpp"
@@ -9,7 +9,7 @@
 #include <gtest/gtest.h>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 TEST(Ifgt, ReferenceImplementation) {

@@ -7,7 +7,7 @@
 #include "p_max_total.hpp"
 
 
-namespace ifgt {
+namespace fgt {
 
 
 Clustering::Clustering(const arma::mat& source, int K, double bandwidth,

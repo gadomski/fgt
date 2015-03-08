@@ -1,4 +1,4 @@
-#include <ifgt/direct.hpp>
+#include <fgt/direct.hpp>
 
 #include "config.hpp"
 
@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 TEST(Direct, ReferenceImplementation) {

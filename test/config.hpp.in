@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 inline std::string test_data_path(const std::string& filename) {

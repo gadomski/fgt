@@ -3,7 +3,7 @@
 #include <armadillo>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 arma::rowvec compute_constant_series(arma::uword d, arma::uword p_max);

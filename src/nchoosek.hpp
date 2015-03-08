@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace ifgt {
+namespace fgt {
 
 
 inline int nchoosek(int n, int k) {

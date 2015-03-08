@@ -3,7 +3,7 @@
 #include "clustering.hpp"
 
 
-namespace ifgt {
+namespace fgt {
 
 
 namespace {

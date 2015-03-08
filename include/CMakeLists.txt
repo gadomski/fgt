@@ -1,1 +1,1 @@
-add_subdirectory(ifgt)
+add_subdirectory(fgt)

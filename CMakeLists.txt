@@ -1,7 +1,7 @@
 # Basic setup
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
-project(ifgt CXX C)
-set(IFGT_VERSION 0.1.0)
+project(fgt CXX C)
+set(FGT_VERSION 0.1.0)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -21,10 +21,10 @@ find_package(Armadillo 4.500.1 REQUIRED)
 
 
 # Targets
-set(IFGT_LIB_TARGET ifgt-lib)
-set(IFGT_LIB_NAME ifgt)
-set(IFGT_TEST_TARGET ifgt-test)
-set(IFGT_EXPORT IfgtTargets)
+set(FGT_LIB_TARGET fgt-lib)
+set(FGT_LIB_NAME fgt)
+set(FGT_TEST_TARGET fgt-test)
+set(FGT_EXPORT FgtTargets)
 
 
 # Subdirectories
@@ -38,32 +38,32 @@ if(BUILD_TESTS)
 endif()
 
 
-# IfgtConfig.cmake
+# FgtConfig.cmake
 include(CMakePackageConfigHelpers)
 
 set(INCLUDE_INSTALL_DIR include)
 
 configure_package_config_file(
-    cmake/IfgtConfig.cmake.in
-    ${PROJECT_BINARY_DIR}/IfgtConfig.cmake
-    INSTALL_DESTINATION lib/ifgt/cmake
+    cmake/FgtConfig.cmake.in
+    ${PROJECT_BINARY_DIR}/FgtConfig.cmake
+    INSTALL_DESTINATION lib/fgt/cmake
     PATH_VARS INCLUDE_INSTALL_DIR
     )
 write_basic_package_version_file(
-    ${PROJECT_BINARY_DIR}/IfgtConfigVersion.cmake
-    VERSION ${IFGT_VERSION}
+    ${PROJECT_BINARY_DIR}/FgtConfigVersion.cmake
+    VERSION ${FGT_VERSION}
     COMPATIBILITY SameMajorVersion
     )
-export(TARGETS ${IFGT_LIB_TARGET} FILE ${PROJECT_BINARY_DIR}/IfgtTargets.cmake)
+export(TARGETS ${FGT_LIB_TARGET} FILE ${PROJECT_BINARY_DIR}/FgtTargets.cmake)
 
 install(
     FILES
-        ${PROJECT_BINARY_DIR}/IfgtConfig.cmake
-        ${PROJECT_BINARY_DIR}/IfgtConfigVersion.cmake
+        ${PROJECT_BINARY_DIR}/FgtConfig.cmake
+        ${PROJECT_BINARY_DIR}/FgtConfigVersion.cmake
     DESTINATION
-        lib/ifgt/cmake
+        lib/fgt/cmake
         )
 install(
-    EXPORT ${IFGT_EXPORT}
-    DESTINATION lib/ifgt/cmake
+    EXPORT ${FGT_EXPORT}
+    DESTINATION lib/fgt/cmake
     )

@@ -1,7 +1,7 @@
-#include <ifgt/direct.hpp>
+#include <fgt/direct.hpp>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 arma::vec direct(const arma::mat& source, const arma::mat& target,

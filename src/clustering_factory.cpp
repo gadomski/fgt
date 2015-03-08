@@ -4,7 +4,7 @@
 #include "clustering/gonzalez.hpp"
 
 
-namespace ifgt {
+namespace fgt {
 
 
 ClusteringFactory::ClusteringFactory() {}

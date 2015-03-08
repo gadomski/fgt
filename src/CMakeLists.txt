@@ -21,15 +21,15 @@ include_directories(
     ${kmlocal_SOURCE_DIR}/src
     )
 
-add_library(${IFGT_LIB_TARGET} ${src})
-target_link_libraries(${IFGT_LIB_TARGET} ${deps})
-set_property(TARGET ${IFGT_LIB_TARGET}
-    PROPERTY OUTPUT_NAME ${IFGT_LIB_NAME})
-target_compile_definitions(${IFGT_LIB_TARGET} PUBLIC ARMA_64BIT_WORD)
+add_library(${FGT_LIB_TARGET} ${src})
+target_link_libraries(${FGT_LIB_TARGET} ${deps})
+set_property(TARGET ${FGT_LIB_TARGET}
+    PROPERTY OUTPUT_NAME ${FGT_LIB_NAME})
+target_compile_definitions(${FGT_LIB_TARGET} PUBLIC ARMA_64BIT_WORD)
 
 install(
-    TARGETS ${IFGT_LIB_TARGET}
-    EXPORT ${IFGT_EXPORT}
+    TARGETS ${FGT_LIB_TARGET}
+    EXPORT ${FGT_EXPORT}
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     )

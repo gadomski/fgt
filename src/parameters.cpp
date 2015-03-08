@@ -7,7 +7,7 @@
 #include <limits>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 namespace {

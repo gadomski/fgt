@@ -3,7 +3,7 @@
 #include <armadillo>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 class Clustering {

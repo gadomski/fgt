@@ -5,7 +5,7 @@
 #include <armadillo>
 
 
-namespace ifgt {
+namespace fgt {
 
 
 inline arma::uword get_p_max_total(arma::uword d, arma::uword p_max) {

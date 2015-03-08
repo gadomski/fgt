@@ -4,7 +4,7 @@ build:
 	    make
 
 test:
-	build/bin/ifgt-test
+	build/bin/fgt-test
 
 install:
 	cd build; sudo make install
