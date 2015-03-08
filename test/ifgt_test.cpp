@@ -2,13 +2,33 @@
 
 #include "clustering.hpp"
 #include "config.hpp"
-#include "parameters.hpp"
 
 #include <armadillo>
 #include <gtest/gtest.h>
 
 
 namespace fgt {
+
+TEST(ChooseIfgtParameters, LargeKLimit) {
+    int d = 2;
+    double h = 0.3;
+    double epsilon = 1e-6;
+    int k_limit = 189;
+    Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
+    EXPECT_EQ(13, params.num_clusters);
+    EXPECT_NEAR(1.1151, params.radius, 0.0001);
+}
+
+
+TEST(ChooseIfgtParameters, SmallKLimit) {
+    arma::uword d = 2;
+    double h = 0.4;
+    double epsilon = 1e-3;
+    arma::uword k_limit = 50;
+    Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
+    EXPECT_EQ(15, params.num_clusters);
+    EXPECT_NEAR(1.051304, params.radius, 0.000001);
+}
 
 
 TEST(Ifgt, ReferenceImplementation) {

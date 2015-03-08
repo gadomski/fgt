@@ -6,6 +6,9 @@
 namespace fgt {
 
 
+class Clustering;
+
+
 class GaussianTransform {
 public:
     GaussianTransform(const arma::mat& source, double bandwidth);
@@ -36,10 +39,23 @@ public:
 
 class Ifgt : public GaussianTransform {
 public:
-    static const int DefaultKLimit = 50;
+    struct Parameters {
+        arma::uword num_clusters;
+        double radius;
+    };
+
+    static const arma::uword DefaultNumClustersLimit = 50;
+    static const arma::uword MaxNumClusters = 200;
+    static const arma::uword NumClusterLimitFactor = 20;
 
     Ifgt(const arma::mat& source, double bandwidth, double epsilon,
-         int k_limit = DefaultKLimit);
+         int k_limit = DefaultNumClustersLimit);
+
+    static Parameters choose_parameters(arma::uword dimensions,
+                                        double bandwidth, double epsilon);
+    static Parameters choose_parameters(arma::uword dimensions,
+                                        double bandwidth, double epsilon,
+                                        arma::uword k_limit);
 
     using GaussianTransform::compute;
     virtual arma::vec compute(const arma::mat& target,
@@ -51,5 +67,6 @@ private:
     double m_epsilon;
     int m_k_limit;
     optional_arma_uword_t m_clustering_starting_index;
+    std::unique_ptr<Clustering> m_clustering;
 };
 }

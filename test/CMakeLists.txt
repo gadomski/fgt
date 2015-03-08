@@ -10,7 +10,6 @@ set(src
     direct_test.cpp
     ifgt_test.cpp
     monomials_test.cpp
-    parameters_test.cpp
     )
 
 set(deps
