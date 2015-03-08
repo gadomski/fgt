@@ -27,3 +27,6 @@ include_directories(
 add_executable(${FGT_TEST_TARGET} ${src})
 target_link_libraries(${FGT_TEST_TARGET} ${deps})
 add_test(unit-tests ${PROJECT_BINARY_DIR}/bin/${FGT_TEST_TARGET})
+
+add_executable(${FGT_TRIAL_TARGET} trial.cpp)
+target_link_libraries(${FGT_TRIAL_TARGET} ${deps})

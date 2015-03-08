@@ -24,6 +24,7 @@ find_package(Armadillo 4.500.1 REQUIRED)
 set(FGT_LIB_TARGET fgt-lib)
 set(FGT_LIB_NAME fgt)
 set(FGT_TEST_TARGET fgt-test)
+set(FGT_TRIAL_TARGET fgt-trial)
 set(FGT_EXPORT FgtTargets)
 
 
