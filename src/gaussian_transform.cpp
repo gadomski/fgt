@@ -1,5 +1,7 @@
 #include <fgt/fgt.hpp>
 
+#include <fgt/exceptions.hpp>
+
 
 namespace fgt {
 
@@ -17,6 +19,12 @@ arma::vec GaussianTransform::compute(const arma::mat& target) const {
 
 arma::vec GaussianTransform::compute(const arma::mat& target,
                                      const arma::vec& weights) const {
+    if (m_source.n_cols != target.n_cols) {
+        std::stringstream ss;
+        ss << "Dimentionality of source and target do not match ("
+           << m_source.n_cols << " vs " << target.n_cols << ")";
+        throw dimension_mismatch(ss.str());
+    }
     return compute_impl(target, weights);
 }
 }
