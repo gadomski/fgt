@@ -4,16 +4,14 @@
 #include "clustering/gonzalez.hpp"
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
 ClusteringFactory::ClusteringFactory() {}
 
 
 Clustering ClusteringFactory::compute(const arma::mat& source, arma::uword k,
-                                      double bandwidth, double epsilon)
-{
+                                      double bandwidth, double epsilon) {
     Clustering clustering = gonzalez_clustering(source, k, bandwidth, epsilon,
                                                 false, arma::uword());
     clustering.initialize();

@@ -3,15 +3,13 @@
 #include <armadillo>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
 class Clustering;
 
 
-class ClusteringFactory
-{
+class ClusteringFactory {
 public:
     ClusteringFactory();
 

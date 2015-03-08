@@ -3,12 +3,10 @@
 #include <armadillo>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
-class Clustering
-{
+class Clustering {
 public:
     Clustering(const arma::mat& source, int K, double bandwidth,
                double epsilon);
@@ -20,13 +18,11 @@ public:
     const arma::uvec& get_num_points() const { return m_num_points; }
     const arma::vec& get_radii() const { return m_radii; }
     double get_radius(arma::uword i) const { return m_radii(i); }
-    arma::uword get_radius_idxmax(arma::uword i) const
-    {
+    arma::uword get_radius_idxmax(arma::uword i) const {
         return std::max_element(m_radii.begin(), m_radii.begin() + i) -
                m_radii.begin();
     }
-    double get_max_radius() const
-    {
+    double get_max_radius() const {
         return *std::max_element(m_radii.begin(), m_radii.end());
     }
     double get_rx() const { return m_rx; }

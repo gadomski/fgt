@@ -8,12 +8,10 @@
 #include <gtest/gtest.h>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
-TEST(GonzalezClustering, ReferenceImplementation)
-{
+TEST(GonzalezClustering, ReferenceImplementation) {
     arma::mat X;
     X.load(test_data_path("X.csv"));
     int K = 15;

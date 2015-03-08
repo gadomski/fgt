@@ -4,12 +4,10 @@
 #include <gtest/gtest.h>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
-TEST(ConstantSeries, ReferenceImplementation)
-{
+TEST(ConstantSeries, ReferenceImplementation) {
     arma::uword d = 2;
     arma::uword p_max = 70;
     arma::rowvec series = compute_constant_series(2, 70);

@@ -3,11 +3,11 @@
 #include <armadillo>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
-arma::vec direct(const arma::mat& source, const arma::mat& target, double bandwidth);
-arma::vec direct(const arma::mat& source, const arma::mat& target, double bandwidth,
-                 const arma::vec& weights);
+arma::vec direct(const arma::mat& source, const arma::mat& target,
+                 double bandwidth);
+arma::vec direct(const arma::mat& source, const arma::mat& target,
+                 double bandwidth, const arma::vec& weights);
 }

@@ -3,12 +3,10 @@
 #include <armadillo>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
-struct Parameters
-{
+struct Parameters {
     int K;
     double r;
 };

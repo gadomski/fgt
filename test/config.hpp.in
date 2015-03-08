@@ -3,12 +3,10 @@
 #include <string>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
-inline std::string test_data_path(const std::string& filename)
-{
+inline std::string test_data_path(const std::string& filename) {
     return "@PROJECT_SOURCE_DIR@/test/data/" + filename;
 }
 }

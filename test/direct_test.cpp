@@ -6,12 +6,10 @@
 #include <gtest/gtest.h>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
-TEST(Direct, ReferenceImplementation)
-{
+TEST(Direct, ReferenceImplementation) {
     arma::mat X, Y;
     X.load(test_data_path("X.csv"));
     Y.load(test_data_path("Y.csv"));

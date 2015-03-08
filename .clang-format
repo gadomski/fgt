@@ -41,7 +41,7 @@ Standard:        Cpp11
 IndentWidth:     4
 TabWidth:        8
 UseTab:          Never
-BreakBeforeBraces: Allman
+BreakBeforeBraces: Attach
 SpacesInParentheses: false
 SpacesInAngles:  false
 SpaceInEmptyParentheses: false

@@ -3,12 +3,10 @@
 #include <gtest/gtest.h>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
-TEST(ChooseTruncationNumber, ReferenceImplementation)
-{
+TEST(ChooseTruncationNumber, ReferenceImplementation) {
     int d = 2;
     double h = 0.3;
     double epsilon = 1e-6;

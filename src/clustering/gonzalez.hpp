@@ -3,11 +3,9 @@
 #include <armadillo>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 class Clustering;
-
 
 Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
                                double epsilon, bool use_starting_idx,

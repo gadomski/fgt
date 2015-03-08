@@ -4,12 +4,10 @@
 #include <gtest/gtest.h>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
-TEST(Monomials, ReferenceImplementation)
-{
+TEST(Monomials, ReferenceImplementation) {
     arma::rowvec dx = {0.319529, 0.401860};
     arma::uword p_max = 70;
     arma::rowvec monomials = compute_monomials(dx / 0.4, p_max);

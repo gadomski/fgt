@@ -1,12 +1,10 @@
 #include <armadillo>
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 class Clustering;
 struct Parameters;
-
 
 arma::vec ifgt(const arma::mat& source, const arma::mat& target,
                double bandwidth, double epsilon);

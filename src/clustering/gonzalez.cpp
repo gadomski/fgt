@@ -3,16 +3,13 @@
 #include "clustering.hpp"
 
 
-namespace ifgt
-{
+namespace ifgt {
 
 
-namespace
-{
+namespace {
 
 
-double ddist(const arma::rowvec& x, const arma::rowvec& y)
-{
+double ddist(const arma::rowvec& x, const arma::rowvec& y) {
     return arma::accu(arma::pow(x - y, 2));
 }
 }
@@ -20,8 +17,7 @@ double ddist(const arma::rowvec& x, const arma::rowvec& y)
 
 Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
                                double epsilon, bool use_starting_idx,
-                               arma::uword starting_idx)
-{
+                               arma::uword starting_idx) {
     Clustering clustering(source, K, bandwidth, epsilon);
 
     arma::uword N = source.n_rows;
@@ -32,19 +28,15 @@ Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
     arma::vec dist(N);
 
     arma::uword nc;
-    if (use_starting_idx)
-    {
+    if (use_starting_idx) {
         nc = starting_idx;
-    }
-    else
-    {
+    } else {
         std::random_device rd;
         nc = rd() % N;
     }
     centers(0) = nc;
 
-    for (arma::uword i = 0; i < N; ++i)
-    {
+    for (arma::uword i = 0; i < N; ++i) {
         dist(i) = (i == nc) ? 0.0 : ddist(source.row(i), source.row(nc));
         cnext(i) = i + 1;
         cprev(i) = i - 1;
@@ -57,8 +49,7 @@ Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
     far2c(0) = nc;
     clustering.set_radius(0, dist(nc));
 
-    for (int i = 1; i < K; ++i)
-    {
+    for (int i = 1; i < K; ++i) {
         nc = far2c(clustering.get_radius_idxmax(i));
 
         centers(i) = nc;
@@ -72,28 +63,22 @@ Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
         cnext(nc) = nc;
         cprev(nc) = nc;
 
-        for (int j = 0; j < i; ++j)
-        {
+        for (int j = 0; j < i; ++j) {
             arma::uword ct_j = centers(j);
             double dc2cq = ddist(source.row(ct_j), source.row(nc)) / 4;
-            if (dc2cq < clustering.get_radius(j))
-            {
+            if (dc2cq < clustering.get_radius(j)) {
                 clustering.set_radius(j, 0.0);
                 far2c(j) = ct_j;
                 arma::uword k = cnext(ct_j);
-                while (k != ct_j)
-                {
+                while (k != ct_j) {
                     arma::uword nextk = cnext(k);
                     double dist2c_k = dist(k);
-                    if (dc2cq < dist2c_k)
-                    {
+                    if (dc2cq < dist2c_k) {
                         double dd = ddist(source.row(k), source.row(nc));
-                        if (dd < dist2c_k)
-                        {
+                        if (dd < dist2c_k) {
                             dist(k) = dd;
                             clustering.set_index(k, i);
-                            if (clustering.get_radius(i) < dd)
-                            {
+                            if (clustering.get_radius(i) < dd) {
                                 clustering.set_radius(i, dd);
                                 far2c(i) = k;
                             }
@@ -103,15 +88,11 @@ Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
                             cprev(cnext(nc)) = k;
                             cnext(nc) = k;
                             cprev(k) = nc;
-                        }
-                        else if (clustering.get_radius(j) < dist2c_k)
-                        {
+                        } else if (clustering.get_radius(j) < dist2c_k) {
                             clustering.set_radius(j, dist2c_k);
                             far2c(j) = k;
                         }
-                    }
-                    else if (clustering.get_radius(j) < dist2c_k)
-                    {
+                    } else if (clustering.get_radius(j) < dist2c_k) {
                         clustering.set_radius(j, dist2c_k);
                         far2c(j) = k;
                     }
@@ -125,8 +106,7 @@ Clustering gonzalez_clustering(const arma::mat& source, int K, double bandwidth,
     clustering.set_rx(clustering.get_max_radius());
 
     arma::mat center_coordinates(clustering.get_centers());
-    for (arma::uword i = 0; i < N; ++i)
-    {
+    for (arma::uword i = 0; i < N; ++i) {
         clustering.increment_num_points(clustering.get_index(i));
         center_coordinates.row(clustering.get_index(i)) += source.row(i);
     }
