@@ -17,6 +17,6 @@
     "test/*_test.cpp": {
         "alternate": ["src/{}.cpp", "src/{}.hpp", "include/ifgt/{}.hpp"],
         "type": "test",
-        "template": ["#include <gtest/gtest.h>", "#include \"{}.hpp\"", "", "", "namespace ifgt", "{", "", "", "}"]
+        "template": ["#include \"{}.hpp\"", "", "#include <gtest/gtest.h>", "", "", "namespace ifgt", "{", "", "", "}"]
     }
 }

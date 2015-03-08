@@ -4,6 +4,7 @@ set(src
     clustering/gonzalez.cpp
     clustering_factory.cpp
     constant_series.cpp
+    direct.cpp
     ifgt.cpp
     monomials.cpp
     parameters.cpp
