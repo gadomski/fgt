@@ -41,8 +41,8 @@ TEST(GonzalezClustering, ReferenceImplementation) {
     EXPECT_EQ(15, clustering.get_centers().n_rows);
     EXPECT_EQ(expected_num_points, actual_num_points);
     EXPECT_EQ(15, clustering.get_radii().size());
-    EXPECT_NEAR(0.0799, clustering.get_radius(0), 0.0001);
-    EXPECT_NEAR(0.1838, clustering.get_rx(), 0.0001);
-    EXPECT_TRUE(clustering.get_p_max() > 0);
+    EXPECT_DOUBLE_EQ(0.079945937357691899, clustering.get_radius(0));
+    EXPECT_DOUBLE_EQ(0.18376119993077969, clustering.get_rx());
+    EXPECT_EQ(6, clustering.get_p_max());
 }
 }

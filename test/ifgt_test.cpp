@@ -44,8 +44,7 @@ TEST(Ifgt, ReferenceImplementation) {
     ifgt.set_clustering_starting_index(2);
     arma::vec g = ifgt.compute(target, weights);
 
-    EXPECT_EQ(g.n_rows, 5000);
-    EXPECT_DOUBLE_EQ(346.36423735983732, arma::min(g));
-    EXPECT_DOUBLE_EQ(2190.6088281193192, arma::max(g));
+    EXPECT_EQ(5000, g.n_rows);
+    EXPECT_DOUBLE_EQ(2.071868804956274e+03, g(0));
 }
 }

@@ -22,7 +22,7 @@ public:
                                                 double epsilon, double rx);
 
 
-    virtual void cluster() = 0;
+    void cluster();
     arma::mat compute_C(const arma::vec& q) const;
     const arma::mat& get_centers() const { return m_centers; }
     arma::uword get_d() const { return m_source.n_cols; }
@@ -34,7 +34,7 @@ public:
     }
     const arma::uword get_n_rows() const { return m_source.n_rows; }
     const arma::uvec& get_num_points() const { return m_num_points; }
-    double get_p_max() const { return m_p_max; }
+    arma::uword get_p_max() const { return m_p_max; }
     const arma::vec& get_radii() const { return m_radii; }
     double get_radius(arma::uword i) const { return m_radii(i); }
     arma::uword get_radius_idxmax(arma::uword i) const {
@@ -51,6 +51,8 @@ public:
     void set_centers(const arma::mat& centers) { m_centers = centers; }
 
 private:
+    virtual void cluster_impl() = 0;
+
     const arma::mat& m_source;
     arma::uword m_K;
     arma::uvec m_indices;
@@ -73,9 +75,9 @@ public:
         const arma::mat& source, int K, double bandwidth, double epsilon,
         optional_arma_uword_t starting_index = DefaultStartingIndex);
 
-    virtual void cluster() override;
-
 private:
+    virtual void cluster_impl() override;
+
     optional_arma_uword_t m_starting_index;
 };
 }

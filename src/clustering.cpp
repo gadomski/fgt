@@ -30,11 +30,7 @@ Clustering::Clustering(const arma::mat& source, arma::uword K, double bandwidth,
       m_bandwidth(bandwidth),
       m_epsilon(epsilon),
       m_p_max(0),
-      m_constant_series() {
-    m_p_max =
-        choose_truncation_number(m_source.n_cols, m_bandwidth, m_epsilon, m_rx);
-    m_constant_series = compute_constant_series(m_source.n_cols, m_p_max);
-}
+      m_constant_series() {}
 
 
 Clustering::~Clustering() {}
@@ -60,6 +56,14 @@ arma::uword Clustering::choose_truncation_number(int dimensions,
     }
 
     return p;
+}
+
+
+void Clustering::cluster() {
+    cluster_impl();
+    m_p_max =
+        choose_truncation_number(m_source.n_cols, m_bandwidth, m_epsilon, m_rx);
+    m_constant_series = compute_constant_series(m_source.n_cols, m_p_max);
 }
 
 
@@ -99,7 +103,7 @@ GonzalezClustering::GonzalezClustering(const arma::mat& source, int K,
       m_starting_index(starting_index) {}
 
 
-void GonzalezClustering::cluster() {
+void GonzalezClustering::cluster_impl() {
     arma::uword N = get_n_rows();
     arma::uword K = get_K();
     arma::uvec centers(K);
