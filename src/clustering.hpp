@@ -62,7 +62,7 @@ private:
     double m_bandwidth;
     double m_epsilon;
     arma::uword m_p_max;
-    arma::rowvec m_constant_series;
+    std::vector<double> m_constant_series;
 };
 
 

@@ -63,7 +63,8 @@ void Clustering::cluster() {
     cluster_impl();
     m_p_max =
         choose_truncation_number(m_source.n_cols, m_bandwidth, m_epsilon, m_rx);
-    m_constant_series = compute_constant_series(m_source.n_cols, m_p_max);
+    m_constant_series.resize(get_p_max_total(m_source.n_cols, m_p_max));
+    compute_constant_series(m_source.n_cols, m_p_max, m_constant_series);
 }
 
 
@@ -84,11 +85,9 @@ arma::mat Clustering::compute_C(const arma::vec& q) const {
         }
     }
 
-    arma::rowvec constant_series =
-        compute_constant_series(m_source.n_cols, m_p_max);
     for (arma::uword i = 0; i < C.n_rows; ++i) {
         for (arma::uword j = 0; j < C.n_cols; ++j) {
-            C(i, j) = C(i, j) * constant_series[j];
+            C(i, j) = C(i, j) * m_constant_series[j];
         }
     }
 
