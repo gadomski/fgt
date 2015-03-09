@@ -19,7 +19,7 @@ protected:
           m_source(arma::randu<arma::mat>(NumSourceRows, NumCols)),
           m_target(arma::randu<arma::mat>(NumTargetRows, NumCols)),
           m_weights(arma::randu<arma::vec>(NumSourceRows)),
-          m_weights_sum(arma::accu(m_weights)),
+          m_weights_sum(arma::sum(m_weights)),
           m_epsilon(Epsilon) {}
 
     arma::mat m_source, m_target;
@@ -34,7 +34,7 @@ TEST_P(Trial, AllMethods) {
     arma::vec g_direct = direct.compute(m_target, m_weights);
 
     Ifgt ifgt(m_source, GetParam(), m_epsilon);
-    arma::vec g_ifgt = ifgt.compute(m_source, m_weights);
+    arma::vec g_ifgt = ifgt.compute(m_target, m_weights);
 
     double error_ifgt = arma::max(arma::abs(g_ifgt - g_direct) / m_weights_sum);
     EXPECT_GT(m_epsilon, error_ifgt);
