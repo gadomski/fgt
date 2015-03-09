@@ -87,7 +87,9 @@ arma::mat Clustering::compute_C(const arma::vec& q) const {
     arma::rowvec constant_series =
         compute_constant_series(m_source.n_cols, m_p_max);
     for (arma::uword i = 0; i < C.n_rows; ++i) {
-        C.row(i) = C.row(i) % constant_series;
+        for (arma::uword j = 0; j < C.n_cols; ++j) {
+            C(i, j) = C(i, j) * constant_series[j];
+        }
     }
 
     return C;
