@@ -70,15 +70,17 @@ void Clustering::cluster() {
 arma::mat Clustering::compute_C(const arma::vec& q) const {
     arma::mat C = arma::zeros<arma::mat>(
         m_centers.n_rows, get_p_max_total(m_source.n_cols, m_p_max));
+    std::vector<double> monomials(C.n_cols);
     double h2 = m_bandwidth * m_bandwidth;
 
     for (arma::uword i = 0; i < m_source.n_rows; ++i) {
         arma::uword k = m_indices(i);
         arma::rowvec dx = m_source.row(i) - m_centers.row(k);
         double distance2 = arma::accu(arma::pow(dx, 2));
-        arma::rowvec center_monomials =
-            compute_monomials(dx / m_bandwidth, m_p_max);
+        compute_monomials(dx / m_bandwidth, m_p_max, monomials);
         double f = q(i) * std::exp(-distance2 / h2);
+        // TODO remove rowvec
+        arma::rowvec center_monomials(monomials);
         C.row(k) += f * center_monomials;
     }
 

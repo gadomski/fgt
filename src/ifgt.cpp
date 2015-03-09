@@ -3,10 +3,12 @@
 #include "clustering.hpp"
 #include "monomials.hpp"
 #include "nchoosek.hpp"
+#include "p_max_total.hpp"
 
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <vector>
 
 
 namespace fgt {
@@ -86,6 +88,9 @@ arma::vec Ifgt::compute_impl(const arma::mat& target,
     GonzalezClustering clustering(source, params.num_clusters, bandwidth,
                                   m_epsilon, get_clustering_starting_index());
     clustering.cluster();
+    arma::uword p_max = clustering.get_p_max();
+    arma::uword p_max_total = get_p_max_total(source.n_cols, p_max);
+    std::vector<double> monomials(p_max_total);
     arma::vec G(target.n_rows);
     arma::vec ry2 = arma::pow(params.radius + clustering.get_radii(), 2);
     double h2 = bandwidth * bandwidth;
@@ -97,10 +102,10 @@ arma::vec Ifgt::compute_impl(const arma::mat& target,
             double distance2 = arma::accu(arma::pow(dy, 2));
             if (distance2 <= ry2(k)) {
                 double g = std::exp(-distance2 / h2);
-                G(j) += arma::accu(
-                    C.row(k) %
-                    compute_monomials(dy / bandwidth, clustering.get_p_max()) *
-                    g);
+                compute_monomials(dy / bandwidth, p_max, monomials);
+                // TODO don't create the rowvec
+                arma::rowvec monomials_rowvec(monomials);
+                G(j) += arma::accu(C.row(k) % monomials_rowvec * g);
             }
         }
     }
