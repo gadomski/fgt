@@ -16,7 +16,7 @@ namespace fgt {
 Ifgt::Parameters Ifgt::choose_parameters(arma::uword d, double bandwidth,
                                          double epsilon) {
     return choose_parameters(d, bandwidth, epsilon,
-                             std::round(NumClusterLimitFactor / bandwidth));
+                             std::round(NumClusterLimitFactor * std::sqrt(d) / bandwidth));
 }
 
 
