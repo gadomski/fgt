@@ -5,6 +5,7 @@ build:
 
 test:
 	build/bin/fgt-test
+	build/bin/fgt-trial
 
 install:
 	cd build; sudo make install
