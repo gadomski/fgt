@@ -9,6 +9,7 @@
 
 namespace fgt {
 
+
 TEST(ChooseIfgtParameters, LargeKLimit) {
     int d = 2;
     double h = 0.3;
@@ -28,6 +29,16 @@ TEST(ChooseIfgtParameters, SmallKLimit) {
     Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
     EXPECT_EQ(15, params.num_clusters);
     EXPECT_NEAR(1.051304, params.radius, 0.000001);
+}
+
+
+TEST(ChooseIfgtParameters, NoBoundFound) {
+    int d = 3;
+    double h = 0.01;
+    double epsilon = 1e-2;
+    int k_limit = 189;
+    Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
+    EXPECT_EQ(k_limit, params.num_clusters);
 }
 
 

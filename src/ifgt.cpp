@@ -27,9 +27,10 @@ Ifgt::Parameters Ifgt::choose_parameters(arma::uword d, double bandwidth,
     double h2 = bandwidth * bandwidth;
     double complexity_min = std::numeric_limits<double>::max();
     double rx = 0.0;
+    double error_min = epsilon + 1;
 
     params.radius = std::min(R, bandwidth * std::sqrt(std::log(1 / epsilon)));
-    params.num_clusters = 1;
+    params.num_clusters = 0;
 
     for (arma::uword i = 0; i < k_limit; ++i) {
         rx = std::pow(double(i + 1), -1.0 / double(d));
@@ -54,7 +55,13 @@ Ifgt::Parameters Ifgt::choose_parameters(arma::uword d, double bandwidth,
         if (complexity < complexity_min) {
             complexity_min = complexity;
             params.num_clusters = i + 1;
+            error_min = error;
         }
+    }
+
+    if (error_min > epsilon)
+    {
+        params.num_clusters = k_limit;
     }
 
     return params;
