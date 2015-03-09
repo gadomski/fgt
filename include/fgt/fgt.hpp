@@ -14,6 +14,7 @@ public:
     arma::vec compute(const arma::mat& target) const;
     arma::vec compute(const arma::mat& target, const arma::vec& weights) const;
     double get_bandwidth() const { return m_bandwidth; }
+    arma::uword get_dimensions() const { return m_source.n_cols; }
     const arma::mat& get_source() const { return m_source; }
     arma::uword get_source_n_rows() const { return m_source.n_rows; }
 
@@ -33,6 +34,25 @@ public:
 private:
     virtual arma::vec compute_impl(const arma::mat& target,
                                    const arma::vec& weights) const override;
+};
+
+
+class DirectTree : public GaussianTransform {
+public:
+    static const size_t MaxLeafSize = 10;
+
+    DirectTree(const arma::mat& source, double bandwidth, double epsilon);
+
+private:
+    virtual arma::vec compute_impl(const arma::mat& target,
+                                   const arma::vec& weights) const override;
+    // I could set Dimensions to -1 and then determine at runtime.
+    template <arma::uword Dimensions>
+    arma::vec compute_impl_with_dimensions(const arma::mat& target,
+                                           const arma::vec& weights) const;
+
+    double m_epsilon;
+    size_t m_max_leaf;
 };
 
 

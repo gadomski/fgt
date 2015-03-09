@@ -33,6 +33,9 @@ TEST_P(Trial, AllMethods) {
     Direct direct(m_source, GetParam());
     arma::vec g_direct = direct.compute(m_target, m_weights);
 
+    DirectTree direct_tree(m_source, GetParam(), m_epsilon);
+    arma::vec g_direct_tree = direct_tree.compute(m_target, m_weights);
+
     Ifgt ifgt(m_source, GetParam(), m_epsilon);
     arma::vec g_ifgt = ifgt.compute(m_target, m_weights);
 
@@ -41,10 +44,13 @@ TEST_P(Trial, AllMethods) {
     arma::vec g_ifgt_data_adaptive =
         ifgt_data_adaptive.compute(m_target, m_weights);
 
+    double error_direct_tree =
+        arma::max(arma::abs(g_direct_tree - g_direct) / m_weights_sum);
     double error_ifgt = arma::max(arma::abs(g_ifgt - g_direct) / m_weights_sum);
     double error_ifgt_data_adaptive =
         arma::max(arma::abs(g_ifgt_data_adaptive - g_direct) / m_weights_sum);
 
+    EXPECT_GT(m_epsilon, error_direct_tree);
     EXPECT_GT(m_epsilon, error_ifgt);
     EXPECT_GT(m_epsilon, error_ifgt_data_adaptive);
 }

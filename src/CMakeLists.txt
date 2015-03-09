@@ -2,6 +2,7 @@ set(src
     clustering.cpp
     constant_series.cpp
     direct.cpp
+    direct_tree.cpp
     gaussian_transform.cpp
     ifgt.cpp
     monomials.cpp
@@ -24,7 +25,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
     ${ARMADILLO_INCLUDE_DIRS}
-    ${kmlocal_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/vendor/nanoflann-v1.1.8-25-g6c91a0e/include
     )
 
 add_library(${FGT_LIB_TARGET} ${src})

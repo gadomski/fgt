@@ -18,4 +18,8 @@ public:
 };
 
 
+class unsupported_number_of_dimensions : public fgt_error {
+public:
+    using fgt_error::fgt_error;
+};
 }
