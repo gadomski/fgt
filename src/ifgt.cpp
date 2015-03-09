@@ -73,7 +73,8 @@ Ifgt::Ifgt(const arma::mat& source, double bandwidth, double epsilon,
     : GaussianTransform(source, bandwidth),
       m_epsilon(epsilon),
       m_k_limit(k_limit),
-      m_clustering_starting_index(std::make_pair(false, 0)) {}
+      m_clustering_starting_index(std::make_pair(false, 0)),
+      m_data_adaptive(false) {}
 
 
 optional_arma_uword_t Ifgt::get_clustering_starting_index() const {

@@ -4,6 +4,7 @@
 #include "monomials.hpp"
 #include "nchoosek.hpp"
 #include "p_max_total.hpp"
+#include "truncation_number.hpp"
 
 
 namespace fgt {
@@ -36,62 +37,16 @@ Clustering::Clustering(const arma::mat& source, arma::uword K, double bandwidth,
 Clustering::~Clustering() {}
 
 
-arma::uword Clustering::choose_truncation_number(int dimensions,
-                                                 double bandwidth,
-                                                 double epsilon, double rx) {
-    double r = std::min(std::sqrt(dimensions),
-                        bandwidth * std::sqrt(std::log(1 / epsilon)));
-    double rx2 = rx * rx;
-    double h2 = bandwidth * bandwidth;
-    double error = 1;
-    double temp = 1;
-    int p = 0;
-
-    while ((error > epsilon) and (p <= TruncationNumberUpperLimit)) {
-        ++p;
-        double b = std::min((rx + std::sqrt(rx2 + 2 * p * h2)) / 2, rx + r);
-        double c = rx - b;
-        temp *= 2 * rx * b / h2 / p;
-        error = temp * std::exp(-c * c / h2);
-    }
-
-    return p;
-}
-
-
-// TODO clean up naming between this and above
-// orrrr just make it one function
-arma::uword Clustering::find_truncation_number(double distance2,
-                                               double cutoff_radius,
-                                               arma::uword k) const {
-    double distance = std::sqrt(distance2);
-    double b, c;
-    double error = m_epsilon + 1;
-    double temp = 1;
-    arma::uword truncation_number = 1;
-    double bandwidth2 = m_bandwidth * m_bandwidth;
-    double ry = get_radius(k) + cutoff_radius;
-
-    while (error > m_epsilon and truncation_number <= m_p_max) {
-        b = std::min(
-            (distance +
-             std::sqrt(distance2 + 2 * truncation_number * bandwidth2)) /
-                2,
-            ry);
-        c = distance - b;
-        temp *= 2 * distance * b / bandwidth2 / double(truncation_number);
-        error = temp * std::exp(-c * c / bandwidth2);
-        truncation_number++;
-    }
-    return truncation_number - 1;
-}
-
-
 void Clustering::cluster() {
     cluster_impl();
-    m_p_max =
-        choose_truncation_number(m_source.n_cols, m_bandwidth, m_epsilon, m_rx);
-    m_constant_series.resize(get_p_max_total(m_source.n_cols, m_p_max));
+    double r =
+        std::min(std::sqrt(get_dimensions()),
+                 get_bandwidth() * std::sqrt(std::log(1 / get_epsilon())));
+    double distance2 = get_rx() * get_rx();
+    double cutoff_radius = get_rx() + r;
+    m_p_max = choose_truncation_number(distance2, cutoff_radius,
+                                       get_bandwidth(), get_epsilon());
+    m_constant_series.resize(get_p_max_total(get_dimensions(), get_p_max()));
     compute_constant_series(m_source.n_cols, m_p_max, m_constant_series);
 }
 
@@ -102,7 +57,7 @@ arma::mat Clustering::compute_C(const arma::vec& q, double cutoff_radius,
     std::vector<arma::uword> truncation_numbers(m_source.n_rows);
     arma::uword p_max_actual = 0;
     arma::uword p_max = m_p_max;
-    arma::uword p_max_total = get_p_max_total(m_source.n_cols, p_max);
+    arma::uword p_max_total = get_p_max_total(get_dimensions(), p_max);
     arma::mat C = arma::zeros<arma::mat>(m_centers.n_rows, p_max_total);
     std::vector<double> monomials(C.n_cols);
 
@@ -112,13 +67,15 @@ arma::mat Clustering::compute_C(const arma::vec& q, double cutoff_radius,
         double distance2 = arma::accu(arma::pow(dx, 2));
 
         if (data_adaptive) {
-            truncation_numbers[i] =
-                find_truncation_number(distance2, cutoff_radius, k);
+            double cluster_cutoff_radius = cutoff_radius + get_radius(k);
+            truncation_numbers[i] = choose_truncation_number(
+                distance2, cluster_cutoff_radius, get_bandwidth(),
+                get_epsilon(), get_p_max());
             if (truncation_numbers[i] > p_max_actual) {
                 p_max_actual = truncation_numbers[i];
             }
             p_max = truncation_numbers[i];
-            p_max_total = get_p_max_total(m_source.n_cols, p_max);
+            p_max_total = get_p_max_total(get_dimensions(), p_max);
         }
         compute_monomials(dx / m_bandwidth, p_max, monomials);
         double f = q(i) * std::exp(-distance2 / h2);
@@ -128,7 +85,7 @@ arma::mat Clustering::compute_C(const arma::vec& q, double cutoff_radius,
     }
 
     if (data_adaptive) {
-        C.resize(C.n_rows, get_p_max_total(m_source.n_cols, p_max_actual));
+        C.resize(C.n_rows, get_p_max_total(get_dimensions(), p_max_actual));
     }
 
     for (arma::uword i = 0; i < C.n_rows; ++i) {
@@ -247,6 +204,6 @@ void GonzalezClustering::cluster_impl() {
         center_coordinates.row(get_index(i)) += get_source_row(i);
     }
     set_centers(center_coordinates /
-                arma::repmat(get_num_points(), 1, get_d()));
+                arma::repmat(get_num_points(), 1, get_dimensions()));
 }
 }

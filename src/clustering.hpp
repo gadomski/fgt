@@ -10,22 +10,17 @@ namespace fgt {
 
 class Clustering {
 public:
-    static const arma::uword TruncationNumberUpperLimit = 300;
-
     Clustering(const arma::mat& source, arma::uword K, double bandwidth,
                double epsilon);
     virtual ~Clustering();
 
-    static arma::uword choose_truncation_number(int dimensions,
-                                                double bandwidth,
-                                                double epsilon, double rx);
-
-
     void cluster();
     arma::mat compute_C(const arma::vec& q, double cutoff_radius,
                         bool data_adaptive) const;
+    double get_bandwidth() const { return m_bandwidth; }
     const arma::mat& get_centers() const { return m_centers; }
-    arma::uword get_d() const { return m_source.n_cols; }
+    arma::uword get_dimensions() const { return m_source.n_cols; }
+    double get_epsilon() const { return m_epsilon; }
     arma::uword get_index(arma::uword i) const { return m_indices(i); }
     const arma::uvec& get_indices() const { return m_indices; }
     arma::uword get_K() const { return m_K; }
@@ -52,7 +47,6 @@ public:
 
 private:
     virtual void cluster_impl() = 0;
-    arma::uword find_truncation_number(double distance2, double cutoff_radius, arma::uword k) const;
 
     const arma::mat& m_source;
     arma::uword m_K;

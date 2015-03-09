@@ -5,6 +5,7 @@ set(src
     gaussian_transform.cpp
     ifgt.cpp
     monomials.cpp
+    truncation_number.cpp
     )
 
 set(deps

@@ -10,6 +10,7 @@ set(src
     gaussian_transform_test.cpp
     ifgt_test.cpp
     monomials_test.cpp
+    truncation_number_test.cpp
     )
 
 set(deps
