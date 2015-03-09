@@ -62,7 +62,8 @@ DirectTree::compute_impl_with_dimensions(const arma::mat& target,
             std::move(arma::conv_to<std::vector<double>>::from(target.row(j)));
         size_t num_points_found = tree.radiusSearch(point.data(), cutoff_radius2,
                 indices_distances, search_params);
-        for (const auto& entry : indices_distances) {
+        for (size_t i = 0; i < num_points_found; ++i) {
+            auto entry = indices_distances[i];
             g(j) += weights(entry.first) * std::exp(-entry.second / bandwidth2);
         }
     }
