@@ -10,7 +10,6 @@ namespace fgt {
 
 class Clustering {
 public:
-
     static const arma::uword TruncationNumberUpperLimit = 300;
 
     Clustering(const arma::mat& source, arma::uword K, double bandwidth,

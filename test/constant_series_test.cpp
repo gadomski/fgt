@@ -19,6 +19,5 @@ TEST(ConstantSeries, ReferenceImplementation) {
     EXPECT_DOUBLE_EQ(4, series.at(4));
     EXPECT_DOUBLE_EQ(2, series.at(5));
     EXPECT_DOUBLE_EQ(4.0 / 3.0, series.at(6));
-    // Could keep going
 }
 }

@@ -5,11 +5,8 @@
 #include <utility>
 
 
-namespace fgt
-{
+namespace fgt {
 
 
 typedef std::pair<bool, arma::uword> optional_arma_uword_t;
-
-
 }

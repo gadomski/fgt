@@ -15,8 +15,9 @@ namespace fgt {
 
 Ifgt::Parameters Ifgt::choose_parameters(arma::uword d, double bandwidth,
                                          double epsilon) {
-    return choose_parameters(d, bandwidth, epsilon,
-                             std::round(NumClusterLimitFactor * std::sqrt(d) / bandwidth));
+    return choose_parameters(
+        d, bandwidth, epsilon,
+        std::round(NumClusterLimitFactor * std::sqrt(d) / bandwidth));
 }
 
 
@@ -59,8 +60,7 @@ Ifgt::Parameters Ifgt::choose_parameters(arma::uword d, double bandwidth,
         }
     }
 
-    if (error_min > epsilon)
-    {
+    if (error_min > epsilon) {
         params.num_clusters = k_limit;
     }
 
@@ -91,18 +91,22 @@ arma::vec Ifgt::compute_impl(const arma::mat& target,
                              const arma::vec& weights) const {
     const arma::mat& source = get_source();
     double bandwidth = get_bandwidth();
+
     Parameters params = choose_parameters(source.n_cols, bandwidth, m_epsilon);
+
     GonzalezClustering clustering(source, params.num_clusters, bandwidth,
                                   m_epsilon, get_clustering_starting_index());
     clustering.cluster();
+
     arma::uword p_max = clustering.get_p_max();
     arma::uword p_max_total = get_p_max_total(source.n_cols, p_max);
     std::vector<double> monomials(p_max_total);
     std::vector<double> dy(source.n_cols);
     std::vector<double> dy_scaled(source.n_cols);
     arma::vec G(target.n_rows);
-    arma::vec ry2 = arma::pow(params.radius + clustering.get_radii(), 2);
     double h2 = bandwidth * bandwidth;
+    arma::vec ry2 = arma::pow(params.radius + clustering.get_radii(), 2);
+
     arma::mat C = clustering.compute_C(weights);
 
     for (arma::uword j = 0; j < target.n_rows; ++j) {
