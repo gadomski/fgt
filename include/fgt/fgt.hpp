@@ -46,6 +46,7 @@ public:
     static const arma::uword DefaultNumClustersLimit = 50;
     static const arma::uword MaxNumClusters = 200;
     static const arma::uword NumClusterLimitFactor = 20;
+    static const bool DefaultUseDataAdaptive = false;
 
     Ifgt(const arma::mat& source, double bandwidth, double epsilon,
          int k_limit = DefaultNumClustersLimit);
@@ -58,6 +59,7 @@ public:
 
     optional_arma_uword_t get_clustering_starting_index() const;
     Ifgt& set_clustering_starting_index(arma::uword index);
+    Ifgt& use_data_adaptive_truncation(bool data_adaptive);
 
 private:
     virtual arma::vec compute_impl(const arma::mat& target,
@@ -66,5 +68,6 @@ private:
     double m_epsilon;
     int m_k_limit;
     optional_arma_uword_t m_clustering_starting_index;
+    bool m_data_adaptive;
 };
 }

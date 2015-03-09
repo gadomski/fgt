@@ -36,8 +36,17 @@ TEST_P(Trial, AllMethods) {
     Ifgt ifgt(m_source, GetParam(), m_epsilon);
     arma::vec g_ifgt = ifgt.compute(m_target, m_weights);
 
+    Ifgt ifgt_data_adaptive(m_source, GetParam(), m_epsilon);
+    ifgt.use_data_adaptive_truncation(true);
+    arma::vec g_ifgt_data_adaptive =
+        ifgt_data_adaptive.compute(m_target, m_weights);
+
     double error_ifgt = arma::max(arma::abs(g_ifgt - g_direct) / m_weights_sum);
+    double error_ifgt_data_adaptive =
+        arma::max(arma::abs(g_ifgt_data_adaptive - g_direct) / m_weights_sum);
+
     EXPECT_GT(m_epsilon, error_ifgt);
+    EXPECT_GT(m_epsilon, error_ifgt_data_adaptive);
 }
 
 

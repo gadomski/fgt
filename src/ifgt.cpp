@@ -87,6 +87,12 @@ Ifgt& Ifgt::set_clustering_starting_index(arma::uword index) {
 }
 
 
+Ifgt& Ifgt::use_data_adaptive_truncation(bool data_adaptive) {
+    m_data_adaptive = data_adaptive;
+    return *this;
+}
+
+
 arma::vec Ifgt::compute_impl(const arma::mat& target,
                              const arma::vec& weights) const {
     const arma::mat& source = get_source();
@@ -107,7 +113,7 @@ arma::vec Ifgt::compute_impl(const arma::mat& target,
     double h2 = bandwidth * bandwidth;
     arma::vec ry2 = arma::pow(params.radius + clustering.get_radii(), 2);
 
-    arma::mat C = clustering.compute_C(weights);
+    arma::mat C = clustering.compute_C(weights, params.radius, m_data_adaptive);
 
     for (arma::uword j = 0; j < target.n_rows; ++j) {
         G(j) = 0.0;

@@ -58,4 +58,22 @@ TEST(Ifgt, ReferenceImplementation) {
     EXPECT_EQ(5000, g.n_rows);
     EXPECT_DOUBLE_EQ(2.071868804956274e+03, g(0));
 }
+
+
+TEST(Ifgt, DataAdaptiveReferenceImplementation) {
+    arma::mat source, target;
+    source.load(test_data_path("X.csv"));
+    target.load(test_data_path("Y.csv"));
+    double bandwidth = 0.4;
+    double epsilon = 1e-3;
+    arma::vec weights = arma::ones<arma::vec>(source.n_rows);
+    int k_limit = 50;
+
+    Ifgt ifgt(source, bandwidth, epsilon, k_limit);
+    ifgt.set_clustering_starting_index(2).use_data_adaptive_truncation(true);
+    arma::vec g = ifgt.compute(target, weights);
+
+    EXPECT_EQ(5000, g.n_rows);
+    EXPECT_DOUBLE_EQ(2071.7022219052133, g(0));
+}
 }

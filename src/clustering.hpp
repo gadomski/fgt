@@ -22,7 +22,8 @@ public:
 
 
     void cluster();
-    arma::mat compute_C(const arma::vec& q) const;
+    arma::mat compute_C(const arma::vec& q, double cutoff_radius,
+                        bool data_adaptive) const;
     const arma::mat& get_centers() const { return m_centers; }
     arma::uword get_d() const { return m_source.n_cols; }
     arma::uword get_index(arma::uword i) const { return m_indices(i); }
@@ -51,6 +52,7 @@ public:
 
 private:
     virtual void cluster_impl() = 0;
+    arma::uword find_truncation_number(double distance2, double cutoff_radius, arma::uword k) const;
 
     const arma::mat& m_source;
     arma::uword m_K;

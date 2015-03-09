@@ -59,6 +59,34 @@ arma::uword Clustering::choose_truncation_number(int dimensions,
 }
 
 
+// TODO clean up naming between this and above
+// orrrr just make it one function
+arma::uword Clustering::find_truncation_number(double distance2,
+                                               double cutoff_radius,
+                                               arma::uword k) const {
+    double distance = std::sqrt(distance2);
+    double b, c;
+    double error = m_epsilon + 1;
+    double temp = 1;
+    arma::uword truncation_number = 1;
+    double bandwidth2 = m_bandwidth * m_bandwidth;
+    double ry = get_radius(k) + cutoff_radius;
+
+    while (error > m_epsilon and truncation_number <= m_p_max) {
+        b = std::min(
+            (distance +
+             std::sqrt(distance2 + 2 * truncation_number * bandwidth2)) /
+                2,
+            ry);
+        c = distance - b;
+        temp *= 2 * distance * b / bandwidth2 / double(truncation_number);
+        error = temp * std::exp(-c * c / bandwidth2);
+        truncation_number++;
+    }
+    return truncation_number - 1;
+}
+
+
 void Clustering::cluster() {
     cluster_impl();
     m_p_max =
@@ -68,21 +96,39 @@ void Clustering::cluster() {
 }
 
 
-arma::mat Clustering::compute_C(const arma::vec& q) const {
-    arma::mat C = arma::zeros<arma::mat>(
-        m_centers.n_rows, get_p_max_total(m_source.n_cols, m_p_max));
-    std::vector<double> monomials(C.n_cols);
+arma::mat Clustering::compute_C(const arma::vec& q, double cutoff_radius,
+                                bool data_adaptive) const {
     double h2 = m_bandwidth * m_bandwidth;
+    std::vector<arma::uword> truncation_numbers(m_source.n_rows);
+    arma::uword p_max_actual = 0;
+    arma::uword p_max = m_p_max;
+    arma::uword p_max_total = get_p_max_total(m_source.n_cols, p_max);
+    arma::mat C = arma::zeros<arma::mat>(m_centers.n_rows, p_max_total);
+    std::vector<double> monomials(C.n_cols);
 
     for (arma::uword i = 0; i < m_source.n_rows; ++i) {
         arma::uword k = m_indices(i);
         arma::rowvec dx = m_source.row(i) - m_centers.row(k);
         double distance2 = arma::accu(arma::pow(dx, 2));
-        compute_monomials(dx / m_bandwidth, m_p_max, monomials);
+
+        if (data_adaptive) {
+            truncation_numbers[i] =
+                find_truncation_number(distance2, cutoff_radius, k);
+            if (truncation_numbers[i] > p_max_actual) {
+                p_max_actual = truncation_numbers[i];
+            }
+            p_max = truncation_numbers[i];
+            p_max_total = get_p_max_total(m_source.n_cols, p_max);
+        }
+        compute_monomials(dx / m_bandwidth, p_max, monomials);
         double f = q(i) * std::exp(-distance2 / h2);
-        for (arma::uword j = 0; j < monomials.size(); ++j) {
+        for (arma::uword j = 0; j < p_max_total; ++j) {
             C(k, j) += f * monomials[j];
         }
+    }
+
+    if (data_adaptive) {
+        C.resize(C.n_rows, get_p_max_total(m_source.n_cols, p_max_actual));
     }
 
     for (arma::uword i = 0; i < C.n_rows; ++i) {
