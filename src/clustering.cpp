@@ -79,9 +79,9 @@ arma::mat Clustering::compute_C(const arma::vec& q) const {
         double distance2 = arma::accu(arma::pow(dx, 2));
         compute_monomials(dx / m_bandwidth, m_p_max, monomials);
         double f = q(i) * std::exp(-distance2 / h2);
-        // TODO remove rowvec
-        arma::rowvec center_monomials(monomials);
-        C.row(k) += f * center_monomials;
+        for (arma::uword j = 0; j < monomials.size(); ++j) {
+            C(k, j) += f * monomials[j];
+        }
     }
 
     arma::rowvec constant_series =
