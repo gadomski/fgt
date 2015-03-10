@@ -2,6 +2,7 @@
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 project(fgt CXX C)
 set(FGT_VERSION 0.1.0)
+set(FGT_SOVERSION 0)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 

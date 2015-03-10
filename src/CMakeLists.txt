@@ -31,8 +31,10 @@ include_directories(
 
 add_library(${FGT_LIB_TARGET} ${src})
 target_link_libraries(${FGT_LIB_TARGET} ${deps})
-set_property(TARGET ${FGT_LIB_TARGET}
-    PROPERTY OUTPUT_NAME ${FGT_LIB_NAME})
+set_target_properties(${FGT_LIB_TARGET} PROPERTIES
+    OUTPUT_NAME ${FGT_LIB_NAME}
+    VERSION ${FGT_VERSION}
+    SOVERSION ${FGT_SOVERSION})
 target_compile_definitions(${FGT_LIB_TARGET} PUBLIC ${public_compile_defs})
 
 install(
