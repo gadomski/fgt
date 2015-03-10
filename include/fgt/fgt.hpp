@@ -27,10 +27,10 @@
 namespace fgt {
 
 
-class GaussianTransform {
+class GaussTransform {
 public:
-    GaussianTransform(const arma::mat& source, double bandwidth);
-    virtual ~GaussianTransform();
+    GaussTransform(const arma::mat& source, double bandwidth);
+    virtual ~GaussTransform();
 
     arma::vec compute(const arma::mat& target) const;
     arma::vec compute(const arma::mat& target, const arma::vec& weights) const;
@@ -48,9 +48,9 @@ private:
 };
 
 
-class Direct : public GaussianTransform {
+class Direct : public GaussTransform {
 public:
-    using GaussianTransform::GaussianTransform;
+    using GaussTransform::GaussTransform;
 
 private:
     virtual arma::vec compute_impl(const arma::mat& target,
@@ -58,7 +58,7 @@ private:
 };
 
 
-class DirectTree : public GaussianTransform {
+class DirectTree : public GaussTransform {
 public:
     static const size_t MaxLeafSize = 10;
 
@@ -73,7 +73,7 @@ private:
 };
 
 
-class Ifgt : public GaussianTransform {
+class Ifgt : public GaussTransform {
 public:
     struct Parameters {
         arma::uword num_clusters;
@@ -109,9 +109,9 @@ private:
 };
 
 
-typedef std::unique_ptr<GaussianTransform> GaussianTransformUnqPtr;
+typedef std::unique_ptr<GaussTransform> GaussTransformUnqPtr;
 
-GaussianTransformUnqPtr choose_gaussian_transform(const arma::mat& source,
-                                                  double bandwidth,
-                                                  double epsilon);
+GaussTransformUnqPtr choose_gaussian_transform(const arma::mat& source,
+                                               double bandwidth,
+                                               double epsilon);
 }

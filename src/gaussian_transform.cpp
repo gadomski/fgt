@@ -23,19 +23,19 @@
 namespace fgt {
 
 
-GaussianTransform::GaussianTransform(const arma::mat& source, double bandwidth)
+GaussTransform::GaussTransform(const arma::mat& source, double bandwidth)
     : m_source(source), m_bandwidth(bandwidth) {}
 
 
-GaussianTransform::~GaussianTransform() {}
+GaussTransform::~GaussTransform() {}
 
 
-arma::vec GaussianTransform::compute(const arma::mat& target) const {
+arma::vec GaussTransform::compute(const arma::mat& target) const {
     return compute(target, arma::ones<arma::vec>(get_source_n_rows()));
 }
 
-arma::vec GaussianTransform::compute(const arma::mat& target,
-                                     const arma::vec& weights) const {
+arma::vec GaussTransform::compute(const arma::mat& target,
+                                  const arma::vec& weights) const {
     if (m_source.n_cols != target.n_cols) {
         std::stringstream ss;
         ss << "Dimentionality of source and target do not match ("

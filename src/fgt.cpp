@@ -42,14 +42,14 @@ static const double IfgtToDirectTreeBandwithBreakpoint = 1e-1;
 }
 
 
-std::unique_ptr<GaussianTransform>
+std::unique_ptr<GaussTransform>
 choose_gaussian_transform(const arma::mat& source, double bandwidth,
                           double epsilon) {
     if (bandwidth < IfgtToDirectTreeBandwithBreakpoint) {
-        return std::unique_ptr<GaussianTransform>(
+        return std::unique_ptr<GaussTransform>(
             new DirectTree(source, bandwidth, epsilon));
     } else {
-        return std::unique_ptr<GaussianTransform>(
+        return std::unique_ptr<GaussTransform>(
             new Ifgt(source, bandwidth, epsilon));
     }
     assert(false && "Unreachable code");

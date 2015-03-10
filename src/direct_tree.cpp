@@ -33,7 +33,7 @@ namespace fgt {
 
 DirectTree::DirectTree(const arma::mat& source, double bandwidth,
                        double epsilon)
-    : GaussianTransform(source, bandwidth),
+    : GaussTransform(source, bandwidth),
       m_epsilon(epsilon),
       m_max_leaf(MaxLeafSize) {}
 

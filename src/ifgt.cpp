@@ -87,7 +87,7 @@ Ifgt::Parameters Ifgt::choose_parameters(arma::uword d, double bandwidth,
 
 Ifgt::Ifgt(const arma::mat& source, double bandwidth, double epsilon,
            int k_limit)
-    : GaussianTransform(source, bandwidth),
+    : GaussTransform(source, bandwidth),
       m_epsilon(epsilon),
       m_k_limit(k_limit),
       m_clustering_starting_index(std::make_pair(false, 0)),

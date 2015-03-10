@@ -26,9 +26,9 @@
 namespace fgt {
 
 
-class MockGaussianTransform : public GaussianTransform {
+class MockGaussTransform : public GaussTransform {
 public:
-    using GaussianTransform::GaussianTransform;
+    using GaussTransform::GaussTransform;
 
 private:
     virtual arma::vec compute_impl(const arma::mat& target,
@@ -38,21 +38,21 @@ private:
 };
 
 
-TEST(GaussianTransform, IncorrectDimensions) {
+TEST(GaussTransform, IncorrectDimensions) {
     arma::mat source(1, 2);
     arma::mat target(1, 3);
     double bandwidth = 1;
-    MockGaussianTransform transform(source, bandwidth);
+    MockGaussTransform transform(source, bandwidth);
     EXPECT_THROW(transform.compute(target), dimension_mismatch);
 }
 
 
-TEST(GaussianTransform, IncorrectWeightCount) {
+TEST(GaussTransform, IncorrectWeightCount) {
     arma::mat source(1, 2);
     arma::mat target(1, 2);
     arma::vec weights(2);
     double bandwidth = 1;
-    MockGaussianTransform transform(source, bandwidth);
+    MockGaussTransform transform(source, bandwidth);
     EXPECT_THROW(transform.compute(target, weights), dimension_mismatch);
 }
 }
