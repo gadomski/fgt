@@ -49,7 +49,8 @@ DirectTree::compute_impl_with_dimensions(const arma::mat& target,
     typedef nanoflann::KDTreeSingleIndexAdaptor<L2_Simple_ArmadilloAdaptor,
                                                 ArmadilloAdaptor, Dimensions,
                                                 arma::uword> tree_t;
-    tree_t tree(Dimensions, get_source(),
+    ArmadilloAdaptor adapter(get_source());
+    tree_t tree(Dimensions, adapter,
                 nanoflann::KDTreeSingleIndexAdaptorParams(m_max_leaf));
     tree.buildIndex();
 
