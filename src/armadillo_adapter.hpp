@@ -23,7 +23,6 @@ public:
     }
     template <class BBOX>
     bool kdtree_get_bbox(BBOX& bounding_box) const {
-        // TODO implement using arma methods
         return false;
     }
 
