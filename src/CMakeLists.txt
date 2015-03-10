@@ -4,7 +4,7 @@ set(src
     direct.cpp
     direct_tree.cpp
     fgt.cpp
-    gaussian_transform.cpp
+    gauss_transform.cpp
     ifgt.cpp
     monomials.cpp
     truncation_number.cpp

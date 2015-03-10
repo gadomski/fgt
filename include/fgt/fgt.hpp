@@ -111,7 +111,6 @@ private:
 
 typedef std::unique_ptr<GaussTransform> GaussTransformUnqPtr;
 
-GaussTransformUnqPtr choose_gaussian_transform(const arma::mat& source,
-                                               double bandwidth,
-                                               double epsilon);
+GaussTransformUnqPtr choose_gauss_transform(const arma::mat& source,
+                                            double bandwidth, double epsilon);
 }
