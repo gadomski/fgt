@@ -3,6 +3,7 @@ set(src
     constant_series.cpp
     direct.cpp
     direct_tree.cpp
+    fgt.cpp
     gaussian_transform.cpp
     ifgt.cpp
     monomials.cpp

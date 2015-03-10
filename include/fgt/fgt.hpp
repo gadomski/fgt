@@ -1,6 +1,8 @@
+#include <fgt/typedefs.hpp>
+
 #include <armadillo>
 
-#include <fgt/typedefs.hpp>
+#include <memory>
 
 
 namespace fgt {
@@ -86,4 +88,11 @@ private:
     optional_arma_uword_t m_clustering_starting_index;
     bool m_data_adaptive;
 };
+
+
+typedef std::unique_ptr<GaussianTransform> GaussianTransformUnqPtr;
+
+GaussianTransformUnqPtr choose_gaussian_transform(const arma::mat& source,
+                                                  double bandwidth,
+                                                  double epsilon);
 }
