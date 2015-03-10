@@ -16,10 +16,4 @@ class dimension_mismatch : public fgt_error {
 public:
     using fgt_error::fgt_error;
 };
-
-
-class unsupported_number_of_dimensions : public fgt_error {
-public:
-    using fgt_error::fgt_error;
-};
 }

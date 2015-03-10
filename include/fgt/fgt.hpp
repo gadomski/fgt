@@ -46,10 +46,6 @@ public:
 private:
     virtual arma::vec compute_impl(const arma::mat& target,
                                    const arma::vec& weights) const override;
-    // I could set Dimensions to -1 and then determine at runtime.
-    template <arma::uword Dimensions>
-    arma::vec compute_impl_with_dimensions(const arma::mat& target,
-                                           const arma::vec& weights) const;
 
     double m_epsilon;
     size_t m_max_leaf;

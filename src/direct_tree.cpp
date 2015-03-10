@@ -1,6 +1,5 @@
 #include <fgt/fgt.hpp>
 
-#include <fgt/exceptions.hpp>
 #include "armadillo_adapter.hpp"
 
 #include <armadillo>
@@ -24,33 +23,14 @@ DirectTree::DirectTree(const arma::mat& source, double bandwidth,
 
 arma::vec DirectTree::compute_impl(const arma::mat& target,
                                    const arma::vec& weights) const {
-    switch (get_dimensions()) {
-    case 2:
-        return compute_impl_with_dimensions<2>(target, weights);
-    case 3:
-        return compute_impl_with_dimensions<3>(target, weights);
-    default:
-        std::stringstream ss;
-        ss << "Unsupported number of dimensions: " << get_dimensions();
-        throw unsupported_number_of_dimensions(ss.str());
-    }
-    assert(false && "Unreachable code");
-}
-
-
-template <arma::uword Dimensions>
-arma::vec
-DirectTree::compute_impl_with_dimensions(const arma::mat& target,
-                                         const arma::vec& weights) const {
     double bandwidth2 = get_bandwidth() * get_bandwidth();
     double cutoff_radius = get_bandwidth() * std::sqrt(std::log(1 / m_epsilon));
     double cutoff_radius2 = cutoff_radius * cutoff_radius;
     arma::vec g = arma::zeros<arma::vec>(target.n_rows);
-    typedef nanoflann::KDTreeSingleIndexAdaptor<L2_Simple_ArmadilloAdaptor,
-                                                ArmadilloAdaptor, Dimensions,
-                                                arma::uword> tree_t;
+    typedef nanoflann::KDTreeSingleIndexAdaptor<
+        L2_Simple_ArmadilloAdaptor, ArmadilloAdaptor, -1, arma::uword> tree_t;
     ArmadilloAdaptor adapter(get_source());
-    tree_t tree(Dimensions, adapter,
+    tree_t tree(get_dimensions(), adapter,
                 nanoflann::KDTreeSingleIndexAdaptorParams(m_max_leaf));
     tree.buildIndex();
 
