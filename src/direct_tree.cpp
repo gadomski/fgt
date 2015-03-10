@@ -46,8 +46,9 @@ DirectTree::compute_impl_with_dimensions(const arma::mat& target,
     double cutoff_radius = get_bandwidth() * std::sqrt(std::log(1 / m_epsilon));
     double cutoff_radius2 = cutoff_radius * cutoff_radius;
     arma::vec g = arma::zeros<arma::vec>(target.n_rows);
-    typedef nanoflann::KDTreeSingleIndexAdaptor<
-        L2_Simple_ArmadilloAdaptor, ArmadilloAdaptor, Dimensions, arma::uword> tree_t;
+    typedef nanoflann::KDTreeSingleIndexAdaptor<L2_Simple_ArmadilloAdaptor,
+                                                ArmadilloAdaptor, Dimensions,
+                                                arma::uword> tree_t;
     tree_t tree(Dimensions, get_source(),
                 nanoflann::KDTreeSingleIndexAdaptorParams(m_max_leaf));
     tree.buildIndex();
@@ -60,8 +61,8 @@ DirectTree::compute_impl_with_dimensions(const arma::mat& target,
     for (int j = 0; j < target.n_rows; ++j) {
         point =
             std::move(arma::conv_to<std::vector<double>>::from(target.row(j)));
-        size_t num_points_found = tree.radiusSearch(point.data(), cutoff_radius2,
-                indices_distances, search_params);
+        size_t num_points_found = tree.radiusSearch(
+            point.data(), cutoff_radius2, indices_distances, search_params);
         for (size_t i = 0; i < num_points_found; ++i) {
             auto entry = indices_distances[i];
             g(j) += weights(entry.first) * std::exp(-entry.second / bandwidth2);

@@ -7,7 +7,7 @@ namespace fgt {
 
 
 void compute_constant_series(arma::uword d, arma::uword p_max,
-                                     std::vector<double>& series) {
+                             std::vector<double>& series) {
     arma::uvec heads = arma::zeros<arma::uvec>(d + 1);
     heads(d) = std::numeric_limits<arma::uword>::max();
     arma::uvec cinds = arma::zeros<arma::uvec>(series.size());
