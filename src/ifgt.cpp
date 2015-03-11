@@ -143,9 +143,7 @@ arma::vec Ifgt::compute_impl(const arma::mat& target,
             if (distance2 <= ry2(k)) {
                 double g = std::exp(-distance2 / h2);
                 compute_monomials(dy_scaled, p_max, monomials);
-                for (arma::uword i = 0; i < C.n_cols; ++i) {
-                    G(j) += C(k, i) * monomials[i] * g;
-                }
+                G(j) += arma::accu(C.row(k) % monomials) * g;
             }
         }
     }
