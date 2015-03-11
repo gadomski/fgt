@@ -66,9 +66,8 @@ TEST(Ifgt, ReferenceImplementation) {
     double bandwidth = 0.4;
     double epsilon = 1e-3;
     arma::vec weights = arma::ones<arma::vec>(source.n_rows);
-    int k_limit = 50;
 
-    Ifgt ifgt(source, bandwidth, epsilon, k_limit);
+    Ifgt ifgt(source, bandwidth, epsilon);
     ifgt.set_clustering_starting_index(2);
     arma::vec g = ifgt.compute(target, weights);
 
@@ -84,9 +83,8 @@ TEST(Ifgt, DataAdaptiveReferenceImplementation) {
     double bandwidth = 0.4;
     double epsilon = 1e-3;
     arma::vec weights = arma::ones<arma::vec>(source.n_rows);
-    int k_limit = 50;
 
-    Ifgt ifgt(source, bandwidth, epsilon, k_limit);
+    Ifgt ifgt(source, bandwidth, epsilon);
     ifgt.set_clustering_starting_index(2).use_data_adaptive_truncation(true);
     arma::vec g = ifgt.compute(target, weights);
 

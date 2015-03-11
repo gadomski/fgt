@@ -80,13 +80,11 @@ public:
         double radius;
     };
 
-    static const arma::uword DefaultNumClustersLimit = 50;
     static const arma::uword MaxNumClusters = 200;
     static const arma::uword NumClusterLimitFactor = 20;
     static const bool DefaultUseDataAdaptive = false;
 
-    Ifgt(const arma::mat& source, double bandwidth, double epsilon,
-         int k_limit = DefaultNumClustersLimit);
+    Ifgt(const arma::mat& source, double bandwidth, double epsilon);
 
     static Parameters choose_parameters(arma::uword dimensions,
                                         double bandwidth, double epsilon);
@@ -103,7 +101,6 @@ private:
                                    const arma::vec& weights) const override;
 
     double m_epsilon;
-    int m_k_limit;
     optional_arma_uword_t m_clustering_starting_index;
     bool m_data_adaptive;
 };
