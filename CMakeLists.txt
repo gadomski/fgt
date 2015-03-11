@@ -4,7 +4,8 @@ project(fgt CXX C)
 set(FGT_VERSION 0.1.0)
 set(FGT_SOVERSION 0)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+# no nested anon types for nanoflann
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-long-long -Wno-nested-anon-types -pedantic")
 
 set(CMAKE_MACOSX_RPATH ON)
 
