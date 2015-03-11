@@ -17,15 +17,13 @@
 
 #include "monomials.hpp"
 
-#include "p_max_total.hpp"
-
 
 namespace fgt {
 
 
 void compute_monomials(const arma::rowvec& dx, arma::uword p_max,
-                       std::vector<double>& monomials) {
-    arma::vec heads = arma::zeros<arma::vec>(dx.n_cols);
+                       arma::rowvec& monomials) {
+    std::vector<arma::uword> heads(dx.n_cols, 0);
     monomials[0] = 1;
 
     for (arma::uword k = 1, t = 1, tail = 1; k < p_max; ++k, tail = t) {

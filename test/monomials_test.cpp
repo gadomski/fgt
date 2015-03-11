@@ -31,7 +31,7 @@ namespace fgt {
 TEST(Monomials, ReferenceImplementation) {
     arma::rowvec dx = {0.319529, 0.401860};
     arma::uword p_max = 70;
-    std::vector<double> monomials(get_p_max_total(2, p_max));
+    arma::rowvec monomials(get_p_max_total(2, p_max));
     compute_monomials(dx / 0.4, p_max, monomials);
 
     EXPECT_EQ(2485, monomials.size());

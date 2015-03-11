@@ -122,7 +122,7 @@ arma::vec Ifgt::compute_impl(const arma::mat& target,
 
     arma::uword p_max = clustering.get_p_max();
     arma::uword p_max_total = get_p_max_total(source.n_cols, p_max);
-    std::vector<double> monomials(p_max_total);
+    arma::rowvec monomials(p_max_total);
     std::vector<double> dy(source.n_cols);
     std::vector<double> dy_scaled(source.n_cols);
     arma::vec G(target.n_rows);

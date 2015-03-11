@@ -76,7 +76,7 @@ arma::mat Clustering::compute_C(const arma::vec& q, double cutoff_radius,
     arma::uword p_max = m_p_max;
     arma::uword p_max_total = get_p_max_total(get_dimensions(), p_max);
     arma::mat C = arma::zeros<arma::mat>(m_centers.n_rows, p_max_total);
-    std::vector<double> monomials(C.n_cols);
+    arma::rowvec monomials(C.n_cols);
 
     for (arma::uword i = 0; i < m_source.n_rows; ++i) {
         arma::uword k = m_indices(i);
