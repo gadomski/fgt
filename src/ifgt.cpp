@@ -123,24 +123,23 @@ arma::vec Ifgt::compute_impl(const arma::mat& target,
     arma::uword p_max = clustering.get_p_max();
     arma::uword p_max_total = get_p_max_total(source.n_cols, p_max);
     arma::rowvec monomials(p_max_total);
-    arma::vec G(target.n_rows);
+    arma::mat G = arma::zeros<arma::mat>(target.n_rows, params.num_clusters);
     double h2 = bandwidth * bandwidth;
     arma::vec ry2 = arma::pow(params.radius + clustering.get_radii(), 2);
 
     arma::mat C = clustering.compute_C(weights, params.radius, m_data_adaptive);
 
     for (arma::uword j = 0; j < target.n_rows; ++j) {
-        G(j) = 0.0;
         for (arma::uword k = 0; k < params.num_clusters; ++k) {
             arma::rowvec dy = target.row(j) - clustering.get_center(k);
             double distance2 = arma::accu(arma::pow(dy, 2));
             if (distance2 <= ry2(k)) {
                 double g = std::exp(-distance2 / h2);
                 compute_monomials(dy / bandwidth, p_max, monomials);
-                G(j) += arma::accu(C.row(k) % monomials) * g;
+                G(j, k) = arma::accu(C.row(k) % monomials) * g;
             }
         }
     }
-    return G;
+    return arma::sum(G, 1);
 }
 }
