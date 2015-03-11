@@ -35,6 +35,7 @@ public:
     arma::mat compute_C(const arma::vec& q, double cutoff_radius,
                         bool data_adaptive) const;
     double get_bandwidth() const { return m_bandwidth; }
+    arma::rowvec get_center(arma::uword k) const { return m_centers.row(k); }
     const arma::mat& get_centers() const { return m_centers; }
     arma::uword get_dimensions() const { return m_source.n_cols; }
     double get_epsilon() const { return m_epsilon; }
