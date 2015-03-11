@@ -4,10 +4,11 @@ project(fgt CXX C)
 set(FGT_VERSION 0.1.0)
 set(FGT_SOVERSION 0)
 
-# no nested anon types for nanoflann
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-long-long -Wno-nested-anon-types -pedantic")
-
 set(CMAKE_MACOSX_RPATH ON)
+
+# TODO refactor this to a configure macro like cpd
+# no nested anon types for nanoflann
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fopenmp -Wall -Wno-long-long -Wno-nested-anon-types -pedantic")
 
 set(EXECUTABLE_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/lib)
@@ -21,7 +22,6 @@ option(ARMA_NO_DEBUG "Build without Armadillo bounds checks" OFF)
 
 # Dependencies
 find_package(Armadillo 4.500.1 REQUIRED)
-
 
 # Targets
 set(FGT_LIB_TARGET fgt-lib)

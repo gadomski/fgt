@@ -23,6 +23,7 @@ if (ARMA_NO_DEBUG)
 endif()
 
 include_directories(
+    /Users/gadomski/local/include
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
     ${ARMADILLO_INCLUDE_DIRS}

@@ -51,14 +51,14 @@ arma::vec DirectTree::compute_impl(const arma::mat& target,
                 nanoflann::KDTreeSingleIndexAdaptorParams(m_max_leaf));
     tree.buildIndex();
 
-    std::vector<double> point(get_dimensions());
-    std::vector<std::pair<arma::uword, double>> indices_distances;
-    indices_distances.reserve(get_source_n_rows());
-    nanoflann::SearchParams search_params;
-    search_params.sorted = false;
+#pragma omp parallel for
     for (int j = 0; j < target.n_rows; ++j) {
-        point =
-            std::move(arma::conv_to<std::vector<double>>::from(target.row(j)));
+        std::vector<double> point =
+            arma::conv_to<std::vector<double>>::from(target.row(j));
+        std::vector<std::pair<arma::uword, double>> indices_distances;
+        indices_distances.reserve(get_source_n_rows());
+        nanoflann::SearchParams search_params;
+        search_params.sorted = false;
         size_t num_points_found = tree.radiusSearch(
             point.data(), cutoff_radius2, indices_distances, search_params);
         for (size_t i = 0; i < num_points_found; ++i) {

@@ -22,6 +22,8 @@
 #include "nchoosek.hpp"
 #include "p_max_total.hpp"
 
+#include <omp.h>
+
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -122,14 +124,15 @@ arma::vec Ifgt::compute_impl(const arma::mat& target,
 
     arma::uword p_max = clustering.get_p_max();
     arma::uword p_max_total = get_p_max_total(source.n_cols, p_max);
-    arma::rowvec monomials(p_max_total);
     arma::mat G = arma::zeros<arma::mat>(target.n_rows, params.num_clusters);
     double h2 = bandwidth * bandwidth;
     arma::vec ry2 = arma::pow(params.radius + clustering.get_radii(), 2);
 
     arma::mat C = clustering.compute_C(weights, params.radius, m_data_adaptive);
 
+#pragma omp parallel for
     for (arma::uword j = 0; j < target.n_rows; ++j) {
+        arma::rowvec monomials(p_max_total);
         for (arma::uword k = 0; k < params.num_clusters; ++k) {
             arma::rowvec dy = target.row(j) - clustering.get_center(k);
             double distance2 = arma::accu(arma::pow(dy, 2));
