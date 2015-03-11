@@ -42,9 +42,9 @@ static const double IfgtToDirectTreeBandwithBreakpoint = 1e-1;
 }
 
 
-std::unique_ptr<GaussTransform>
-choose_gauss_transform(const arma::mat& source, double bandwidth,
-                          double epsilon) {
+std::unique_ptr<GaussTransform> choose_gauss_transform(const arma::mat& source,
+                                                       double bandwidth,
+                                                       double epsilon) {
     if (bandwidth < IfgtToDirectTreeBandwithBreakpoint) {
         return std::unique_ptr<GaussTransform>(
             new DirectTree(source, bandwidth, epsilon));

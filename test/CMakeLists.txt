@@ -8,6 +8,7 @@ set(src
     constant_series_test.cpp
     direct_test.cpp
     direct_tree_test.cpp
+    fgt_test.cpp
     gauss_transform_test.cpp
     ifgt_test.cpp
     monomials_test.cpp
