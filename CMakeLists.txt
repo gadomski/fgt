@@ -46,7 +46,11 @@ if (WITH_OPENMP)
     # box, so clang+openmp setups are probably using
     # https://clang-omp.github.io/. This will change eventually, and hopefully
     # this will all converge -- eventually.
-    find_library(OpenMP_LIBRARY gomp)
+    if (CMAKE_CXX_COMPILER_ID EQUAL "GNU")
+        set(OpenMP_LIBRARY gomp CACHE STRING "OpenMP library name (usually gomp for gcc)")
+    else()
+        set(OpenMP_LIBRARY OpenMP_LIBRARY-NOTFOUND CACHE STRING "OpenMP library")
+    endif()
     message(STATUS "OpenMP library: ${OpenMP_LIBRARY}")
 endif()
 
