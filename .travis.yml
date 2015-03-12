@@ -4,8 +4,20 @@ compiler:
     - clang
     - gcc
 
+env:
+    - FGT_WITH_OPENMP=ON OMP_NUM_THREADS=4
+    - FGT_WITH_OPENMP=OFF
+
+matrix:
+    exclude:
+        - compiler: clang
+          env: FGT_WITH_OPENMP=ON OMP_NUM_THREADS=4
+
 install:
     - make -f make/dependencies.mak install-travis
+    - if [[ $FGT_WITH_OPENMP == "ON" ]]; then
+      sudo apt-get install libgomp1;
+      fi
 
 before_script:
     - if [[ $CXX == "g++" ]]; then
