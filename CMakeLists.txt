@@ -4,7 +4,17 @@ project(fgt CXX C)
 set(FGT_VERSION 0.1.0)
 set(FGT_SOVERSION 0)
 
+# RPath
 set(CMAKE_MACOSX_RPATH ON)
+set(CMAKE_SKIP_BUILD_RPATH  OFF)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH OFF)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+if("${isSystemDir}" STREQUAL "-1")
+   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif()
+
 
 # TODO refactor this to a configure macro like cpd
 # no nested anon types for nanoflann
