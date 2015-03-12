@@ -22,8 +22,6 @@
 #include "nchoosek.hpp"
 #include "p_max_total.hpp"
 
-#include <omp.h>
-
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -130,7 +128,9 @@ arma::vec Ifgt::compute_impl(const arma::mat& target,
 
     arma::mat C = clustering.compute_C(weights, params.radius, m_data_adaptive);
 
+#ifdef FGT_WITH_OPENMP
 #pragma omp parallel for
+#endif
     for (arma::uword j = 0; j < target.n_rows; ++j) {
         arma::rowvec monomials(p_max_total);
         for (arma::uword k = 0; k < params.num_clusters; ++k) {

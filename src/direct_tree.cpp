@@ -51,7 +51,9 @@ arma::vec DirectTree::compute_impl(const arma::mat& target,
                 nanoflann::KDTreeSingleIndexAdaptorParams(m_max_leaf));
     tree.buildIndex();
 
+#ifdef FGT_WITH_OPENMP
 #pragma omp parallel for
+#endif
     for (int j = 0; j < target.n_rows; ++j) {
         std::vector<double> point =
             arma::conv_to<std::vector<double>>::from(target.row(j));
