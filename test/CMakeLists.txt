@@ -16,7 +16,7 @@ set(src
     )
 
 set(deps
-    ${FGT_LIB_TARGET}
+    fgt-lib
     gtest_main
     )
 
@@ -24,13 +24,15 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${ARMADILLO_INCLUDE_DIRS}
     ${gtest_SOURCE_DIR}/include
+    ${ARMADILLO_INCLUDE_DIRS}
     )
 
-add_executable(${FGT_TEST_TARGET} ${src})
-target_link_libraries(${FGT_TEST_TARGET} ${deps})
-add_test(unit-tests ${PROJECT_BINARY_DIR}/bin/${FGT_TEST_TARGET})
+add_executable(fgt-test ${src})
+target_link_libraries(fgt-test ${deps})
+fgt_configure_target(fgt-test)
+add_test(unit-tests ${PROJECT_BINARY_DIR}/bin/fgt-test)
 
-add_executable(${FGT_TRIAL_TARGET} trial.cpp)
-target_link_libraries(${FGT_TRIAL_TARGET} ${deps})
+add_executable(fgt-trial trial.cpp)
+target_link_libraries(fgt-trial ${deps})
+fgt_configure_target(fgt-trial)

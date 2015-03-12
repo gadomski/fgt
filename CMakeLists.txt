@@ -1,15 +1,24 @@
 # Basic setup
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 project(fgt CXX C)
+
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+set(EXECUTABLE_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/lib)
+set(FGT_EXPORT FgtTargets)
 
-
-# Version
 include(GetGitRevisionDescription)
 git_describe(FGT_VERSION_DESCRIBE)
 string(SUBSTRING ${FGT_VERSION_DESCRIBE} 1 -1 FGT_VERSION)
 set(FGT_SOVERSION 0)
 message(STATUS "fgt version ${FGT_VERSION}")
+
+
+# Options
+option(ARMA_64BIT_WORD "Build 64 bit Armadillo words" ON)
+option(ARMA_NO_DEBUG "Build without Armadillo bounds checks" OFF)
+option(BUILD_SHARED_LIBS "Create shared libraries" ON)
+option(BUILD_TESTS "Build test suite" ON)
 
 
 # RPath
@@ -24,32 +33,13 @@ if("${isSystemDir}" STREQUAL "-1")
 endif()
 
 
-# TODO refactor this to a configure macro like cpd
-# no nested anon types for nanoflann
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fopenmp -Wall -Wno-long-long -Wno-nested-anon-types -pedantic")
-
-set(EXECUTABLE_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/lib)
-
-
-# Options
-option(BUILD_SHARED_LIBS "Create shared libraries" ON)
-option(BUILD_TESTS "Build test suite" ON)
-option(ARMA_NO_DEBUG "Build without Armadillo bounds checks" OFF)
-
-
 # Dependencies
 find_package(Armadillo 4.650.1 REQUIRED NO_CMAKE_SYSTEM_PATH)
 
-# Targets
-set(FGT_LIB_TARGET fgt-lib)
-set(FGT_LIB_NAME fgt)
-set(FGT_TEST_TARGET fgt-test)
-set(FGT_TRIAL_TARGET fgt-trial)
-set(FGT_EXPORT FgtTargets)
-
 
 # Subdirectories
+include(configure_target)
+
 add_subdirectory(include)
 add_subdirectory(src)
 
@@ -76,7 +66,7 @@ write_basic_package_version_file(
     VERSION ${FGT_VERSION}
     COMPATIBILITY SameMajorVersion
     )
-export(TARGETS ${FGT_LIB_TARGET} FILE ${PROJECT_BINARY_DIR}/FgtTargets.cmake)
+export(TARGETS fgt-lib FILE ${PROJECT_BINARY_DIR}/FgtTargets.cmake)
 
 install(
     FILES
