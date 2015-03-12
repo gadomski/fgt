@@ -19,6 +19,7 @@ option(ARMA_64BIT_WORD "Build 64 bit Armadillo words" ON)
 option(ARMA_NO_DEBUG "Build without Armadillo bounds checks" OFF)
 option(BUILD_SHARED_LIBS "Create shared libraries" ON)
 option(BUILD_TESTS "Build test suite" ON)
+option(WITH_OPENMP "Build with OpenMP paralellization support" OFF)
 
 
 # RPath
@@ -35,6 +36,19 @@ endif()
 
 # Dependencies
 find_package(Armadillo 4.650.1 REQUIRED NO_CMAKE_SYSTEM_PATH)
+
+if (WITH_OPENMP)
+    find_package(OpenMP REQUIRED QUIET)
+    message(STATUS "OpenMP compiler detected: ${OpenMP_CXX_FLAGS}")
+
+    # We punt on finding non-gomp OpenMP because clang is super-variable. This
+    # is becuase Clang (as of this writing) doesn't support OpenMP out of the
+    # box, so clang+openmp setups are probably using
+    # https://clang-omp.github.io/. This will change eventually, and hopefully
+    # this will all converge -- eventually.
+    find_library(OpenMP_LIBRARY gomp)
+    message(STATUS "OpenMP library: ${OpenMP_LIBRARY}")
+endif()
 
 
 # Subdirectories
