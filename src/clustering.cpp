@@ -158,7 +158,7 @@ void GonzalezClustering::cluster_impl() {
     far2c(0) = nc;
     set_radius(0, dist(nc));
 
-    for (int i = 1; i < K; ++i) {
+    for (arma::uword i = 1; i < K; ++i) {
         nc = far2c(get_radius_idxmax(i));
 
         centers(i) = nc;
@@ -172,7 +172,7 @@ void GonzalezClustering::cluster_impl() {
         cnext(nc) = nc;
         cprev(nc) = nc;
 
-        for (int j = 0; j < i; ++j) {
+        for (arma::uword j = 0; j < i; ++j) {
             arma::uword ct_j = centers(j);
             double dc2cq = ddist(get_source_row(ct_j), get_source_row(nc)) / 4;
             if (dc2cq < get_radius(j)) {

@@ -54,7 +54,7 @@ arma::vec DirectTree::compute_impl(const arma::mat& target,
 #ifdef FGT_WITH_OPENMP
 #pragma omp parallel for
 #endif
-    for (int j = 0; j < target.n_rows; ++j) {
+    for (arma::uword j = 0; j < target.n_rows; ++j) {
         std::vector<double> point =
             arma::conv_to<std::vector<double>>::from(target.row(j));
         std::vector<std::pair<arma::uword, double>> indices_distances;

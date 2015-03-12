@@ -30,7 +30,7 @@ include_directories(
 
 add_executable(fgt-test ${src})
 target_link_libraries(fgt-test ${deps})
-fgt_configure_target(fgt-test)
+fgt_configure_target(fgt-test EXTRA_COMPILE_FLAGS "-w")
 add_test(unit-tests ${PROJECT_BINARY_DIR}/bin/fgt-test)
 
 add_executable(fgt-trial trial.cpp)
