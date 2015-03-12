@@ -1,8 +1,14 @@
 function(fgt_configure_target target)
     set(one_value_args NAME EXTRA_COMPILE_FLAGS)
     cmake_parse_arguments(TARGET "" "${one_value_args}" "" ${ARGN})
+
+    set(compile_flags " -std=c++11 -Wall -Werror -pedantic")
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        set(compile_flags "${compile_flags} -Wno-nested-anon-types")
+    endif()
+
     set_property(TARGET ${target} APPEND_STRING PROPERTY
-        COMPILE_FLAGS " -std=c++11 -Wall -pedantic -Werror -Wno-nested-anon-types ${OpenMP_CXX_FLAGS} ${TARGET_EXTRA_COMPILE_FLAGS}")
+        COMPILE_FLAGS " ${compile_flags} ${OpenMP_CXX_FLAGS} ${TARGET_EXTRA_COMPILE_FLAGS}")
 
     set_target_properties(${target} PROPERTIES
         VERSION ${FGT_VERSION}
