@@ -24,6 +24,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${ARMADILLO_INCLUDE_DIRS}
     ${gtest_SOURCE_DIR}/include
     )
 

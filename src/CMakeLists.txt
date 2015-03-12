@@ -11,7 +11,7 @@ set(src
     )
 
 set(deps
-    ${ARMADILLO_LIBRARIES}
+    armadillo
     )
 
 set(public_compile_defs

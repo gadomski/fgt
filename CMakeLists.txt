@@ -31,7 +31,7 @@ option(ARMA_NO_DEBUG "Build without Armadillo bounds checks" OFF)
 
 
 # Dependencies
-find_package(Armadillo 4.500.1 REQUIRED)
+find_package(Armadillo 4.650.1 REQUIRED NO_CMAKE_SYSTEM_PATH)
 
 # Targets
 set(FGT_LIB_TARGET fgt-lib)
