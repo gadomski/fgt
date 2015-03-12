@@ -1,8 +1,16 @@
 # Basic setup
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 project(fgt CXX C)
-set(FGT_VERSION 0.1.0)
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
+
+# Version
+include(GetGitRevisionDescription)
+git_describe(FGT_VERSION_DESCRIBE)
+string(SUBSTRING ${FGT_VERSION_DESCRIBE} 1 -1 FGT_VERSION)
 set(FGT_SOVERSION 0)
+message(STATUS "fgt version ${FGT_VERSION}")
+
 
 # RPath
 set(CMAKE_MACOSX_RPATH ON)
