@@ -21,6 +21,11 @@ option(BUILD_SHARED_LIBS "Create shared libraries" ON)
 option(BUILD_TESTS "Build test suite" ON)
 option(WITH_OPENMP "Build with OpenMP paralellization support" OFF)
 
+message(STATUS "fgt options:")
+message(STATUS "    ARMA_64BIT_WORD: ${ARMA_64BIT_WORD}")
+message(STATUS "    ARMA_NO_DEBUG: ${ARMA_NO_DEBUG}")
+message(STATUS "    WITH_OPENMP: ${WITH_OPENMP}")
+
 
 # RPath
 set(CMAKE_MACOSX_RPATH ON)
