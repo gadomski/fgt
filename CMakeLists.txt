@@ -1,16 +1,22 @@
-# Basic setup
+# Top-level CMakeLists.txt for Fgt
+
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 project(fgt CXX C)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-set(EXECUTABLE_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/lib)
-set(FGT_EXPORT FgtTargets)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
+set(ARMA_MINIMUM_VERSION 4.650.1)
+
+
+# Version
 include(GetGitRevisionDescription)
 git_describe(FGT_VERSION_DESCRIBE)
 string(SUBSTRING ${FGT_VERSION_DESCRIBE} 1 -1 FGT_VERSION)
 set(FGT_SOVERSION 0)
+
 message(STATUS "fgt version ${FGT_VERSION}")
 
 
@@ -40,10 +46,12 @@ endif()
 
 
 # Dependencies
-find_package(Armadillo 4.650.1 REQUIRED NO_CMAKE_SYSTEM_PATH)
+# NO_CMAKE_SYSTEM_PATH because cmake's built-in arma find script needs to
+# be superceded by the installed version
+find_package(Armadillo ${ARMA_MINIMUM_VERSION} REQUIRED NO_CMAKE_SYSTEM_PATH)
 
 if (WITH_OPENMP)
-    find_package(OpenMP REQUIRED QUIET)
+    find_package(OpenMP REQUIRED)
     message(STATUS "OpenMP compiler detected: ${OpenMP_CXX_FLAGS}")
 
     # We punt on finding non-gomp OpenMP because clang is super-variable. This
@@ -62,7 +70,6 @@ endif()
 
 # Subdirectories
 include(configure_target)
-
 add_subdirectory(include)
 add_subdirectory(src)
 
@@ -75,30 +82,26 @@ endif()
 
 # FgtConfig.cmake
 include(CMakePackageConfigHelpers)
-
-set(INCLUDE_INSTALL_DIR include)
-
 configure_package_config_file(
     cmake/FgtConfig.cmake.in
     ${PROJECT_BINARY_DIR}/FgtConfig.cmake
     INSTALL_DESTINATION lib/fgt/cmake
-    PATH_VARS INCLUDE_INSTALL_DIR
+    NO_SET_AND_CHECK_MACRO
+    NO_CHECK_REQUIRED_COMPONENTS_MACRO
     )
 write_basic_package_version_file(
     ${PROJECT_BINARY_DIR}/FgtConfigVersion.cmake
     VERSION ${FGT_VERSION}
     COMPATIBILITY SameMajorVersion
     )
-export(TARGETS fgt-lib FILE ${PROJECT_BINARY_DIR}/FgtTargets.cmake)
-
 install(
     FILES
         ${PROJECT_BINARY_DIR}/FgtConfig.cmake
         ${PROJECT_BINARY_DIR}/FgtConfigVersion.cmake
-    DESTINATION
-        lib/fgt/cmake
-        )
+    DESTINATION lib/fgt/cmake
+    )
 install(
-    EXPORT ${FGT_EXPORT}
+    EXPORT FgtTargets
+    NAMESPACE Fgt::
     DESTINATION lib/fgt/cmake
     )

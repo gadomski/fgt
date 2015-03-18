@@ -1,4 +1,4 @@
-@PACKAGE_INIT@
+include(CMakeFindDependencyMacro)
+find_dependency(Armadillo @ARMA_MINIMUM_VERSION@)
 
-set_and_check(FGT_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@")
 include("${CMAKE_CURRENT_LIST_DIR}/FgtTargets.cmake")

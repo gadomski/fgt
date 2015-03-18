@@ -10,23 +10,34 @@ set(src
     truncation_number.cpp
     )
 
-set(deps
-    armadillo
+add_library(Library ${src})
+configure_target(Library)
+set_target_properties(Library PROPERTIES
+    VERSION ${FGT_VERSION}
+    SOVERSION ${FGT_SOVERSION}
+    OUTPUT_NAME fgt
     )
 
-include_directories(
+target_include_directories(Library
+    PUBLIC
+    ${ARMADILLO_INCLUDE_DIRS}
+    PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/vendor/nanoflann-v1.1.8-25-g6c91a0e/include
-    ${ARMADILLO_INCLUDE_DIRS}
     )
 
-add_library(fgt-lib ${src})
-target_link_libraries(fgt-lib ${deps})
-fgt_configure_target(fgt-lib NAME fgt)
+target_link_libraries(Library PUBLIC armadillo)
+if (WITH_OPENMP)
+    target_link_libraries(Library PRIVATE ${OpenMP_LIBRARY})
+    target_compile_options(Library PRIVATE ${OpenMP_CXX_FLAGS})
+    target_compile_definitions(Library PRIVATE FGT_WITH_OPENMP)
+endif()
+
 install(
-    TARGETS fgt-lib
-    EXPORT ${FGT_EXPORT}
+    TARGETS Library
+    EXPORT FgtTargets
+    INCLUDES DESTINATION include
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     )

@@ -15,24 +15,25 @@ set(src
     truncation_number_test.cpp
     )
 
-set(deps
-    fgt-lib
-    gtest_main
+add_executable(Test ${src})
+configure_target(Test)
+set_target_properties(Test PROPERTIES OUTPUT_NAME fgt-test)
+target_include_directories(Test
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${gtest_SOURCE_DIR}/include
     )
+target_link_libraries(Test PRIVATE Library gtest_main)
+add_test(NAME unit-tests COMMAND Test)
 
-include_directories(
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${gtest_SOURCE_DIR}/include
-    ${ARMADILLO_INCLUDE_DIRS}
+add_executable(Trial trial.cpp)
+configure_target(Trial)
+set_target_properties(Trial PROPERTIES OUTPUT_NAME fgt-trial)
+target_include_directories(Trial
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+        ${gtest_SOURCE_DIR}/include
     )
-
-add_executable(fgt-test ${src})
-target_link_libraries(fgt-test ${deps})
-fgt_configure_target(fgt-test EXTRA_COMPILE_FLAGS "-w")
-add_test(unit-tests ${PROJECT_BINARY_DIR}/bin/fgt-test)
-
-add_executable(fgt-trial trial.cpp)
-target_link_libraries(fgt-trial ${deps})
-fgt_configure_target(fgt-trial)
+target_link_libraries(Trial PRIVATE Library gtest_main)
