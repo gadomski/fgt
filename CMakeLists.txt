@@ -68,13 +68,13 @@ if (WITH_OPENMP)
         set(OpenMP_LIBRARY gomp CACHE STRING "OpenMP library name (usually gomp for gcc)")
     else()
         find_library(OpenMP_LIBRARY iomp5)
+        find_path(OpenMP_INCLUDE_DIR omp.h
+            PATH_SUFFIXES libiomp
+            )
+        message(STATUS "OpenMP include directory: ${OpenMP_INCLUDE_DIR}")
     endif()
     message(STATUS "OpenMP library: ${OpenMP_LIBRARY}")
 
-    find_path(OpenMP_INCLUDE_DIR omp.h
-        PATH_SUFFIXES libiomp
-        )
-    message(STATUS "OpenMP include directory: ${OpenMP_INCLUDE_DIR}")
 endif()
 
 
