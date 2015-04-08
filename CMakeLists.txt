@@ -70,6 +70,11 @@ if (WITH_OPENMP)
         find_library(OpenMP_LIBRARY iomp5)
     endif()
     message(STATUS "OpenMP library: ${OpenMP_LIBRARY}")
+
+    find_path(OpenMP_INCLUDE_DIR omp.h
+        PATH_SUFFIXES libiomp
+        )
+    message(STATUS "OpenMP include directory: ${OpenMP_INCLUDE_DIR}")
 endif()
 
 
