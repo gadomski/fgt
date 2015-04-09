@@ -29,6 +29,7 @@ target_include_directories(Library
 
 target_link_libraries(Library PUBLIC armadillo)
 if (WITH_OPENMP)
+    target_include_directories(Library PRIVATE ${OpenMP_INCLUDE_DIR})
     target_link_libraries(Library PRIVATE ${OpenMP_LIBRARY})
     target_compile_options(Library PRIVATE ${OpenMP_CXX_FLAGS})
     target_compile_definitions(Library PRIVATE FGT_WITH_OPENMP)
