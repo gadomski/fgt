@@ -4,8 +4,22 @@ compiler:
     - clang
     - gcc
 
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+            - kalakris-cmake
+        packages:
+            - g++-4.8
+            - cmake
+            - cmake-data
+
 env:
     - FGT_WITH_OPENMP=ON OMP_NUM_THREADS=4
+      addons:
+          apt:
+              packages:
+                  - libgomp1;
     - FGT_WITH_OPENMP=OFF
 
 matrix:
@@ -14,10 +28,11 @@ matrix:
           env: FGT_WITH_OPENMP=ON OMP_NUM_THREADS=4
 
 install:
-    - make -f make/dependencies.mak install-travis
-    - if [[ $FGT_WITH_OPENMP == "ON" ]]; then
-      sudo apt-get install libgomp1;
-      fi
+    - bash scripts/install-armadillo.sh $HOME/armadillo
+
+cache:
+    directories:
+        - $HOME/armadillo
 
 before_script:
     - if [[ $CXX == "g++" ]]; then
@@ -25,4 +40,9 @@ before_script:
       fi
 
 script:
-    - make -f make/travis.mak build test install
+    - mkdir build && cd build && \
+      cmake .. -BUILD_TESTS=ON -DWITH_OPENMP=$(FGT_WITH_OPENMP) -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HOME/fgt && \
+      make
+    - build/bin/fgt-test
+    - build/bin/fgt-trial
+    - cd build && make install
