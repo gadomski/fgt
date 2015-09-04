@@ -26,3 +26,4 @@ before_script:
 
 script:
     - make -f make/travis.mak build test install
+    - test `git describe --abbrev=0` = `cat VERSION.txt`
