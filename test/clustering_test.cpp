@@ -43,7 +43,7 @@ TEST(GonzalezClustering, ReferenceImplementation) {
         arma::conv_to<std::vector<arma::uword>>::from(
             clustering.get_num_points());
 
-    EXPECT_EQ(5000, clustering.get_indices().size());
+    EXPECT_EQ(5000u, clustering.get_indices().size());
     EXPECT_EQ(2, clustering.get_centers().n_cols);
     EXPECT_EQ(15, clustering.get_centers().n_rows);
     EXPECT_EQ(expected_num_points, actual_num_points);
