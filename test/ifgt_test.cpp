@@ -33,7 +33,7 @@ TEST(ChooseIfgtParameters, LargeKLimit) {
     double epsilon = 1e-6;
     int k_limit = 189;
     Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
-    EXPECT_EQ(13, params.num_clusters);
+    EXPECT_EQ(13u, params.num_clusters);
     EXPECT_NEAR(1.1151, params.radius, 0.0001);
 }
 
@@ -44,7 +44,7 @@ TEST(ChooseIfgtParameters, SmallKLimit) {
     double epsilon = 1e-3;
     arma::uword k_limit = 50;
     Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
-    EXPECT_EQ(15, params.num_clusters);
+    EXPECT_EQ(15u, params.num_clusters);
     EXPECT_NEAR(1.051304, params.radius, 0.000001);
 }
 
@@ -53,7 +53,7 @@ TEST(ChooseIfgtParameters, NoBoundFound) {
     int d = 3;
     double h = 0.01;
     double epsilon = 1e-2;
-    int k_limit = 189;
+    unsigned int k_limit = 189;
     Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
     EXPECT_EQ(k_limit, params.num_clusters);
 }
@@ -71,7 +71,7 @@ TEST(Ifgt, ReferenceImplementation) {
     ifgt.set_clustering_starting_index(2);
     arma::vec g = ifgt.compute(target, weights);
 
-    EXPECT_EQ(5000, g.n_rows);
+    EXPECT_EQ(5000u, g.n_rows);
     EXPECT_DOUBLE_EQ(2.071868804956274e+03, g(0));
 }
 
@@ -88,7 +88,7 @@ TEST(Ifgt, DataAdaptiveReferenceImplementation) {
     ifgt.set_clustering_starting_index(2).use_data_adaptive_truncation(true);
     arma::vec g = ifgt.compute(target, weights);
 
-    EXPECT_EQ(5000, g.n_rows);
+    EXPECT_EQ(5000u, g.n_rows);
     EXPECT_DOUBLE_EQ(2071.7022219052133, g(0));
 }
 }

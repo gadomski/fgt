@@ -31,7 +31,7 @@ TEST(ConstantSeries, ReferenceImplementation) {
     arma::uword p_max = 70;
     std::vector<double> series(get_p_max_total(d, p_max));
     compute_constant_series(2, 70, series);
-    EXPECT_EQ(2485, series.size());
+    EXPECT_EQ(2485u, series.size());
     EXPECT_DOUBLE_EQ(1, series.at(0));
     EXPECT_DOUBLE_EQ(2, series.at(1));
     EXPECT_DOUBLE_EQ(2, series.at(2));

@@ -34,7 +34,7 @@ TEST(Monomials, ReferenceImplementation) {
     arma::rowvec monomials(get_p_max_total(2, p_max));
     compute_monomials(dx / 0.4, p_max, monomials);
 
-    EXPECT_EQ(2485, monomials.size());
+    EXPECT_EQ(2485u, monomials.size());
     EXPECT_NEAR(1.0, monomials.at(0), 0.000001);
     EXPECT_NEAR(0.798823, monomials.at(1), 0.000001);
     EXPECT_NEAR(1.004649, monomials.at(2), 0.000001);
