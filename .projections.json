@@ -1,22 +1,18 @@
 {
     "include/fgt/*.hpp": {
         "alternate": "src/{}.cpp",
-        "type": "include",
-        "template": ["#pragma once", "", "", "namespace fgt", "{", "", "", "}"]
+        "type": "include"
     },
     "src/*.hpp": {
         "alternate": "src/{}.cpp",
-        "type": "header",
-        "template": ["#pragma once", "", "", "namespace fgt", "{", "", "", "}"]
+        "type": "header"
     },
     "src/*.cpp": {
         "alternate": ["include/fgt/{}.hpp", "src/{}.hpp"],
-        "type": "source",
-        "template": ["#include \"{}.hpp\"", "", "", "namespace fgt", "{", "", "", "}"]
+        "type": "source"
     },
     "test/*_test.cpp": {
         "alternate": ["src/{}.cpp", "src/{}.hpp", "include/fgt/{}.hpp"],
-        "type": "test",
-        "template": ["#include \"{}.hpp\"", "", "#include <gtest/gtest.h>", "", "", "namespace fgt", "{", "", "", "}"]
+        "type": "test"
     }
 }
