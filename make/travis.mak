@@ -1,11 +1,11 @@
 build:
 	mkdir build; cd build; \
-	    cmake .. -DBUILD_TESTS=ON -DWITH_OPENMP=$(FGT_WITH_OPENMP) -DCMAKE_BUILD_TYPE=Release; \
-	    make
+		cmake .. -DWITH_TESTS=ON -DWITH_OPENMP=$(FGT_WITH_OPENMP) -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON; \
+		make
 
 test:
-	build/bin/fgt-test
-	build/bin/fgt-trial
+	build/test/fgt-test
+	build/test/fgt-trial
 
 install:
 	cd build; sudo make install
