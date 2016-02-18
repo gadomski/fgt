@@ -4,8 +4,9 @@ project(fgt CXX C)
 cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-
+include(ConfigureTarget)
 include(GetGitRevisionDescription)
+
 git_describe(FGT_VERSION_DESCRIBE)
 if(NOT FGT_VERSION_DESCRIBE STREQUAL "HEAD-HASH-NOTFOUND")
     string(SUBSTRING ${FGT_VERSION_DESCRIBE} 1 -1 FGT_VERSION)
@@ -37,7 +38,6 @@ if (WITH_OPENMP)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-include(configure_target)
 set(src
     src/clustering.cpp
     src/constant_series.cpp
