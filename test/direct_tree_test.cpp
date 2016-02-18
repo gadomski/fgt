@@ -23,12 +23,10 @@
 #include "gtest/gtest.h"
 
 
-namespace fgt
-{
+namespace fgt {
 
 
-TEST(DirectTree, ReferenceImplementation)
-{
+TEST(DirectTree, ReferenceImplementation) {
     arma::mat source, target;
     source.load(test_data_path("X.csv"));
     source.resize(1000, source.n_cols);
@@ -44,6 +42,4 @@ TEST(DirectTree, ReferenceImplementation)
     EXPECT_EQ(1000u, g.n_rows);
     EXPECT_DOUBLE_EQ(557.19832513213646, g(0));
 }
-
-
 }

@@ -28,4 +28,3 @@ TEST(FgtTest, Basic) {
     GaussTransformUnqPtr transform = choose_gauss_transform(arma::mat(), 1, 1);
 }
 }
-
