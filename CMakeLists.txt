@@ -20,8 +20,9 @@ option(WITH_TESTS "Build test suite" ON)
 option(WITH_OPENMP "Build with OpenMP paralellization support" OFF)
 
 message(STATUS "fgt options:
-        ARMA_64BIT_WORD: ${ARMA_64BIT_WORD}
-        ARMA_NO_DEBUG: ${ARMA_NO_DEBUG}
+    ARMA_64BIT_WORD: ${ARMA_64BIT_WORD}
+      ARMA_NO_DEBUG: ${ARMA_NO_DEBUG}
+         WITH_TESTS: ${WITH_TESTS}
         WITH_OPENMP: ${WITH_OPENMP}")
 
 set(CMAKE_MACOSX_RPATH ON)
