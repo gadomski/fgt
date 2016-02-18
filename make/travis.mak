@@ -4,8 +4,8 @@ build:
 		make
 
 test:
-	build/bin/fgt-test
-	build/bin/fgt-trial
+	build/test/fgt-test
+	build/test/fgt-trial
 
 install:
 	cd build; sudo make install
