@@ -17,7 +17,6 @@ message(STATUS "fgt version ${FGT_VERSION}")
 
 option(ARMA_64BIT_WORD "Build 64 bit Armadillo words" ON)
 option(ARMA_NO_DEBUG "Build without Armadillo bounds checks" OFF)
-option(BUILD_SHARED_LIBS "Create shared libraries" ON)
 option(BUILD_TESTS "Build test suite" ON)
 option(WITH_OPENMP "Build with OpenMP paralellization support" OFF)
 
