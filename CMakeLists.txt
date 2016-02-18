@@ -38,7 +38,7 @@ if (WITH_OPENMP)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-set(src
+add_library(Library
     src/clustering.cpp
     src/constant_series.cpp
     src/direct.cpp
@@ -49,15 +49,7 @@ set(src
     src/monomials.cpp
     src/truncation_number.cpp
     )
-
-add_library(Library ${src})
 configure_target(Library)
-set_target_properties(Library PROPERTIES
-    VERSION ${FGT_VERSION}
-    SOVERSION ${FGT_SOVERSION}
-    OUTPUT_NAME fgt
-    )
-
 target_include_directories(Library
     PUBLIC
     ${ARMADILLO_INCLUDE_DIRS}
@@ -66,18 +58,26 @@ target_include_directories(Library
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/vendor/nanoflann-v1.1.8-25-g6c91a0e/include
     )
-
 target_link_libraries(Library PUBLIC armadillo)
+set_target_properties(Library PROPERTIES
+    VERSION ${FGT_VERSION}
+    SOVERSION ${FGT_SOVERSION}
+    OUTPUT_NAME fgt
+    )
 if (WITH_OPENMP)
     target_compile_definitions(Library PRIVATE FGT_WITH_OPENMP)
 endif()
-
 install(
     TARGETS Library
     EXPORT FgtTargets
-    INCLUDES DESTINATION include
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
+    )
+
+install(
+    DIRECTORY include/fgt
+    DESTINATION include
+    FILES_MATCHING PATTERN "*.hpp"
     )
 
 if(WITH_TESTS)
@@ -92,12 +92,6 @@ if(WITH_TESTS)
         MACOSX_RPATH ON
         )
 endif()
-
-install(
-    DIRECTORY include/fgt
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.hpp"
-    )
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
