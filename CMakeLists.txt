@@ -12,7 +12,6 @@ else()
     string(SUBSTRING ${FGT_VERSION} 1 -1 FGT_VERSION)
 endif()
 set(FGT_SOVERSION 0)
-
 message(STATUS "fgt version ${FGT_VERSION}")
 
 option(ARMA_64BIT_WORD "Build 64 bit Armadillo words" ON)
