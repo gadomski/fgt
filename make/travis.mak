@@ -1,7 +1,7 @@
 build:
 	mkdir build; cd build; \
-	    cmake .. -DWITH_TESTS=ON -DWITH_OPENMP=$(FGT_WITH_OPENMP) -DCMAKE_BUILD_TYPE=Release; \
-	    make
+		cmake .. -DWITH_TESTS=ON -DWITH_OPENMP=$(FGT_WITH_OPENMP) -DCMAKE_BUILD_TYPE=Release; \
+		make
 
 test:
 	build/bin/fgt-test
