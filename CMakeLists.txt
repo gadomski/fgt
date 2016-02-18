@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 project(fgt CXX C)
 
-cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
+if(POLICY CMP0042)
+    cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
+endif()
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(ConfigureTarget)
