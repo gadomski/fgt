@@ -38,7 +38,6 @@ if (WITH_OPENMP)
 endif()
 
 include(configure_target)
-add_subdirectory(include)
 add_subdirectory(src)
 
 if(WITH_TESTS)
@@ -53,6 +52,12 @@ if(WITH_TESTS)
         MACOSX_RPATH ON
         )
 endif()
+
+install(
+    DIRECTORY include/fgt
+    DESTINATION include
+    FILES_MATCHING PATTERN "*.hpp"
+    )
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
