@@ -17,15 +17,24 @@
 
 #pragma once
 
-#include <fgt/typedefs.hpp>
+#include <memory>
+#include <stdexcept>
 
 #include <armadillo>
 
-#include <memory>
-
-
 namespace fgt {
 
+typedef std::pair<bool, arma::uword> optional_arma_uword_t;
+
+class fgt_error : public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
+
+class dimension_mismatch : public fgt_error {
+public:
+    using fgt_error::fgt_error;
+};
 
 class GaussTransform {
 public:
@@ -47,7 +56,6 @@ private:
     double m_bandwidth;
 };
 
-
 class Direct : public GaussTransform {
 public:
     using GaussTransform::GaussTransform;
@@ -56,7 +64,6 @@ private:
     virtual arma::vec compute_impl(const arma::mat& target,
                                    const arma::vec& weights) const override;
 };
-
 
 class DirectTree : public GaussTransform {
 public:
@@ -71,7 +78,6 @@ private:
     double m_epsilon;
     size_t m_max_leaf;
 };
-
 
 class Ifgt : public GaussTransform {
 public:
@@ -104,7 +110,6 @@ private:
     optional_arma_uword_t m_clustering_starting_index;
     bool m_data_adaptive;
 };
-
 
 typedef std::unique_ptr<GaussTransform> GaussTransformUnqPtr;
 

@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include <fgt/typedefs.hpp>
+#include "fgt.hpp"
 
 #include <armadillo>
 

@@ -74,11 +74,7 @@ install(
     ARCHIVE DESTINATION lib
     )
 
-install(
-    DIRECTORY include/fgt
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.hpp"
-    )
+install(FILES include/fgt.hpp DESTINATION include)
 
 if(WITH_TESTS)
     enable_testing()
