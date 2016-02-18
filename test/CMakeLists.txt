@@ -25,7 +25,7 @@ target_include_directories(Test
         ${CMAKE_CURRENT_BINARY_DIR}
         ${gtest_SOURCE_DIR}/include
     )
-target_link_libraries(Test PRIVATE Library gtest_main)
+target_link_libraries(Test PRIVATE Library-C++ gtest_main)
 add_test(NAME unit-tests COMMAND Test)
 
 add_executable(Trial trial.cpp)
@@ -36,4 +36,4 @@ target_include_directories(Trial
         ${PROJECT_SOURCE_DIR}/include
         ${gtest_SOURCE_DIR}/include
     )
-target_link_libraries(Trial PRIVATE Library gtest_main)
+target_link_libraries(Trial PRIVATE Library-C++ gtest_main)
