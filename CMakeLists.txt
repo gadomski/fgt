@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 project(fgt CXX C)
 
+cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
+
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 include(GetGitRevisionDescription)
@@ -24,16 +26,6 @@ message(STATUS "fgt options:
       ARMA_NO_DEBUG: ${ARMA_NO_DEBUG}
          WITH_TESTS: ${WITH_TESTS}
         WITH_OPENMP: ${WITH_OPENMP}")
-
-set(CMAKE_MACOSX_RPATH ON)
-set(CMAKE_SKIP_BUILD_RPATH  OFF)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH OFF)
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
-   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-endif()
 
 set(ARMA_MINIMUM_VERSION 4.600.1)
 # We set NO_CMAKE_SYSTEM_PATH because newer Armadillos come with a configure
@@ -73,8 +65,15 @@ add_subdirectory(src)
 
 if(WITH_TESTS)
     enable_testing()
-    add_subdirectory(vendor/gtest-1.7.0)
     add_subdirectory(test)
+
+    add_subdirectory(vendor/gtest-1.7.0)
+    set_target_properties(gtest PROPERTIES
+        MACOSX_RPATH ON
+        )
+    set_target_properties(gtest_main PROPERTIES
+        MACOSX_RPATH ON
+        )
 endif()
 
 include(CMakePackageConfigHelpers)
