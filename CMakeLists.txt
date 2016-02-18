@@ -84,8 +84,6 @@ install(
 
 if(WITH_TESTS)
     enable_testing()
-    add_subdirectory(test)
-
     add_subdirectory(vendor/gtest-1.7.0)
     set_target_properties(gtest PROPERTIES
         MACOSX_RPATH ON
@@ -93,6 +91,8 @@ if(WITH_TESTS)
     set_target_properties(gtest_main PROPERTIES
         MACOSX_RPATH ON
         )
+
+    add_subdirectory(test)
 endif()
 
 include(CMakePackageConfigHelpers)
