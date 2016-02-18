@@ -33,30 +33,8 @@ set(ARMA_MINIMUM_VERSION 4.600.1)
 find_package(Armadillo ${ARMA_MINIMUM_VERSION} REQUIRED NO_CMAKE_SYSTEM_PATH)
 
 if (WITH_OPENMP)
-    # We manually set the flags for clang-omp
-    # CMake comes with a FindOpenMP script, but it doesn't work out of the box
-    # on OSX with a custom-built clang-omp. Since that's what I have, I get to
-    # set it the way that I want. In the future, when we use this on other OSes,
-    # this will have to be smartened up.
-    #
-    # Note though that this works for my Travis as well.
-    set(OpenMP_C_FLAGS -fopenmp CACHE STRING "OpenMP C flag")
-    set(OpenMP_CXX_FLAGS -fopenmp CACHE STRING "OpenMP CXX flag")
-
-    # This os-specific stuff is hackey, but it works for now. At the very least
-    # we should use find_library for GNU as well, but building up a Travis simulation
-    # box with openmp is beyond my scope of work ATM :-).
-    if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-        set(OpenMP_LIBRARY gomp CACHE STRING "OpenMP library name (usually gomp for gcc)")
-    else()
-        find_library(OpenMP_LIBRARY iomp5)
-        find_path(OpenMP_INCLUDE_DIR omp.h
-            PATH_SUFFIXES libiomp
-            )
-        message(STATUS "OpenMP include directory: ${OpenMP_INCLUDE_DIR}")
-    endif()
-    message(STATUS "OpenMP library: ${OpenMP_LIBRARY}")
-
+    find_package(OpenMP REQUIRED)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
 include(configure_target)
