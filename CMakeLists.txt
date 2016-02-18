@@ -38,7 +38,47 @@ if (WITH_OPENMP)
 endif()
 
 include(configure_target)
-add_subdirectory(src)
+set(src
+    src/clustering.cpp
+    src/constant_series.cpp
+    src/direct.cpp
+    src/direct_tree.cpp
+    src/fgt.cpp
+    src/gauss_transform.cpp
+    src/ifgt.cpp
+    src/monomials.cpp
+    src/truncation_number.cpp
+    )
+
+add_library(Library ${src})
+configure_target(Library)
+set_target_properties(Library PROPERTIES
+    VERSION ${FGT_VERSION}
+    SOVERSION ${FGT_SOVERSION}
+    OUTPUT_NAME fgt
+    )
+
+target_include_directories(Library
+    PUBLIC
+    ${ARMADILLO_INCLUDE_DIRS}
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/vendor/nanoflann-v1.1.8-25-g6c91a0e/include
+    )
+
+target_link_libraries(Library PUBLIC armadillo)
+if (WITH_OPENMP)
+    target_compile_definitions(Library PRIVATE FGT_WITH_OPENMP)
+endif()
+
+install(
+    TARGETS Library
+    EXPORT FgtTargets
+    INCLUDES DESTINATION include
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    )
 
 if(WITH_TESTS)
     enable_testing()
