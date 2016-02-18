@@ -38,7 +38,7 @@ if (WITH_OPENMP)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-add_library(Library
+add_library(Library-C++
     src/clustering.cpp
     src/constant_series.cpp
     src/direct.cpp
@@ -49,8 +49,8 @@ add_library(Library
     src/monomials.cpp
     src/truncation_number.cpp
     )
-configure_target(Library)
-target_include_directories(Library
+configure_target(Library-C++)
+target_include_directories(Library-C++
     PUBLIC
     ${ARMADILLO_INCLUDE_DIRS}
     PRIVATE
@@ -58,17 +58,17 @@ target_include_directories(Library
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/vendor/nanoflann-v1.1.8-25-g6c91a0e/include
     )
-target_link_libraries(Library PUBLIC armadillo)
-set_target_properties(Library PROPERTIES
+target_link_libraries(Library-C++ PUBLIC armadillo)
+set_target_properties(Library-C++ PROPERTIES
     VERSION ${FGT_VERSION}
     SOVERSION ${FGT_SOVERSION}
     OUTPUT_NAME fgt
     )
 if (WITH_OPENMP)
-    target_compile_definitions(Library PRIVATE FGT_WITH_OPENMP)
+    target_compile_definitions(Library-C++ PRIVATE FGT_WITH_OPENMP)
 endif()
 install(
-    TARGETS Library
+    TARGETS Library-C++
     EXPORT FgtTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
