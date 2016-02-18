@@ -89,6 +89,11 @@ if(WITH_TESTS)
     add_subdirectory(test)
 endif()
 
+configure_file(Doxyfile.in ${PROJECT_BINARY_DIR}/Doxyfile)
+add_custom_target(docs
+    COMMAND doxygen ${PROJECT_BINARY_DIR}/Doxyfile
+    )
+
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
     cmake/FgtConfig.cmake.in
