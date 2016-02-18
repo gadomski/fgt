@@ -17,7 +17,7 @@ message(STATUS "fgt version ${FGT_VERSION}")
 
 option(ARMA_64BIT_WORD "Build 64 bit Armadillo words" ON)
 option(ARMA_NO_DEBUG "Build without Armadillo bounds checks" OFF)
-option(BUILD_TESTS "Build test suite" ON)
+option(WITH_TESTS "Build test suite" ON)
 option(WITH_OPENMP "Build with OpenMP paralellization support" OFF)
 
 message(STATUS "fgt options:
@@ -71,7 +71,7 @@ include(configure_target)
 add_subdirectory(include)
 add_subdirectory(src)
 
-if(BUILD_TESTS)
+if(WITH_TESTS)
     enable_testing()
     add_subdirectory(vendor/gtest-1.7.0)
     add_subdirectory(test)

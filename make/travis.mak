@@ -1,6 +1,6 @@
 build:
 	mkdir build; cd build; \
-	    cmake .. -DBUILD_TESTS=ON -DWITH_OPENMP=$(FGT_WITH_OPENMP) -DCMAKE_BUILD_TYPE=Release; \
+	    cmake .. -DWITH_TESTS=ON -DWITH_OPENMP=$(FGT_WITH_OPENMP) -DCMAKE_BUILD_TYPE=Release; \
 	    make
 
 test:
