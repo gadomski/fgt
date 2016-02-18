@@ -54,12 +54,12 @@ $ make
 ```
 
 **fgt** comes with a CMake configuration file that lets downstream projects easily integrate **fgt** targets.
-For example, if **fgt** is installed to a location in the default CMake find package path, you can easily integrate `fgt-lib` into a downstream CMakeLists.txt:
+For example, if **fgt** is installed to a location in the default CMake find package path, you can easily integrate **fgt**'s C++ library into a downstream CMakeLists.txt:
 
 ```cmake
 find_package(Fgt REQUIRED)
 add_executable(my-great-program main.cpp)
-target_link_libraries(my-great-program fgt-lib)
+target_link_libraries(my-great-program Fgt::Libary-C++)
 ```
 
 If you have installed **fgt** to a non-standard location, you may have to set `Fgt_DIR` in your downstream CMake cache.
