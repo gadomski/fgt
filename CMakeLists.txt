@@ -3,8 +3,6 @@ project(fgt CXX C)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-set(ARMA_MINIMUM_VERSION 4.600.1)
-
 include(GetGitRevisionDescription)
 git_describe(FGT_VERSION_DESCRIBE)
 if(NOT FGT_VERSION_DESCRIBE STREQUAL "HEAD-HASH-NOTFOUND")
@@ -38,6 +36,9 @@ if("${isSystemDir}" STREQUAL "-1")
    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif()
 
+set(ARMA_MINIMUM_VERSION 4.600.1)
+# We set NO_CMAKE_SYSTEM_PATH because newer Armadillos come with a configure
+# script that conflicts with cmake's pre-packaged version
 find_package(Armadillo ${ARMA_MINIMUM_VERSION} REQUIRED NO_CMAKE_SYSTEM_PATH)
 
 if (WITH_OPENMP)
