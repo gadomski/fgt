@@ -19,9 +19,7 @@
 
 #include <cassert>
 
-
 namespace fgt {
-
 
 namespace {
 // This value was arrived at through two avenues:
@@ -40,7 +38,6 @@ namespace {
 // but for now let's kiss.
 static const double IfgtToDirectTreeBandwithBreakpoint = 1e-1;
 }
-
 
 std::unique_ptr<GaussTransform> choose_gauss_transform(const arma::mat& source,
                                                        double bandwidth,

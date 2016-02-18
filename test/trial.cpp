@@ -20,9 +20,7 @@
 
 #include "fgt.hpp"
 
-
 namespace fgt {
-
 
 class Trial : public ::testing::TestWithParam<double> {
 protected:
@@ -44,7 +42,6 @@ protected:
     double m_weights_sum;
     double m_epsilon;
 };
-
 
 TEST_P(Trial, AllMethods) {
     Direct direct(m_source, GetParam());
@@ -71,7 +68,6 @@ TEST_P(Trial, AllMethods) {
     EXPECT_GT(m_epsilon, error_ifgt);
     EXPECT_GT(m_epsilon, error_ifgt_data_adaptive);
 }
-
 
 INSTANTIATE_TEST_CASE_P(Trial, Trial, ::testing::Values(0.01, 0.02, 0.04, 0.08,
                                                         0.16, 0.32, 0.64));

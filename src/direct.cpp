@@ -17,9 +17,7 @@
 
 #include "fgt.hpp"
 
-
 namespace fgt {
-
 
 arma::vec Direct::compute_impl(const arma::mat& target,
                                const arma::vec& weights) const {

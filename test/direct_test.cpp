@@ -21,9 +21,7 @@
 #include "config.hpp"
 #include "fgt.hpp"
 
-
 namespace fgt {
-
 
 TEST(Direct, OneTargetOneSource) {
     arma::mat source = {0, 0};
@@ -36,7 +34,6 @@ TEST(Direct, OneTargetOneSource) {
     EXPECT_EQ(g.n_rows, 1u);
     EXPECT_DOUBLE_EQ(0.006737946999085467, g(0));
 }
-
 
 TEST(Direct, TwoTargetsTwoSources) {
     arma::mat source = {0, 0, 0, 1};

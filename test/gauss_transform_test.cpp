@@ -22,7 +22,6 @@
 
 namespace fgt {
 
-
 class MockGaussTransform : public GaussTransform {
 public:
     using GaussTransform::GaussTransform;
@@ -34,7 +33,6 @@ private:
     }
 };
 
-
 TEST(GaussTransform, IncorrectDimensions) {
     arma::mat source(1, 2);
     arma::mat target(1, 3);
@@ -42,7 +40,6 @@ TEST(GaussTransform, IncorrectDimensions) {
     MockGaussTransform transform(source, bandwidth);
     EXPECT_THROW(transform.compute(target), dimension_mismatch);
 }
-
 
 TEST(GaussTransform, IncorrectWeightCount) {
     arma::mat source(1, 2);

@@ -21,9 +21,7 @@
 #include "config.hpp"
 #include "fgt.hpp"
 
-
 namespace fgt {
-
 
 TEST(DirectTree, ReferenceImplementation) {
     arma::mat source, target;

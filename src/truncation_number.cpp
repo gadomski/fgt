@@ -19,9 +19,7 @@
 
 #include <cmath>
 
-
 namespace fgt {
-
 
 arma::uword choose_truncation_number(double distance2, double cutoff_radius,
                                      double bandwidth, double epsilon,

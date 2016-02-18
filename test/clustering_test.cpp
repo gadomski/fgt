@@ -22,9 +22,7 @@
 #include <armadillo>
 #include "gtest/gtest.h"
 
-
 namespace fgt {
-
 
 TEST(GonzalezClustering, ReferenceImplementation) {
     arma::mat X;

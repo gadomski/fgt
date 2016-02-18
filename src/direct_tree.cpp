@@ -27,16 +27,13 @@
 #include <utility>
 #include <vector>
 
-
 namespace fgt {
-
 
 DirectTree::DirectTree(const arma::mat& source, double bandwidth,
                        double epsilon)
     : GaussTransform(source, bandwidth),
       m_epsilon(epsilon),
       m_max_leaf(MaxLeafSize) {}
-
 
 arma::vec DirectTree::compute_impl(const arma::mat& target,
                                    const arma::vec& weights) const {
