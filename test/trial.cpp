@@ -18,7 +18,7 @@
 #include <fgt/fgt.hpp>
 
 #include <armadillo>
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 
 namespace fgt {

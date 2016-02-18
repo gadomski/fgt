@@ -21,7 +21,7 @@
 #include "config.hpp"
 
 #include <armadillo>
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 
 namespace fgt {

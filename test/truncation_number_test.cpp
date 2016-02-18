@@ -17,7 +17,7 @@
 
 #include "truncation_number.hpp"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 #include <cmath>
 
