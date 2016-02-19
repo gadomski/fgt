@@ -87,6 +87,13 @@ Ifgt::Ifgt(const arma::mat& source, double bandwidth, double epsilon)
       m_clustering_starting_index(std::make_pair(false, 0)),
       m_data_adaptive(false) {}
 
+Ifgt::Ifgt(const arma::mat& source, double bandwidth, double epsilon,
+           bool data_adaptive)
+    : GaussTransform(source, bandwidth),
+      m_epsilon(epsilon),
+      m_clustering_starting_index(std::make_pair(false, 0)),
+      m_data_adaptive(data_adaptive) {}
+
 optional_arma_uword_t Ifgt::get_clustering_starting_index() const {
     return m_clustering_starting_index;
 }

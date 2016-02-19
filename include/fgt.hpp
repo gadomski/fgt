@@ -155,6 +155,10 @@ public:
 
     /// Creates a new IFGT object, with the given error tolerance (epsilon).
     Ifgt(const arma::mat& source, double bandwidth, double epsilon);
+    /// Creates a new IFGT object and specifies whether it should be data
+    /// adaptive.
+    Ifgt(const arma::mat& source, double bandwidth, double epsilon,
+         bool data_adaptive);
 
     /// Choose the correct IFGT parameters for the given dimensionality,
     /// bandwidth, and error tolerance.
