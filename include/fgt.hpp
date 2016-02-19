@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <chrono>
 #include <memory>
 #include <stdexcept>
 
@@ -50,6 +51,15 @@ public:
 /// This is an abstract superclass for all flavors of gauss transform.
 class GaussTransform {
 public:
+    /// The result of a Gauss transform.
+    ///
+    /// Along with the transform values themselves, this result contains
+    /// information about the actual run.
+    struct Result {
+        arma::vec data;
+        std::chrono::microseconds runtime;
+    };
+
     /// Creates a new Gauss transform using the source points and the given
     /// bandwidth.
     GaussTransform(const arma::mat& source, double bandwidth);
@@ -58,11 +68,11 @@ public:
     virtual ~GaussTransform();
 
     /// Computes the Gauss transform between the source and target matrices.
-    arma::vec compute(const arma::mat& target) const;
+    Result compute(const arma::mat& target) const;
 
     /// Computes the Gauss transform between the source and target matrices,
     /// applying the given weights to the target matrices.
-    arma::vec compute(const arma::mat& target, const arma::vec& weights) const;
+    Result compute(const arma::mat& target, const arma::vec& weights) const;
 
     /// Returns this transform's bandwidth.
     double get_bandwidth() const { return m_bandwidth; }

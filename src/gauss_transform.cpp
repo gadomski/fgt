@@ -24,12 +24,12 @@ GaussTransform::GaussTransform(const arma::mat& source, double bandwidth)
 
 GaussTransform::~GaussTransform() {}
 
-arma::vec GaussTransform::compute(const arma::mat& target) const {
+GaussTransform::Result GaussTransform::compute(const arma::mat& target) const {
     return compute(target, arma::ones<arma::vec>(get_source_n_rows()));
 }
 
-arma::vec GaussTransform::compute(const arma::mat& target,
-                                  const arma::vec& weights) const {
+GaussTransform::Result GaussTransform::compute(const arma::mat& target,
+                                               const arma::vec& weights) const {
     if (m_source.n_cols != target.n_cols) {
         std::stringstream ss;
         ss << "Dimentionality of source and target do not match ("
@@ -42,6 +42,12 @@ arma::vec GaussTransform::compute(const arma::mat& target,
            << m_source.n_rows << " vs " << weights.n_rows << ")";
         throw dimension_mismatch(ss.str());
     }
-    return compute_impl(target, weights);
+    GaussTransform::Result result;
+    auto tic = std::chrono::high_resolution_clock::now();
+    result.data = compute_impl(target, weights);
+    auto toc = std::chrono::high_resolution_clock::now();
+    result.runtime =
+        std::chrono::duration_cast<std::chrono::microseconds>(toc - tic);
+    return result;
 }
 }

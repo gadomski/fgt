@@ -63,7 +63,7 @@ TEST(Ifgt, ReferenceImplementation) {
 
     Ifgt ifgt(source, bandwidth, epsilon);
     ifgt.set_clustering_starting_index(2);
-    arma::vec g = ifgt.compute(target, weights);
+    arma::vec g = ifgt.compute(target, weights).data;
 
     EXPECT_EQ(5000u, g.n_rows);
     EXPECT_DOUBLE_EQ(2.071868804956274e+03, g(0));
@@ -79,7 +79,7 @@ TEST(Ifgt, DataAdaptiveReferenceImplementation) {
 
     Ifgt ifgt(source, bandwidth, epsilon);
     ifgt.set_clustering_starting_index(2).use_data_adaptive_truncation(true);
-    arma::vec g = ifgt.compute(target, weights);
+    arma::vec g = ifgt.compute(target, weights).data;
 
     EXPECT_EQ(5000u, g.n_rows);
     EXPECT_DOUBLE_EQ(2071.7022219052133, g(0));
