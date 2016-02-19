@@ -4,7 +4,7 @@
 #
 # Inspired by travis-doxygen.sh from miloyip/rapidjson
 
-set -e
+set -ex
 
 DOXYGEN_VER=doxygen-1.8.11
 DOXYGEN_TAR=${DOXYGEN_VER}.linux.bin.tar.gz
