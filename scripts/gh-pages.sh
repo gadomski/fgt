@@ -19,6 +19,7 @@ abort() {
 }
 
 [ -f scripts/gh-pages.sh ] || abort "scripts/gh-pages.sh must be run from PROJECT_SOURCE_DIR"
+[ -f build/Doxyfile ] || abort "build/Doxyfile must exist for this script to run"
 
 if [ "${TRAVIS}" = "true" ]; then
     [ "${TRAVIS_PULL_REQUEST}" = "false" ] || skip "Not building docs for pull requests"
@@ -27,6 +28,7 @@ if [ "${TRAVIS}" = "true" ]; then
     sudo apt-get install -y doxygen
 fi
 
+mkdir -p build/doc
 cd build/doc
 rm -rf html
 git clone -b gh-pages https://github.com/gadomski/fgt html
