@@ -15,16 +15,23 @@ matrix:
     - compiler: clang
       env: FGT_WITH_OPENMP=ON OMP_NUM_THREADS=4
 
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.8
+      - g++-4.8
+
 install:
-  - make -f make/dependencies.mak install-travis
-  - if [[ $FGT_WITH_OPENMP == "ON" ]]; then sudo apt-get install libgomp1; fi
+  - scripts/travis-install-cmake.sh && export PATH=$(pwd)/cmake/bin:$PATH
+  - scripts/travis-install-armadillo.sh
 
 before_script:
-  - if [[ $CXX == "g++" ]]; then export CXX="g++-4.8"; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
 
 script:
-  - make -f make/travis.mak build test install
+  - scripts/travis-script.sh
   - test `git describe --abbrev=0` = `cat VERSION.txt`
 
-after_success:
-  - scripts/gh-pages.sh
+after_success: scripts/gh-pages.sh
