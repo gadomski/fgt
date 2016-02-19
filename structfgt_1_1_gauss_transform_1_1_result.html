@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>fgt: Member List</title>
+<title>fgt: fgt::GaussTransform::Result Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -85,26 +85,39 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacefgt.html">fgt</a></li><li class="navelem"><a class="el" href="classfgt_1_1_direct.html">Direct</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacefgt.html">fgt</a></li><li class="navelem"><a class="el" href="classfgt_1_1_gauss_transform.html">GaussTransform</a></li><li class="navelem"><a class="el" href="structfgt_1_1_gauss_transform_1_1_result.html">Result</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="structfgt_1_1_gauss_transform_1_1_result-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">fgt::Direct Member List</div>  </div>
+<div class="title">fgt::GaussTransform::Result Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="classfgt_1_1_direct.html">fgt::Direct</a>, including all inherited members.</p>
-<table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html#a3df18d530349b10a1d90c3607550a5a9">compute</a>(const arma::mat &amp;target) const </td><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html">fgt::GaussTransform</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html#a70bf9d19daaf50303ea936b61ea76370">compute</a>(const arma::mat &amp;target, const arma::vec &amp;weights) const </td><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html">fgt::GaussTransform</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html#a2f5ca1009bd19d48f74bd179ea820baf">GaussTransform</a>(const arma::mat &amp;source, double bandwidth)</td><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html">fgt::GaussTransform</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html#ac48e01772b9bffd9cf5f28bce7f63565">get_bandwidth</a>() const </td><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html">fgt::GaussTransform</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html#a1853441b2d3c1b5b736fc0cd195e5c59">get_dimensions</a>() const </td><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html">fgt::GaussTransform</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html#a216b5234e3bd4255aa15cffed2c83338">get_source</a>() const </td><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html">fgt::GaussTransform</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html#a8ededde1c81bee36e68a2f71d6c927a3">get_source_n_rows</a>() const </td><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html">fgt::GaussTransform</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html#a62e503b29524d98f88c763a971479097">~GaussTransform</a>()</td><td class="entry"><a class="el" href="classfgt_1_1_gauss_transform.html">fgt::GaussTransform</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-</table></div><!-- contents -->
+<p>The result of a Gauss transform.  
+ <a href="structfgt_1_1_gauss_transform_1_1_result.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="fgt_8hpp_source.html">fgt.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:aa9098d335644b263bee6dcf057d3b700"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa9098d335644b263bee6dcf057d3b700"></a>
+arma::vec&#160;</td><td class="memItemRight" valign="bottom"><b>data</b></td></tr>
+<tr class="separator:aa9098d335644b263bee6dcf057d3b700"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c5ba32c59f8b78651a4625e20040768"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8c5ba32c59f8b78651a4625e20040768"></a>
+std::chrono::microseconds&#160;</td><td class="memItemRight" valign="bottom"><b>runtime</b></td></tr>
+<tr class="separator:a8c5ba32c59f8b78651a4625e20040768"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The result of a Gauss transform. </p>
+<p>Along with the transform values themselves, this result contains information about the actual run. </p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<li>include/<a class="el" href="fgt_8hpp_source.html">fgt.hpp</a></li>
+</ul>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
