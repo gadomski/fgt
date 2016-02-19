@@ -6,6 +6,10 @@
 
 set -e
 
+DOXYGEN_VER=doxygen-1.8.11
+DOXYGEN_TAR=${DOXYGEN_VER}.linux.bin.tar.gz
+DOXYGEN_URL="http://ftp.stack.nl/pub/users/dimitri/${DOXYGEN_TAR}"
+
 skip() {
     echo "SKIPPING: $@" 1>&2
     echo "Exiting..."
@@ -26,7 +30,10 @@ if [ "${TRAVIS}" = "true" ]; then
     [ "${TRAVIS_BRANCH}" = "master" ] || skip "Only building docs for master branch"
     [ "${TRAVIS_JOB_NUMBER}" = "${TRAVIS_BUILD_NUMBER}.1" ] || skip "Only build docs once"
 
-    sudo apt-get install -y doxygen
+    wget -O - "${DOXYGEN_URL}" | tar xz -C ${TMPDIR-/tmp} ${DOXYGEN_VER}/bin/doxygen
+    export PATH="${TMPDIR-/tmp}/${DOXYGEN_VER}/bin:$PATH"
+    git config user.name "Travis CI"
+    git config user.email "travis@localhost"
 fi
 
 mkdir -p build/doc
@@ -43,8 +50,6 @@ git add --all
 git diff-index --quiet HEAD || git commit -m "scripts/gh-pages.sh"
 
 if [ "${TRAVIS}" = "true" ]; then
-    git config user.name "Travis CI"
-    git config user.email "travis@localhost"
     git push "https://${GH_TOKEN}@github.com/gadomski/fgt.git" gh-pages
 else
     git push git@github.com:gadomski/fgt gh-pages
