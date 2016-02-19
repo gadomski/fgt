@@ -15,6 +15,7 @@ configure_file(src/version.cpp.in
     ${PROJECT_BINARY_DIR}/version.cpp
     )
 
+option(WITH_BENCH "Build benchmark executable" ON)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
 
@@ -75,6 +76,10 @@ install(TARGETS Library-C++
     DESTINATION lib
     EXPORT fgt-targets
     )
+
+if(WITH_BENCH)
+    add_subdirectory(bench)
+endif()
 
 if(WITH_TESTS)
     enable_testing()

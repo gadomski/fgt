@@ -33,6 +33,11 @@ The library provides a few different ways to calculate the Gauss transform:
 - `fgt::ifgt` uses the [Improved Fast Gauss Transform (pdf)](http://www.umiacs.umd.edu/~yangcj/papers/siam_fgt_v11.pdf) to speed up the calculation.
   IFGT is fast for large bandwidths but can break down for smaller bandwidths.
 
+There is some benchmarking code available in the [bench](bench/) directory, which you can use to try to get a sense of the performance of the various modes.
+We found a crossover point at bandwidths of a bit more than 0.2 during local testing on a Mac laptop; YMMV.
+
+![Benchmarks conducted on a random dataset on my personal Mac laptop](img/2016-02-22-clang-700.1.81.x86_64-apple-darwin15.3.0.png)
+
 ## Installation
 
 **fgt** has no runtime dependencies, and only depends on [CMake](https://cmake.org/) for building.
