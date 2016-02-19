@@ -34,7 +34,7 @@ TEST(DirectTree, ReferenceImplementation) {
     arma::vec weights = arma::ones<arma::vec>(source.n_rows);
 
     DirectTree direct_tree(source, bandwidth, epsilon);
-    arma::vec g = direct_tree.compute(target, weights);
+    arma::vec g = direct_tree.compute(target, weights).data;
 
     EXPECT_EQ(1000u, g.n_rows);
     EXPECT_DOUBLE_EQ(557.19832513213646, g(0));
