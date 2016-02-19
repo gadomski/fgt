@@ -17,9 +17,7 @@
 
 #pragma once
 
-
 namespace fgt {
-
 
 inline int nchoosek(int n, int k) {
     int n_k = n - k;

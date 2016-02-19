@@ -15,17 +15,14 @@
 // along with this library; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-#include <fgt/fgt.hpp>
-
-#include "clustering.hpp"
-#include "config.hpp"
-
 #include <armadillo>
 #include "gtest/gtest.h"
 
+#include "clustering.hpp"
+#include "fgt.hpp"
+#include "config.hpp"
 
 namespace fgt {
-
 
 TEST(ChooseIfgtParameters, LargeKLimit) {
     int d = 2;
@@ -37,7 +34,6 @@ TEST(ChooseIfgtParameters, LargeKLimit) {
     EXPECT_NEAR(1.1151, params.radius, 0.0001);
 }
 
-
 TEST(ChooseIfgtParameters, SmallKLimit) {
     arma::uword d = 2;
     double h = 0.4;
@@ -48,7 +44,6 @@ TEST(ChooseIfgtParameters, SmallKLimit) {
     EXPECT_NEAR(1.051304, params.radius, 0.000001);
 }
 
-
 TEST(ChooseIfgtParameters, NoBoundFound) {
     int d = 3;
     double h = 0.01;
@@ -57,7 +52,6 @@ TEST(ChooseIfgtParameters, NoBoundFound) {
     Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
     EXPECT_EQ(k_limit, params.num_clusters);
 }
-
 
 TEST(Ifgt, ReferenceImplementation) {
     arma::mat source, target;
@@ -74,7 +68,6 @@ TEST(Ifgt, ReferenceImplementation) {
     EXPECT_EQ(5000u, g.n_rows);
     EXPECT_DOUBLE_EQ(2.071868804956274e+03, g(0));
 }
-
 
 TEST(Ifgt, DataAdaptiveReferenceImplementation) {
     arma::mat source, target;

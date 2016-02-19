@@ -74,11 +74,7 @@ install(
     ARCHIVE DESTINATION lib
     )
 
-install(
-    DIRECTORY include/fgt
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.hpp"
-    )
+install(FILES include/fgt.hpp DESTINATION include)
 
 if(WITH_TESTS)
     enable_testing()
@@ -92,6 +88,11 @@ if(WITH_TESTS)
 
     add_subdirectory(test)
 endif()
+
+configure_file(Doxyfile.in ${PROJECT_BINARY_DIR}/Doxyfile)
+add_custom_target(docs
+    COMMAND doxygen ${PROJECT_BINARY_DIR}/Doxyfile
+    )
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(

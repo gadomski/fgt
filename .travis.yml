@@ -1,29 +1,30 @@
 language: cpp
-
 compiler:
-    - clang
-    - gcc
+  - clang
+  - gcc
 
 env:
+  matrix:
     - FGT_WITH_OPENMP=ON OMP_NUM_THREADS=4
     - FGT_WITH_OPENMP=OFF
+  global:
+    secure: ZN/AGl23+zH+afTiBq6CMelSaZYK3dCk2a4Y9hPYYCOXOMCDXo/s8jtQxUdwCTjChBsdRgTnZCXeMgGEbK7aH75Kw1pEeOcT/n2yHgY75ZJH6R2U+DPCkX5A+WHdzHBP+N0IouAOieYP+nMNqc7yEvzAi1vJ50X0sSGiFdNzASo=
 
 matrix:
-    exclude:
-        - compiler: clang
-          env: FGT_WITH_OPENMP=ON OMP_NUM_THREADS=4
+  exclude:
+    - compiler: clang
+      env: FGT_WITH_OPENMP=ON OMP_NUM_THREADS=4
 
 install:
-    - make -f make/dependencies.mak install-travis
-    - if [[ $FGT_WITH_OPENMP == "ON" ]]; then
-      sudo apt-get install libgomp1;
-      fi
+  - make -f make/dependencies.mak install-travis
+  - if [[ $FGT_WITH_OPENMP == "ON" ]]; then sudo apt-get install libgomp1; fi
 
 before_script:
-    - if [[ $CXX == "g++" ]]; then
-      export CXX="g++-4.8";
-      fi
+  - if [[ $CXX == "g++" ]]; then export CXX="g++-4.8"; fi
 
 script:
-    - make -f make/travis.mak build test install
-    - test `git describe --abbrev=0` = `cat VERSION.txt`
+  - make -f make/travis.mak build test install
+  - test `git describe --abbrev=0` = `cat VERSION.txt`
+
+after_success:
+  - scripts/gh-pages.sh

@@ -23,18 +23,14 @@
 #include "p_max_total.hpp"
 #include "truncation_number.hpp"
 
-
 namespace fgt {
 
-
 namespace {
-
 
 double ddist(const arma::rowvec& x, const arma::rowvec& y) {
     return arma::accu(arma::pow(x - y, 2));
 }
 }
-
 
 Clustering::Clustering(const arma::mat& source, arma::uword K, double bandwidth,
                        double epsilon)
@@ -50,9 +46,7 @@ Clustering::Clustering(const arma::mat& source, arma::uword K, double bandwidth,
       m_p_max(0),
       m_constant_series() {}
 
-
 Clustering::~Clustering() {}
-
 
 void Clustering::cluster() {
     cluster_impl();
@@ -66,7 +60,6 @@ void Clustering::cluster() {
     m_constant_series.resize(get_p_max_total(get_dimensions(), get_p_max()));
     compute_constant_series(m_source.n_cols, m_p_max, m_constant_series);
 }
-
 
 arma::mat Clustering::compute_C(const arma::vec& q, double cutoff_radius,
                                 bool data_adaptive) const {
@@ -114,17 +107,14 @@ arma::mat Clustering::compute_C(const arma::vec& q, double cutoff_radius,
     return C;
 }
 
-
 const optional_arma_uword_t GonzalezClustering::DefaultStartingIndex = {false,
                                                                         0};
-
 
 GonzalezClustering::GonzalezClustering(const arma::mat& source, int K,
                                        double bandwidth, double epsilon,
                                        optional_arma_uword_t starting_index)
     : Clustering(source, K, bandwidth, epsilon),
       m_starting_index(starting_index) {}
-
 
 void GonzalezClustering::cluster_impl() {
     arma::uword N = get_n_rows();

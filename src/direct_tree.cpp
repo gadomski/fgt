@@ -15,7 +15,7 @@
 // along with this library; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-#include <fgt/fgt.hpp>
+#include "fgt.hpp"
 
 #include "armadillo_adapter.hpp"
 
@@ -27,16 +27,13 @@
 #include <utility>
 #include <vector>
 
-
 namespace fgt {
-
 
 DirectTree::DirectTree(const arma::mat& source, double bandwidth,
                        double epsilon)
     : GaussTransform(source, bandwidth),
       m_epsilon(epsilon),
       m_max_leaf(MaxLeafSize) {}
-
 
 arma::vec DirectTree::compute_impl(const arma::mat& target,
                                    const arma::vec& weights) const {

@@ -24,9 +24,7 @@
 
 #include <vector>
 
-
 namespace fgt {
-
 
 TEST(Monomials, ReferenceImplementation) {
     arma::rowvec dx = {0.319529, 0.401860};

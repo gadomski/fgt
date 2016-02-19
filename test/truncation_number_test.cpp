@@ -21,9 +21,7 @@
 
 #include <cmath>
 
-
 namespace fgt {
-
 
 TEST(ChooseTruncationNumber, ReferenceImplementation) {
     double bandwidth = 0.3;

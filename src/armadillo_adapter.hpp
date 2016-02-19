@@ -20,9 +20,7 @@
 #include <armadillo>
 #include <nanoflann.hpp>
 
-
 namespace fgt {
-
 
 class ArmadilloAdaptor {
 public:
@@ -46,7 +44,6 @@ public:
 private:
     const arma::mat& m_data;
 };
-
 
 typedef nanoflann::L2_Simple_Adaptor<double, ArmadilloAdaptor>
     L2_Simple_ArmadilloAdaptor;

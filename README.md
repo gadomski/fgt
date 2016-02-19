@@ -4,6 +4,8 @@
 **fgt** can do an Improved Fast Gauss Transform, a direct Gauss transform using an approximate nearest neighbor simplification, and the direct Gauss transform.
 This library is heavily based on previous work in the [figtree](https://github.com/vmorariu/figtree) library, as well as the original [Improved Fast Gauss Transform](http://www.umiacs.umd.edu/labs/cvl/pirl/vikas/Software/IFGT/IFGT_code.htm) code.
 
+**fgt** lives at [https://github.com/gadomski/fgt](https://github.com/gadomski/fgt), and its documentation lives at [http://gadomski.github.io/fgt](http://gadomski.github.io/fgt).
+
 [![Build Status](https://travis-ci.org/gadomski/fgt.svg?branch=master)](https://travis-ci.org/gadomski/fgt)
 
 

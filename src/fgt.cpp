@@ -15,13 +15,11 @@
 // along with this library; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-#include <fgt/fgt.hpp>
+#include "fgt.hpp"
 
 #include <cassert>
 
-
 namespace fgt {
-
 
 namespace {
 // This value was arrived at through two avenues:
@@ -40,7 +38,6 @@ namespace {
 // but for now let's kiss.
 static const double IfgtToDirectTreeBandwithBreakpoint = 1e-1;
 }
-
 
 std::unique_ptr<GaussTransform> choose_gauss_transform(const arma::mat& source,
                                                        double bandwidth,

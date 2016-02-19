@@ -15,16 +15,12 @@
 // along with this library; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-#include <fgt/fgt.hpp>
-
-#include <fgt/exceptions.hpp>
-
 #include <armadillo>
 #include "gtest/gtest.h"
 
+#include "fgt.hpp"
 
 namespace fgt {
-
 
 class MockGaussTransform : public GaussTransform {
 public:
@@ -37,7 +33,6 @@ private:
     }
 };
 
-
 TEST(GaussTransform, IncorrectDimensions) {
     arma::mat source(1, 2);
     arma::mat target(1, 3);
@@ -45,7 +40,6 @@ TEST(GaussTransform, IncorrectDimensions) {
     MockGaussTransform transform(source, bandwidth);
     EXPECT_THROW(transform.compute(target), dimension_mismatch);
 }
-
 
 TEST(GaussTransform, IncorrectWeightCount) {
     arma::mat source(1, 2);

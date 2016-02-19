@@ -15,20 +15,14 @@
 // along with this library; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-#include <fgt/fgt.hpp>
-
-#include <fgt/exceptions.hpp>
-
+#include "fgt.hpp"
 
 namespace fgt {
-
 
 GaussTransform::GaussTransform(const arma::mat& source, double bandwidth)
     : m_source(source), m_bandwidth(bandwidth) {}
 
-
 GaussTransform::~GaussTransform() {}
-
 
 arma::vec GaussTransform::compute(const arma::mat& target) const {
     return compute(target, arma::ones<arma::vec>(get_source_n_rows()));

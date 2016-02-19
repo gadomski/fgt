@@ -15,9 +15,8 @@
 // along with this library; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-#include <fgt/fgt.hpp>
-
 #include "clustering.hpp"
+#include "fgt.hpp"
 #include "monomials.hpp"
 #include "nchoosek.hpp"
 #include "p_max_total.hpp"
@@ -27,7 +26,6 @@
 #include <limits>
 #include <vector>
 
-
 namespace fgt {
 
 Ifgt::Parameters Ifgt::choose_parameters(arma::uword d, double bandwidth,
@@ -36,7 +34,6 @@ Ifgt::Parameters Ifgt::choose_parameters(arma::uword d, double bandwidth,
         d, bandwidth, epsilon,
         std::round(NumClusterLimitFactor * std::sqrt(d) / bandwidth));
 }
-
 
 Ifgt::Parameters Ifgt::choose_parameters(arma::uword d, double bandwidth,
                                          double epsilon, arma::uword k_limit) {
@@ -84,30 +81,25 @@ Ifgt::Parameters Ifgt::choose_parameters(arma::uword d, double bandwidth,
     return params;
 }
 
-
 Ifgt::Ifgt(const arma::mat& source, double bandwidth, double epsilon)
     : GaussTransform(source, bandwidth),
       m_epsilon(epsilon),
       m_clustering_starting_index(std::make_pair(false, 0)),
       m_data_adaptive(false) {}
 
-
 optional_arma_uword_t Ifgt::get_clustering_starting_index() const {
     return m_clustering_starting_index;
 }
-
 
 Ifgt& Ifgt::set_clustering_starting_index(arma::uword index) {
     m_clustering_starting_index = std::make_pair(true, index);
     return *this;
 }
 
-
 Ifgt& Ifgt::use_data_adaptive_truncation(bool data_adaptive) {
     m_data_adaptive = data_adaptive;
     return *this;
 }
-
 
 arma::vec Ifgt::compute_impl(const arma::mat& target,
                              const arma::vec& weights) const {

@@ -15,16 +15,13 @@
 // along with this library; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-#include <fgt/fgt.hpp>
-
-#include "config.hpp"
-
 #include <armadillo>
 #include "gtest/gtest.h"
 
+#include "config.hpp"
+#include "fgt.hpp"
 
 namespace fgt {
-
 
 TEST(Direct, OneTargetOneSource) {
     arma::mat source = {0, 0};
@@ -37,7 +34,6 @@ TEST(Direct, OneTargetOneSource) {
     EXPECT_EQ(g.n_rows, 1u);
     EXPECT_DOUBLE_EQ(0.006737946999085467, g(0));
 }
-
 
 TEST(Direct, TwoTargetsTwoSources) {
     arma::mat source = {0, 0, 0, 1};

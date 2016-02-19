@@ -15,16 +15,13 @@
 // along with this library; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-#include <fgt/fgt.hpp>
-
-#include "config.hpp"
-
 #include <armadillo>
 #include "gtest/gtest.h"
 
+#include "config.hpp"
+#include "fgt.hpp"
 
 namespace fgt {
-
 
 TEST(DirectTree, ReferenceImplementation) {
     arma::mat source, target;

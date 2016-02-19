@@ -17,13 +17,11 @@
 
 #pragma once
 
-#include <fgt/typedefs.hpp>
+#include "fgt.hpp"
 
 #include <armadillo>
 
-
 namespace fgt {
-
 
 class Clustering {
 public:
@@ -78,7 +76,6 @@ private:
     arma::uword m_p_max;
     std::vector<double> m_constant_series;
 };
-
 
 class GonzalezClustering : public Clustering {
 public:
