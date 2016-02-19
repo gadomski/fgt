@@ -8,11 +8,11 @@ home=$(pwd)
 mkdir build
 cd build
 cmake .. -DWITH_TESTS=ON \
-  -DWITH_OPENMP=$(FGT_WITH_OPENMP) \
+  -DWITH_OPENMP=${FGT_WITH_OPENMP} \
   -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_VERBOSE_MAKEFILE=$(FGT_CMAKE_VERBOSE_MAKEFILE) \
+  -DCMAKE_VERBOSE_MAKEFILE=${FGT_CMAKE_VERBOSE_MAKEFILE} \
   -DArmadillo_DIR=../local/share/Armadillo/CMake \
-  -DCMAKE_INSTALL_PREFIX=$(home)/local
+  -DCMAKE_INSTALL_PREFIX=${home}/local
 make
 make test
 make install
