@@ -32,8 +32,8 @@ if [ "${TRAVIS}" = "true" ]; then
 
     wget -O - "${DOXYGEN_URL}" | tar xz -C ${TMPDIR-/tmp} ${DOXYGEN_VER}/bin/doxygen
     export PATH="${TMPDIR-/tmp}/${DOXYGEN_VER}/bin:$PATH"
-    git config user.name "Travis CI"
-    git config user.email "travis@localhost"
+    git config --global user.name "Travis CI"
+    git config --global user.email "travis@localhost"
 fi
 
 mkdir -p build/doc
