@@ -1,68 +1,90 @@
-// fgt, C++ library for Fast Gauss Transforms
-// Copyright (C) 2015 Peter J. Gadomski <pete.gadomski@gmail.com>
+// fgt — fast Gauss transforms
+// Copyright (C) 2016 Peter J. Gadomski <pete.gadomski@gmail.com>
 //
-// This library is free software; you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by the
-// Free Software Foundation; either version 2.1 of the License, or (at your
-// option) any later version.
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
 //
-// This library is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-// for more details.
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesser General Public License
-// along with this library; if not, write to the Free Software Foundation,
-// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+
+#include <cmath>
+
+#include "nanoflann.hpp"
 
 #include "fgt.hpp"
 
-#include "armadillo_adapter.hpp"
-
-#include <armadillo>
-#include <nanoflann.hpp>
-
-#include <cmath>
-#include <sstream>
-#include <utility>
-#include <vector>
-
 namespace fgt {
+namespace {
 
-DirectTree::DirectTree(const arma::mat& source, double bandwidth,
-                       double epsilon)
-    : GaussTransform(source, bandwidth),
-      m_epsilon(epsilon),
-      m_max_leaf(MaxLeafSize) {}
+struct MatrixAdaptor {
+    size_t kdtree_get_point_count() const { return m_rows; }
+    double kdtree_distance(const double* p1, const size_t idx_p2,
+                           size_t) const {
+        double distance = 0.0;
+        for (size_t k = 0; k < m_cols; ++k) {
+            double temp = p1[k] - m_data[idx_p2 * m_cols + k];
+            distance += temp * temp;
+        }
+        return distance;
+    }
+    double kdtree_get_pt(const size_t idx, int dim) const {
+        return m_data[m_cols * idx + dim];
+    }
+    template <class BBOX>
+    bool kdtree_get_bbox(BBOX& bb) const {
+        return false;
+    }
 
-arma::vec DirectTree::compute_impl(const arma::mat& target,
-                                   const arma::vec& weights) const {
-    double bandwidth2 = get_bandwidth() * get_bandwidth();
-    double cutoff_radius = get_bandwidth() * std::sqrt(std::log(1 / m_epsilon));
-    double cutoff_radius2 = cutoff_radius * cutoff_radius;
-    arma::vec g = arma::zeros<arma::vec>(target.n_rows);
+    const double* m_data;
+    size_t m_rows;
+    size_t m_cols;
+};
+}
+
+std::vector<double> direct_tree(const double* source, size_t rows_source,
+                                const double* target, size_t rows_target,
+                                size_t cols, double bandwidth, double epsilon) {
+    std::vector<double> weights(rows_source, 1.0);
+    return direct_tree(source, rows_source, target, rows_target, cols,
+                       bandwidth, epsilon, weights.data());
+}
+
+std::vector<double> direct_tree(const double* source, size_t rows_source,
+                                const double* target, size_t rows_target,
+                                size_t cols, double bandwidth, double epsilon,
+                                const double* weights) {
+    double h2 = bandwidth * bandwidth;
+    double cutoff_radius = bandwidth * std::sqrt(std::log(1.0 / epsilon));
+    double r2 = cutoff_radius * cutoff_radius;
+    std::vector<double> g(rows_target, 0.0);
+
     typedef nanoflann::KDTreeSingleIndexAdaptor<
-        L2_Simple_ArmadilloAdaptor, ArmadilloAdaptor, -1, arma::uword> tree_t;
-    ArmadilloAdaptor adapter(get_source());
-    tree_t tree(get_dimensions(), adapter,
-                nanoflann::KDTreeSingleIndexAdaptorParams(m_max_leaf));
-    tree.buildIndex();
+        nanoflann::L2_Simple_Adaptor<double, MatrixAdaptor>, MatrixAdaptor>
+        tree_t;
+    MatrixAdaptor adapted_source = {source, rows_source, cols};
+    tree_t index(cols, adapted_source);
+    index.buildIndex();
 
-#ifdef FGT_WITH_OPENMP
+    nanoflann::SearchParams params;
+    params.sorted = false;
+
 #pragma omp parallel for
-#endif
-    for (arma::uword j = 0; j < target.n_rows; ++j) {
-        std::vector<double> point =
-            arma::conv_to<std::vector<double>>::from(target.row(j));
-        std::vector<std::pair<arma::uword, double>> indices_distances;
-        indices_distances.reserve(get_source_n_rows());
-        nanoflann::SearchParams search_params;
-        search_params.sorted = false;
-        size_t num_points_found = tree.radiusSearch(
-            point.data(), cutoff_radius2, indices_distances, search_params);
-        for (size_t i = 0; i < num_points_found; ++i) {
+    for (size_t j = 0; j < rows_target; ++j) {
+        std::vector<std::pair<size_t, double>> indices_distances;
+        indices_distances.reserve(rows_source);
+        size_t nfound = index.radiusSearch(&target[j * cols], r2,
+                                           indices_distances, params);
+        for (size_t i = 0; i < nfound; ++i) {
             auto entry = indices_distances[i];
-            g(j) += weights(entry.first) * std::exp(-entry.second / bandwidth2);
+            g[j] += weights[i] * std::exp(-entry.second / h2);
         }
     }
     return g;

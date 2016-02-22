@@ -1,84 +1,100 @@
 # fgt
 
-**fgt** is an LGPL C++ library for quickly performing [Gauss transforms](https://en.wikipedia.org/wiki/Weierstrass_transform).
-**fgt** can do an Improved Fast Gauss Transform, a direct Gauss transform using an approximate nearest neighbor simplification, and the direct Gauss transform.
-This library is heavily based on previous work in the [figtree](https://github.com/vmorariu/figtree) library, as well as the original [Improved Fast Gauss Transform](http://www.umiacs.umd.edu/labs/cvl/pirl/vikas/Software/IFGT/IFGT_code.htm) code.
+Fast Gauss transforms.
 
-**fgt** lives at [https://github.com/gadomski/fgt](https://github.com/gadomski/fgt), and its documentation lives at [http://gadomski.github.io/fgt](http://gadomski.github.io/fgt).
+The Gauss transform is a common operation that computes the per-point similarity between two data sets:
 
-[![Build Status](https://travis-ci.org/gadomski/fgt.svg?branch=master)](https://travis-ci.org/gadomski/fgt)
+![The Gauss transform](img/gauss-transform.png)
 
+This a C++ library for computing the Gauss transform using the direct method as well as a few shortcuts.
+This code lives on [Github](https://github.com/gadomski/fgt) and it has [some Doxygen documentation](http://gadomski.github.io/fgt).
 
 ## Usage
 
-Let **fgt** pick the best Gauss transform for your purposes:
+There is one C++ header file, `fgt.hpp`, which has everything you need.
+Include that file and you're off to the races:
 
 ```cpp
-GaussTransformUnqPtr transfom = choose_gauss_transform(source, bandwidth, epsilon);
-auto transform = transform->compute(target, weights);
+#include <fgt.hpp>
+
+void my_great_function(const double* x, size_t x_rows,
+                       const double* y, size_t y_rows,
+                       size_t cols) {
+    double bandwidth = 0.3;
+    std::vector<double> gauss_transform = fgt::direct(x, x_rows, y, y_rows, cols, bandwidth);
+}
 ```
 
-Run the Improved Fast Gauss Transform:
+The library provides a few different ways to calculate the Gauss transform:
 
-```cpp
-Ifgt ifgt = Ifgt(source, bandwidth, epsilon);
-auto transform = ifgt.compute(target, weights);
-```
-
-## Dependencies
-
-
-**fgt** requires a modern compiler that supports many c++11 features, such as clang 3.4 or gcc 4.8, and [armadillo](http://arma.sourceforge.net/), a C++ linear algebra library.
-On OSX, installing armadillo is easy with [homebrew](http://brew.sh/):
-
-```bash
-$ brew install armadillo
-```
-
-On Ubuntu:
-
-```bash
-$ sudo apt-get install libarmadillo-dev
-```
-
-Windoze, caveat emptor.
-
+- `fgt::direct` calculates the exact Gauss transform, and is the most accurate and the slowest option.
+- `fgt::direct_tree` tries to do less work by only considering "close" points, where "close" is defined by the bandwidth.
+  The direct tree method works best for very small bandwidths.
+- `fgt::ifgt` uses the [Improved Fast Gauss Transform (pdf)](http://www.umiacs.umd.edu/~yangcj/papers/siam_fgt_v11.pdf) to speed up the calculation.
+  IFGT is fast for large bandwidths but can break down for smaller bandwidths.
 
 ## Installation
 
-**fgt** uses [CMake](http://www.cmake.org/):
+**fgt** has no runtime dependencies, and only depends on [CMake](https://cmake.org/) for building.
+To build **fgt** from source, clone the repository and execute the traditional CMake build incantation:
 
-```bash
-$ mkdir build
-$ cd build
-$ cmake .. -DCMAKE_BUILD_TYPE=Release
-$ make
+```sh
+git clone https://github.com/gadomski/fgt
+mkdir -p fgt/build
+cd fgt/build
+cmake ..
+make
 ```
 
-**fgt** comes with a CMake configuration file that lets downstream projects easily integrate **fgt** targets.
-For example, if **fgt** is installed to a location in the default CMake find package path, you can easily integrate **fgt**'s C++ library into a downstream CMakeLists.txt:
+**fgt** doesn't make any assumptions about whether you do or do not want shared libraries, so if you have a preference be sure to set `BUILD_SHARED_LIBS`.
+
+### OpenMP
+
+**fgt** comes with build-in OpenMP parallelization, which can lead to some significant speedups for large data sets.
+To enable OpenMP, make sure you're using an OpenMP-aware compiler (on OSX, you can get OpenMP clang via [Homebrew](http://brew.sh): `brew install clang-omp`) and set the CMake variable `WITH_OPENMP` to ON, e.g.:
+
+```sh
+CC=clang-omp CXX=clang-omp++ cmake .. -DWITH_OPENMP=ON
+make
+```
+
+This will build an OpenMP-enabled **fgt** library.
+
+### Tests
+
+**fgt** comes with a unit-test suite.
+To run, simply execute `make test`.
+
+### Using in a downstream project
+
+When you install **fgt** on your system, you will also install a few CMake configuration files that make it easy to integrate this project into your downstream work.
+If **fgt** is installed to a traditional location (e.g. `/usr/local`), finding **fgt** might be as simple as including the following in your `CMakeLists.txt`:
 
 ```cmake
 find_package(Fgt REQUIRED)
-add_executable(my-great-program main.cpp)
-target_link_libraries(my-great-program Fgt::Libary-C++)
+target_link_libraries(my-sweet-target
+    PUBLIC
+    Fgt::Library-C++
+    )
 ```
 
-If you have installed **fgt** to a non-standard location, you may have to set `Fgt_DIR` in your downstream CMake cache.
+The provided target, `Fgt::Library-C++`, should have its `INTERFACE_INCLUDE_DIRECTORIES` and other useful properties configured, so you shouldn't have to muck with anything else.
 
+If you've installed **fgt** to a non-standard location, you may need to use `Fgt_DIR` to find its CMake configuration files, or use `CMAKE_PREFIX_PATH` to point CMake at your non-standard install tree.
 
-## A Note Regarding Performance
+## Versioning
 
-Armadillo is a template-heavy header library, so relies heavily on optimizations to achieve reasonable performance.
-Set `CMAKE_BUILD_TYPE=Release` for good results.
+We follow [semantic versioning](http://semver.org/).
+Versions have annotated tags following a `vMAJOR.MINOR.PATCH` naming convention.
+While we'll do our best to increment the `MINOR` version with all breaking changes, we can't guarantee anything until `MAJOR` hits 1 (per usual).
 
-If you are confident in your code, you can also set `ARMA_NO_DEBUG=ON` to disable bounds checks on armadillo matrices.
-This opens up your code to problems, but if you're confident, you can get another performance boost by sidestepping those checks.
+## Contributing
 
+As always, we welcome bug reports, features requests, and particularly pull requests via [Github](https://github.com/gadomski/fgt).
+
+This library was developed by [Pete Gadomski](https://github.com/gadomski), and it was inspired by [the IFGT source code](http://www.umiacs.umd.edu/labs/cvl/pirl/vikas/Software/IFGT/IFGT_code.htm) and [figtree](https://github.com/vmorariu/figtree).
 
 ## License
 
-This software is distributed under the GNU Lesser General Public License v2.1.
-A copy of this license can be found in LICENSE.txt.
-
-This version is copyright (c) Peter J. Gadomski <pete.gadomski@gmail.com>.
+LGPL v2.1.
+See LICENSE.txt for the complete text.

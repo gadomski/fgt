@@ -1,87 +1,33 @@
-// fgt, C++ library for Fast Gauss Transforms
-// Copyright (C) 2015 Peter J. Gadomski <pete.gadomski@gmail.com>
-//
-// This library is free software; you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by the
-// Free Software Foundation; either version 2.1 of the License, or (at your
-// option) any later version.
-//
-// This library is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-// for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with this library; if not, write to the Free Software Foundation,
-// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
-#include <armadillo>
 #include "gtest/gtest.h"
 
-#include "clustering.hpp"
-#include "fgt.hpp"
-#include "config.hpp"
+#include "test/support.hpp"
+#include "ifgt.hpp"
 
 namespace fgt {
 
-TEST(ChooseIfgtParameters, LargeKLimit) {
-    int d = 2;
-    double h = 0.3;
-    double epsilon = 1e-6;
-    int k_limit = 189;
-    Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
-    EXPECT_EQ(13u, params.num_clusters);
-    EXPECT_NEAR(1.1151, params.radius, 0.0001);
+TEST(Ifgt, Reference) {
+    auto source = load_ascii_test_matrix<double>("X.txt");
+    auto target = load_ascii_test_matrix<double>("Y.txt");
+    auto expected = direct(source.data.data(), source.rows, target.data.data(),
+                           target.rows, source.cols, 0.5);
+    auto actual = ifgt(source.data.data(), source.rows, target.data.data(),
+                       target.rows, source.cols, 0.5, 1e-4);
+    ASSERT_EQ(expected.size(), actual.size());
+    for (size_t i = 0; i < expected.size(); ++i) {
+        ASSERT_NEAR(expected[i], actual[i], 1e-2);
+    }
 }
 
-TEST(ChooseIfgtParameters, SmallKLimit) {
-    arma::uword d = 2;
-    double h = 0.4;
-    double epsilon = 1e-3;
-    arma::uword k_limit = 50;
-    Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
-    EXPECT_EQ(15u, params.num_clusters);
-    EXPECT_NEAR(1.051304, params.radius, 0.000001);
+TEST(Ifgt, ChooseParameters) {
+    IfgtParameters params = ifgt_choose_parameters(2, 0.3, 1e-6, 189, 200);
+    EXPECT_EQ(13, params.nclusters);
+    EXPECT_EQ(17, params.max_truncation_number);
+    EXPECT_NEAR(1.1151, params.cutoff_radius, 1e-4);
 }
 
-TEST(ChooseIfgtParameters, NoBoundFound) {
-    int d = 3;
-    double h = 0.01;
-    double epsilon = 1e-2;
-    unsigned int k_limit = 189;
-    Ifgt::Parameters params = Ifgt::choose_parameters(d, h, epsilon, k_limit);
-    EXPECT_EQ(k_limit, params.num_clusters);
-}
-
-TEST(Ifgt, ReferenceImplementation) {
-    arma::mat source, target;
-    source.load(test_data_path("X.csv"));
-    target.load(test_data_path("Y.csv"));
-    double bandwidth = 0.4;
-    double epsilon = 1e-3;
-    arma::vec weights = arma::ones<arma::vec>(source.n_rows);
-
-    Ifgt ifgt(source, bandwidth, epsilon);
-    ifgt.set_clustering_starting_index(2);
-    arma::vec g = ifgt.compute(target, weights).data;
-
-    EXPECT_EQ(5000u, g.n_rows);
-    EXPECT_DOUBLE_EQ(2.071868804956274e+03, g(0));
-}
-
-TEST(Ifgt, DataAdaptiveReferenceImplementation) {
-    arma::mat source, target;
-    source.load(test_data_path("X.csv"));
-    target.load(test_data_path("Y.csv"));
-    double bandwidth = 0.4;
-    double epsilon = 1e-3;
-    arma::vec weights = arma::ones<arma::vec>(source.n_rows);
-
-    Ifgt ifgt(source, bandwidth, epsilon);
-    ifgt.set_clustering_starting_index(2).use_data_adaptive_truncation(true);
-    arma::vec g = ifgt.compute(target, weights).data;
-
-    EXPECT_EQ(5000u, g.n_rows);
-    EXPECT_DOUBLE_EQ(2071.7022219052133, g(0));
+TEST(Ifgt, ChooseTruncationNumber) {
+    size_t truncation_number =
+        ifgt_choose_truncation_number(2, 0.3, 1e-6, 0.1, 200);
+    EXPECT_EQ(9, truncation_number);
 }
 }

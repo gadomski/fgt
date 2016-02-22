@@ -1,42 +1,34 @@
-// fgt, C++ library for Fast Gauss Transforms
-// Copyright (C) 2015 Peter J. Gadomski <pete.gadomski@gmail.com>
-//
-// This library is free software; you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by the
-// Free Software Foundation; either version 2.1 of the License, or (at your
-// option) any later version.
-//
-// This library is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-// for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with this library; if not, write to the Free Software Foundation,
-// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
-#include <armadillo>
 #include "gtest/gtest.h"
 
-#include "config.hpp"
-#include "fgt.hpp"
+#include "test/support.hpp"
 
 namespace fgt {
 
-TEST(DirectTree, ReferenceImplementation) {
-    arma::mat source, target;
-    source.load(test_data_path("X.csv"));
-    source.resize(1000, source.n_cols);
-    target.load(test_data_path("Y.csv"));
-    target.resize(1000, target.n_cols);
-    double bandwidth = 0.4;
-    double epsilon = 1e-3;
-    arma::vec weights = arma::ones<arma::vec>(source.n_rows);
+TEST(DirectTree, MatchesDirect) {
+    auto source = load_ascii_test_matrix<double>("X.txt");
+    auto target = load_ascii_test_matrix<double>("Y.txt");
+    auto expected = direct(source.data.data(), source.rows, target.data.data(),
+                           target.rows, source.cols, 0.5);
+    auto actual =
+        direct_tree(source.data.data(), source.rows, target.data.data(),
+                    target.rows, source.cols, 0.5, 1e-4);
+    for (size_t i = 0; i < expected.size(); ++i) {
+        ASSERT_NEAR(expected[i], actual[i], 1e-4);
+    }
+}
 
-    DirectTree direct_tree(source, bandwidth, epsilon);
-    arma::vec g = direct_tree.compute(target, weights).data;
-
-    EXPECT_EQ(1000u, g.n_rows);
-    EXPECT_DOUBLE_EQ(557.19832513213646, g(0));
+TEST(DirectTree, WithWeights) {
+    auto source = load_ascii_test_matrix<double>("X.txt");
+    auto target = load_ascii_test_matrix<double>("Y.txt");
+    std::vector<double> weights(source.rows, 1.0);
+    auto no_weights =
+        direct_tree(source.data.data(), source.rows, target.data.data(),
+                    target.rows, source.cols, 0.5, 1e-4);
+    auto with_weights =
+        direct_tree(source.data.data(), source.rows, target.data.data(),
+                    target.rows, source.cols, 0.5, 1e-4, weights.data());
+    for (size_t i = 0; i < no_weights.size(); ++i) {
+        ASSERT_DOUBLE_EQ(no_weights[i], with_weights[i]);
+    }
 }
 }

@@ -25,13 +25,11 @@ addons:
 
 install:
   - scripts/travis-install-cmake.sh && export PATH=$(pwd)/cmake/bin:$PATH
-  - scripts/travis-install-armadillo.sh
 
 before_script:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
 
 script:
   - scripts/travis-script.sh
-  - test `git describe --abbrev=0` = `cat VERSION.txt`
 
 after_success: scripts/gh-pages.sh
