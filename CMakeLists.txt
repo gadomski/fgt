@@ -11,11 +11,12 @@ if(EXISTS "${PROJECT_SOURCE_DIR}/.git")
     git_describe(FGT_VERSION --abbrev=0)
     string(SUBSTRING ${FGT_VERSION} 1 -1 FGT_VERSION)
 else()
-    file(STRINGS VERSION.txt FGT_VERSION)
+    file(STRINGS "${PROJECT_SOURCE_DIR}/VERSION.txt" FGT_VERSION)
 endif()
 configure_file(src/version.cpp.in
     ${PROJECT_BINARY_DIR}/version.cpp
     )
+message(STATUS "fgt version: ${FGT_VERSION}")
 
 set(FGT_SOVERSION 0)
 
