@@ -6,7 +6,7 @@ if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 endif()
 
-set(FGT_VERSION 0.3.0)
+set(FGT_VERSION 0.3.2)
 set(FGT_SOVERSION 0)
 configure_file(src/version.cpp.in
     ${PROJECT_BINARY_DIR}/version.cpp
