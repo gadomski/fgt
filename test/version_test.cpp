@@ -1,10 +1,16 @@
+#include <fstream>
+
 #include "gtest/gtest.h"
 
-#include "fgt.hpp"
+#include "test/support.hpp"
 
 namespace fgt {
 
-TEST(Version, Compiles) { std::string v = version(); }
-
-TEST(GitDescribe, Compiles) { std::string d = git_describe(); }
+TEST(Version, MatchesVersionFile) {
+    std::string v = version();
+    std::ifstream file(project_source_filename("VERSION.txt"));
+    std::string version_txt;
+    std::getline(file, version_txt);
+    EXPECT_EQ(version_txt, v);
+}
 }

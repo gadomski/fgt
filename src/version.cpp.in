@@ -20,5 +20,4 @@
 namespace fgt {
 
 const char* version() { return "@FGT_VERSION@"; }
-const char* git_describe() { return "@FGT_DESCRIBE@"; }
 }

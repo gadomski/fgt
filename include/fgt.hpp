@@ -28,9 +28,6 @@ namespace fgt {
 /// Returns the version of the fgt library as a string.
 const char* version();
 
-/// Returns the result of `git describe` for this library's version.
-const char* git_describe();
-
 /// Computes the direct Gauss transform with equal weights.
 std::vector<double> direct(const double* source, size_t rows_source,
                            const double* target, size_t rows_target,

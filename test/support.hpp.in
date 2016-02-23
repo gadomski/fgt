@@ -10,6 +10,10 @@ namespace {
 const char* TEST_DATA_DIR = "@PROJECT_SOURCE_DIR@/test/data/";
 }
 
+std::string project_source_filename(const std::string& filename) {
+    return "@PROJECT_SOURCE_DIR@/" + filename;
+}
+
 template <typename T>
 struct Matrix {
     std::vector<T> data;
