@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">fgt
-   &#160;<span id="projectnumber">0.3.0</span>
+   &#160;<span id="projectnumber">0.3.2</span>
    </div>
    <div id="projectbrief">C++ library for fast Gauss transforms</div>
   </td>
@@ -103,10 +103,14 @@ The Gauss transform</div></div>
 <div class="caption">
 Benchmarks conducted on a random dataset on my personal Mac laptop</div></div>
  <h2>Installation</h2>
-<p><b>fgt</b> has no runtime dependencies, and only depends on <a href="https://cmake.org/">CMake</a> for building. To build <b>fgt</b> from source, clone the repository and execute the traditional CMake build incantation:</p>
+<p><b>fgt</b> has no runtime dependencies, and only depends on <a href="https://cmake.org/">CMake</a> for building.</p>
+<h3>Homebrew</h3>
+<p>If you're on a Mac and you use <a href="http://brew.sh">Homebrew</a>, use <a href="https://github.com/gadomski/homebrew-gadomski">my tap</a> to install:</p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;brew tap gadomski/gadomski</div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;brew install fgt</div></div><!-- fragment --><h3>From source</h3>
+<p>To build <b>fgt</b> from source, clone the repository and execute the traditional CMake build incantation:</p>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;git clone https://github.com/gadomski/fgt</div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;mkdir -p fgt/build</div><div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;cd fgt/build</div><div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;cmake ..</div><div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;make</div></div><!-- fragment --><p><b>fgt</b> doesn't make any assumptions about whether you do or do not want shared libraries, so if you have a preference be sure to set <code>BUILD_SHARED_LIBS</code>.</p>
 <h3>OpenMP</h3>
-<p><b>fgt</b> comes with build-in OpenMP parallelization, which can lead to some significant speedups for large data sets. To enable OpenMP, make sure you're using an OpenMP-aware compiler (on OSX, you can get OpenMP clang via <a href="http://brew.sh">Homebrew</a>: <code>brew install clang-omp</code>) and set the CMake variable <code>WITH_OPENMP</code> to ON, e.g.:</p>
+<p><b>fgt</b> comes with build-in OpenMP parallelization, which can lead to some significant speedups for large data sets. To enable OpenMP, make sure you're using an OpenMP-aware compiler (on OSX, you can get OpenMP clang via Homebrew: <code>brew install clang-omp</code>) and set the CMake variable <code>WITH_OPENMP</code> to ON, e.g.:</p>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;CC=clang-omp CXX=clang-omp++ cmake .. -DWITH_OPENMP=ON</div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;make</div></div><!-- fragment --><p>This will build an OpenMP-enabled <b>fgt</b> library.</p>
 <h3>Tests</h3>
 <p><b>fgt</b> comes with a unit-test suite. To run, simply execute <code>make test</code>.</p>
