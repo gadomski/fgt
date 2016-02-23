@@ -1,8 +1,8 @@
 var indexSectionsWithContent =
 {
-  0: "dfgiv",
+  0: "dfiv",
   1: "f",
-  2: "dgiv",
+  2: "div",
   3: "f"
 };
 

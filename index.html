@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">fgt
-   &#160;<span id="projectnumber">0.2.0</span>
+   &#160;<span id="projectnumber">0.3.0</span>
    </div>
    <div id="projectbrief">C++ library for fast Gauss transforms</div>
   </td>
@@ -85,7 +85,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <img src="gauss-transform.png" alt="gauss-transform.png"/>
 <div class="caption">
 The Gauss transform</div></div>
-<p> This a C++ library for computing the Gauss transform using the direct method as well as a few shortcuts. This code lives on <a href="https://github.com/gadomski/fgt">Github</a> and it has <a href="http://gadomski.github.io/fgt">some Doxygen documentation</a>.</p>
+<p> This a C++ library for computing the Gauss transform using the direct method as well as a few shortcuts. This code lives on <a href="https://github.com/gadomski/fgt">Github</a>, has <a href="http://gadomski.github.io/fgt">some Doxygen documentation</a>, and is tested <a href="https://travis-ci.org/gadomski/fgt">with Travis</a>.</p>
+<div class="image">
+<img src="https://travis-ci.org/gadomski/fgt.svg?branch=master"  alt="Build Status"/>
+</div>
 <h2>Usage</h2>
 <p>There is one C++ header file, <code><a class="el" href="fgt_8hpp.html" title="The header file for the fgt library. ">fgt.hpp</a></code>, which has everything you need. Include that file and you're off to the races:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="fgt_8hpp.html">fgt.hpp</a>&gt;</span></div><div class="line"></div><div class="line"><span class="keywordtype">void</span> my_great_function(<span class="keyword">const</span> <span class="keywordtype">double</span>* x, <span class="keywordtype">size_t</span> x_rows,</div><div class="line">                       <span class="keyword">const</span> <span class="keywordtype">double</span>* y, <span class="keywordtype">size_t</span> y_rows,</div><div class="line">                       <span class="keywordtype">size_t</span> cols) {</div><div class="line">    <span class="keywordtype">double</span> bandwidth = 0.3;</div><div class="line">    std::vector&lt;double&gt; gauss_transform = <a class="code" href="fgt_8hpp.html#a42281fb6f97283c3e73332544ad9f126">fgt::direct</a>(x, x_rows, y, y_rows, cols, bandwidth);</div><div class="line">}</div></div><!-- fragment --><p>The library provides a few different ways to calculate the Gauss transform:</p>

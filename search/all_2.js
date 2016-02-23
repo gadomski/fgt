@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['git_5fdescribe',['git_describe',['../fgt_8hpp.html#aedc2e951d2812a14223bb7e48d8f4f18',1,'fgt']]]
+  ['ifgt',['ifgt',['../fgt_8hpp.html#ac1eb1fb51991868c88b3f851c944e2bb',1,'fgt::ifgt(const double *source, size_t rows_source, const double *target, size_t rows_target, size_t cols, double bandwidth, double epsilon)'],['../fgt_8hpp.html#a7aa390b114162003fade719fe2491e15',1,'fgt::ifgt(const double *source, size_t rows_source, const double *target, size_t rows_target, size_t cols, double bandwidth, double epsilon, const double *weights)']]]
 ];
