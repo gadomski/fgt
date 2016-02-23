@@ -6,19 +6,12 @@ if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 endif()
 
-if(EXISTS "${PROJECT_SOURCE_DIR}/.git")
-    include(GetGitRevisionDescription)
-    git_describe(FGT_VERSION --abbrev=0)
-    string(SUBSTRING ${FGT_VERSION} 1 -1 FGT_VERSION)
-else()
-    file(STRINGS "${PROJECT_SOURCE_DIR}/VERSION.txt" FGT_VERSION)
-endif()
+set(FGT_VERSION 0.3.0)
+set(FGT_SOVERSION 0)
 configure_file(src/version.cpp.in
     ${PROJECT_BINARY_DIR}/version.cpp
     )
 message(STATUS "fgt version: ${FGT_VERSION}")
-
-set(FGT_SOVERSION 0)
 
 option(WITH_BENCH "Build benchmark executable" ON)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
