@@ -199,7 +199,7 @@ IfgtParameters ifgt_choose_parameters(size_t cols, double bandwidth,
         double error = std::numeric_limits<double>::max();
         double temp = 1.0;
         size_t p = 0;
-        while ((error > epsilon) & (p <= truncation_number_ul)) {
+        while ((error > epsilon) && (p <= truncation_number_ul)) {
             ++p;
             double b =
                 std::min((rx + std::sqrt(rx2 + 2.0 * double(p) * h2)) / 2.0,
@@ -229,7 +229,7 @@ size_t ifgt_choose_truncation_number(size_t cols, double bandwidth,
     double error = std::numeric_limits<double>::max();
     size_t p = 0;
     double temp = 1.0;
-    while ((error > epsilon) & (p <= truncation_number_ul)) {
+    while ((error > epsilon) && (p <= truncation_number_ul)) {
         ++p;
         double b =
             std::min((rx + std::sqrt(rx2 + 2 * double(p) * h2)) / 2.0, rx + r);
