@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['fgt',['fgt',['../namespacefgt.html',1,'']]],
-  ['fgt_2ehpp',['fgt.hpp',['../fgt_8hpp.html',1,'']]],
-  ['fgt_5ferror',['fgt_error',['../classfgt_1_1fgt__error.html',1,'fgt']]],
-  ['fgt',['fgt',['../index.html',1,'']]]
+  ['git_5fdescribe',['git_describe',['../fgt_8hpp.html#aedc2e951d2812a14223bb7e48d8f4f18',1,'fgt']]]
 ];

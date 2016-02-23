@@ -40,8 +40,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
-      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -87,77 +85,56 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">fgt.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Header file for the fgt C++ library.  
+<p>The header file for the fgt library.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;chrono&gt;</code><br />
-<code>#include &lt;memory&gt;</code><br />
-<code>#include &lt;stdexcept&gt;</code><br />
-<code>#include &lt;armadillo&gt;</code><br />
+<div class="textblock"><code>#include &lt;cstddef&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div>
 <p><a href="fgt_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfgt_1_1fgt__error.html">fgt::fgt_error</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Top-level error class for all fgt errors.  <a href="classfgt_1_1fgt__error.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfgt_1_1dimension__mismatch.html">fgt::dimension_mismatch</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Two matrices do not have compatible dimensions.  <a href="classfgt_1_1dimension__mismatch.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfgt_1_1_gauss_transform.html">fgt::GaussTransform</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A generic gauss transform.  <a href="classfgt_1_1_gauss_transform.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfgt_1_1_gauss_transform_1_1_result.html">fgt::GaussTransform::Result</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The result of a Gauss transform.  <a href="structfgt_1_1_gauss_transform_1_1_result.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfgt_1_1_direct.html">fgt::Direct</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direct Gauss transform.  <a href="classfgt_1_1_direct.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfgt_1_1_direct_tree.html">fgt::DirectTree</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direct Gauss transform, but simplified using clustering.  <a href="classfgt_1_1_direct_tree.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfgt_1_1_ifgt.html">fgt::Ifgt</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Improved fast Gauss Transform.  <a href="classfgt_1_1_ifgt.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfgt_1_1_ifgt_1_1_parameters.html">fgt::Ifgt::Parameters</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reusable parameter object.  <a href="structfgt_1_1_ifgt_1_1_parameters.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacefgt"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacefgt.html">fgt</a></td></tr>
-<tr class="memdesc:namespacefgt"><td class="mdescLeft">&#160;</td><td class="mdescRight">Top-level namespace for all things fgt. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a4ceaf33e8c0178ca99031300fa2cf278"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ceaf33e8c0178ca99031300fa2cf278"></a>
-typedef std::pair&lt; bool, arma::uword &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacefgt.html#a4ceaf33e8c0178ca99031300fa2cf278">fgt::optional_arma_uword_t</a></td></tr>
-<tr class="memdesc:a4ceaf33e8c0178ca99031300fa2cf278"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used when you <em>might</em> have a armadillo size value. <br /></td></tr>
-<tr class="separator:a4ceaf33e8c0178ca99031300fa2cf278"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5973f79b70a271a3a3c2390f5b30ce39"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5973f79b70a271a3a3c2390f5b30ce39"></a>
-typedef std::unique_ptr&lt; GaussTransform &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacefgt.html#a5973f79b70a271a3a3c2390f5b30ce39">fgt::GaussTransformUnqPtr</a></td></tr>
-<tr class="memdesc:a5973f79b70a271a3a3c2390f5b30ce39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique pointer to a <code><a class="el" href="classfgt_1_1_gauss_transform.html" title="A generic gauss transform. ">GaussTransform</a></code>. <br /></td></tr>
-<tr class="separator:a5973f79b70a271a3a3c2390f5b30ce39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a70ccf4d490cf66f699afe6f75b3fee82"><td class="memItemLeft" align="right" valign="top">GaussTransformUnqPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacefgt.html#a70ccf4d490cf66f699afe6f75b3fee82">fgt::choose_gauss_transform</a> (const arma::mat &amp;source, double bandwidth, double epsilon)</td></tr>
-<tr class="memdesc:a70ccf4d490cf66f699afe6f75b3fee82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Choose The Best™ Gauss transform for these data.  <a href="namespacefgt.html#a70ccf4d490cf66f699afe6f75b3fee82">More...</a><br /></td></tr>
-<tr class="separator:a70ccf4d490cf66f699afe6f75b3fee82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91e90ffef713cd49ec368937827f75d6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a91e90ffef713cd49ec368937827f75d6"></a>
+const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fgt_8hpp.html#a91e90ffef713cd49ec368937827f75d6">fgt::version</a> ()</td></tr>
+<tr class="memdesc:a91e90ffef713cd49ec368937827f75d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the version of the fgt library as a string. <br /></td></tr>
+<tr class="separator:a91e90ffef713cd49ec368937827f75d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedc2e951d2812a14223bb7e48d8f4f18"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aedc2e951d2812a14223bb7e48d8f4f18"></a>
+const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fgt_8hpp.html#aedc2e951d2812a14223bb7e48d8f4f18">fgt::git_describe</a> ()</td></tr>
+<tr class="memdesc:aedc2e951d2812a14223bb7e48d8f4f18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the result of <code>git describe</code> for this library's version. <br /></td></tr>
+<tr class="separator:aedc2e951d2812a14223bb7e48d8f4f18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87e3cc52ab5525743a2f925d49737f15"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87e3cc52ab5525743a2f925d49737f15"></a>
+std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fgt_8hpp.html#a87e3cc52ab5525743a2f925d49737f15">fgt::direct</a> (const double *source, size_t rows_source, const double *target, size_t rows_target, size_t cols, double bandwidth)</td></tr>
+<tr class="memdesc:a87e3cc52ab5525743a2f925d49737f15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the direct Gauss transform with equal weights. <br /></td></tr>
+<tr class="separator:a87e3cc52ab5525743a2f925d49737f15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42281fb6f97283c3e73332544ad9f126"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a42281fb6f97283c3e73332544ad9f126"></a>
+std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fgt_8hpp.html#a42281fb6f97283c3e73332544ad9f126">fgt::direct</a> (const double *source, size_t rows_source, const double *target, size_t rows_target, size_t cols, double bandwidth, const double *weights)</td></tr>
+<tr class="memdesc:a42281fb6f97283c3e73332544ad9f126"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the direct Gauss transform with provided weights. <br /></td></tr>
+<tr class="separator:a42281fb6f97283c3e73332544ad9f126"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe0a00bf27ab0e3ba36463a69c411fec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe0a00bf27ab0e3ba36463a69c411fec"></a>
+std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fgt_8hpp.html#abe0a00bf27ab0e3ba36463a69c411fec">fgt::direct_tree</a> (const double *source, size_t rows_source, const double *target, size_t rows_target, size_t cols, double bandwidth, double epsilon)</td></tr>
+<tr class="memdesc:abe0a00bf27ab0e3ba36463a69c411fec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the direct Gauss transform using a kd-tree. <br /></td></tr>
+<tr class="separator:abe0a00bf27ab0e3ba36463a69c411fec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c6f18199efeeb01c2f83b1e71eb016f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9c6f18199efeeb01c2f83b1e71eb016f"></a>
+std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fgt_8hpp.html#a9c6f18199efeeb01c2f83b1e71eb016f">fgt::direct_tree</a> (const double *source, size_t rows_source, const double *target, size_t rows_target, size_t cols, double bandwidth, double epsilon, const double *weights)</td></tr>
+<tr class="memdesc:a9c6f18199efeeb01c2f83b1e71eb016f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the direct Gauss transform using a kd-tree and weights. <br /></td></tr>
+<tr class="separator:a9c6f18199efeeb01c2f83b1e71eb016f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1eb1fb51991868c88b3f851c944e2bb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1eb1fb51991868c88b3f851c944e2bb"></a>
+std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fgt_8hpp.html#ac1eb1fb51991868c88b3f851c944e2bb">fgt::ifgt</a> (const double *source, size_t rows_source, const double *target, size_t rows_target, size_t cols, double bandwidth, double epsilon)</td></tr>
+<tr class="memdesc:ac1eb1fb51991868c88b3f851c944e2bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the Improved Fast Gauss Transform. <br /></td></tr>
+<tr class="separator:ac1eb1fb51991868c88b3f851c944e2bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7aa390b114162003fade719fe2491e15"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7aa390b114162003fade719fe2491e15"></a>
+std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fgt_8hpp.html#a7aa390b114162003fade719fe2491e15">fgt::ifgt</a> (const double *source, size_t rows_source, const double *target, size_t rows_target, size_t cols, double bandwidth, double epsilon, const double *weights)</td></tr>
+<tr class="memdesc:a7aa390b114162003fade719fe2491e15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the Improved Fast Gauss Transform with the provided weights. <br /></td></tr>
+<tr class="separator:a7aa390b114162003fade719fe2491e15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Header file for the fgt C++ library. </p>
-<p>Include this file to declare everything you need to run fgt in C++. </p>
+<div class="textblock"><p>The header file for the fgt library. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
