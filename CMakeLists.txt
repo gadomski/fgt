@@ -26,11 +26,13 @@ configure_file(Doxyfile.in ${PROJECT_BINARY_DIR}/Doxyfile)
 add_custom_target(docs
     COMMAND doxygen ${PROJECT_BINARY_DIR}/Doxyfile
     )
+set(cluster_src src/cluster-sequential.cpp)
 
 if(WITH_OPENMP)
     find_package(OpenMP REQUIRED)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(cluster_src src/cluster-openmp.cpp)
 endif()
 
 add_library(Library-C++
@@ -38,6 +40,7 @@ add_library(Library-C++
     src/direct.cpp
     src/direct_tree.cpp
     src/ifgt.cpp
+    ${cluster_src}
     ${PROJECT_BINARY_DIR}/version.cpp
     )
 target_include_directories(Library-C++
