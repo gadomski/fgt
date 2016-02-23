@@ -43,6 +43,18 @@ We found a crossover point at bandwidths of a bit more than 0.2 during local tes
 ## Installation
 
 **fgt** has no runtime dependencies, and only depends on [CMake](https://cmake.org/) for building.
+
+### Homebrew
+
+If you're on a Mac and you use [Homebrew](http://brew.sh), use [my tap](https://github.com/gadomski/homebrew-gadomski) to install:
+
+```sh
+brew tap gadomski/gadomski
+brew install fgt
+```
+
+### From source
+
 To build **fgt** from source, clone the repository and execute the traditional CMake build incantation:
 
 ```sh
@@ -58,7 +70,7 @@ make
 ### OpenMP
 
 **fgt** comes with build-in OpenMP parallelization, which can lead to some significant speedups for large data sets.
-To enable OpenMP, make sure you're using an OpenMP-aware compiler (on OSX, you can get OpenMP clang via [Homebrew](http://brew.sh): `brew install clang-omp`) and set the CMake variable `WITH_OPENMP` to ON, e.g.:
+To enable OpenMP, make sure you're using an OpenMP-aware compiler (on OSX, you can get OpenMP clang via Homebrew: `brew install clang-omp`) and set the CMake variable `WITH_OPENMP` to ON, e.g.:
 
 ```sh
 CC=clang-omp CXX=clang-omp++ cmake .. -DWITH_OPENMP=ON
