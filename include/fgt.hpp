@@ -23,6 +23,7 @@
 #include <cstddef>
 #include <vector>
 
+/// Top-level namespace for all things fgt.
 namespace fgt {
 
 /// Returns the version of the fgt library as a string.
