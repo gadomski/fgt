@@ -38,6 +38,7 @@ add_library(Library-C++
     src/direct.cpp
     src/direct_tree.cpp
     src/ifgt.cpp
+    src/openmp.cpp
     ${cluster_src}
     ${PROJECT_BINARY_DIR}/version.cpp
     )
@@ -53,6 +54,12 @@ set_target_properties(Library-C++ PROPERTIES
     VERSION ${FGT_VERSION}
     SOVERSION ${FGT_SOVERSION}
     )
+if(WITH_OPENMP)
+    target_compile_definitions(Library-C++
+        PUBLIC
+        FGT_WITH_OPENMP
+        )
+endif()
 target_compile_options(Library-C++
     PRIVATE
     # The no-nested-anon-types is for nanoflann
