@@ -52,26 +52,49 @@ struct MatrixAdaptor {
 std::vector<double> direct_tree(const double* source, size_t rows_source,
                                 const double* target, size_t rows_target,
                                 size_t cols, double bandwidth, double epsilon) {
-    std::vector<double> weights(rows_source, 1.0);
-    return direct_tree(source, rows_source, target, rows_target, cols,
-                       bandwidth, epsilon, weights.data());
+    return DirectTree(source, rows_source, cols, bandwidth, epsilon)
+        .compute(target, rows_target);
 }
 
 std::vector<double> direct_tree(const double* source, size_t rows_source,
                                 const double* target, size_t rows_target,
                                 size_t cols, double bandwidth, double epsilon,
                                 const double* weights) {
-    double h2 = bandwidth * bandwidth;
-    double cutoff_radius = bandwidth * std::sqrt(std::log(1.0 / epsilon));
-    double r2 = cutoff_radius * cutoff_radius;
-    std::vector<double> g(rows_target, 0.0);
+    return DirectTree(source, rows_source, cols, bandwidth, epsilon)
+        .compute(target, rows_target, weights);
+}
 
+struct DirectTree::NanoflannTree {
     typedef nanoflann::KDTreeSingleIndexAdaptor<
         nanoflann::L2_Simple_Adaptor<double, MatrixAdaptor>, MatrixAdaptor>
         tree_t;
-    MatrixAdaptor adapted_source = {source, rows_source, cols};
-    tree_t index(cols, adapted_source);
-    index.buildIndex();
+
+    NanoflannTree(const double* source, size_t rows, size_t cols)
+        : matrix_adaptor({source, rows, cols}), tree(cols, matrix_adaptor) {}
+
+    MatrixAdaptor matrix_adaptor;
+    tree_t tree;
+};
+
+DirectTree::DirectTree(const double* source, size_t rows, size_t cols,
+                       double bandwidth, double epsilon)
+    : Transform(source, rows, cols, bandwidth),
+      m_epsilon(epsilon),
+      m_tree(new DirectTree::NanoflannTree(source, rows, cols)) {
+    m_tree->tree.buildIndex();
+}
+
+DirectTree::~DirectTree() {}
+
+std::vector<double> DirectTree::compute_impl(const double* target,
+                                             size_t rows_target,
+                                             const double* weights) const {
+    double h2 = bandwidth() * bandwidth();
+    double cutoff_radius = bandwidth() * std::sqrt(std::log(1.0 / epsilon()));
+    double r2 = cutoff_radius * cutoff_radius;
+    std::vector<double> g(rows_target, 0.0);
+    size_t rows_source = this->rows_source();
+    size_t cols = this->cols();
 
     nanoflann::SearchParams params;
     params.sorted = false;
@@ -80,8 +103,8 @@ std::vector<double> direct_tree(const double* source, size_t rows_source,
     for (size_t j = 0; j < rows_target; ++j) {
         std::vector<std::pair<size_t, double>> indices_distances;
         indices_distances.reserve(rows_source);
-        size_t nfound = index.radiusSearch(&target[j * cols], r2,
-                                           indices_distances, params);
+        size_t nfound = m_tree->tree.radiusSearch(&target[j * cols], r2,
+                                                  indices_distances, params);
         for (size_t i = 0; i < nfound; ++i) {
             auto entry = indices_distances[i];
             g[j] += weights[i] * std::exp(-entry.second / h2);

@@ -22,19 +22,16 @@
 
 namespace fgt {
 
-std::vector<double> direct(const double* source, size_t rows_source,
-                           const double* target, size_t rows_target,
-                           size_t cols, double bandwidth) {
-    std::vector<double> weights(rows_source, 1.0);
-    return direct(source, rows_source, target, rows_target, cols, bandwidth,
-                  weights.data());
-}
+Direct::Direct(const double* source, size_t rows, size_t cols, double bandwidth)
+    : Transform(source, rows, cols, bandwidth) {}
 
-std::vector<double> direct(const double* source, size_t rows_source,
-                           const double* target, size_t rows_target,
-                           size_t cols, double bandwidth,
-                           const double* weights) {
-    double h2 = bandwidth * bandwidth;
+std::vector<double> Direct::compute_impl(const double* target,
+                                         size_t rows_target,
+                                         const double* weights) const {
+    double h2 = bandwidth() * bandwidth();
+    const double* source = this->source();
+    size_t rows_source = this->rows_source();
+    size_t cols = this->cols();
     std::vector<double> g(rows_target, 0.0);
 #pragma omp parallel for
     for (size_t j = 0; j < rows_target; ++j) {
@@ -48,5 +45,20 @@ std::vector<double> direct(const double* source, size_t rows_source,
         }
     }
     return g;
+}
+
+std::vector<double> direct(const double* source, size_t rows_source,
+                           const double* target, size_t rows_target,
+                           size_t cols, double bandwidth) {
+    return Direct(source, rows_source, cols, bandwidth)
+        .compute(target, rows_target);
+}
+
+std::vector<double> direct(const double* source, size_t rows_source,
+                           const double* target, size_t rows_target,
+                           size_t cols, double bandwidth,
+                           const double* weights) {
+    return Direct(source, rows_source, cols, bandwidth)
+        .compute(target, rows_target, weights);
 }
 }

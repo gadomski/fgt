@@ -40,6 +40,7 @@ add_library(Library-C++
     src/direct_tree.cpp
     src/ifgt.cpp
     src/openmp.cpp
+    src/transform.cpp
     ${cluster_src}
     ${PROJECT_BINARY_DIR}/version.cpp
     )

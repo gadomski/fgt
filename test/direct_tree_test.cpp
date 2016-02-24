@@ -31,4 +31,17 @@ TEST(DirectTree, WithWeights) {
         ASSERT_DOUBLE_EQ(no_weights[i], with_weights[i]);
     }
 }
+
+TEST(DirectTree, ClassBased) {
+    auto source = load_ascii_test_matrix<double>("X.txt");
+    auto target = load_ascii_test_matrix<double>("Y.txt");
+    auto expected = direct(source.data.data(), source.rows, target.data.data(),
+                           target.rows, source.cols, 0.5);
+    auto actual =
+        DirectTree(source.data.data(), source.rows, source.cols, 0.5, 1e-4)
+            .compute(target.data.data(), target.rows);
+    for (size_t i = 0; i < expected.size(); ++i) {
+        ASSERT_NEAR(expected[i], actual[i], 1e-4);
+    }
+}
 }

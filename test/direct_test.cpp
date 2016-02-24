@@ -28,4 +28,15 @@ TEST(Direct, WithWeights) {
         ASSERT_DOUBLE_EQ(no_weights[i], with_weights[i]);
     }
 }
+
+TEST(Direct, ClassBased) {
+    auto source = load_ascii_test_matrix<double>("X.txt");
+    auto target = load_ascii_test_matrix<double>("Y.txt");
+    Direct direct(source.data.data(), source.rows, source.cols, 0.5);
+    auto actual = direct.compute(target.data.data(), target.rows);
+    auto expected = load_ascii_test_matrix<double>("direct.txt").data;
+    for (size_t i = 0; i < expected.size(); ++i) {
+        ASSERT_NEAR(expected[i], actual[i], 1e-4);
+    }
+}
 }
