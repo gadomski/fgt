@@ -24,6 +24,7 @@
 #pragma once
 
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 /// Top-level namespace for all things fgt.
