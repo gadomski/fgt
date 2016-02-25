@@ -15,6 +15,7 @@ message(STATUS "fgt version: ${FGT_VERSION}")
 option(WITH_BENCH "Build benchmark executable" ON)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
+message(STATUS "fgt with OpenMP: ${WITH_OPENMP}")
 
 set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/gtest-1.7.0)
 set(NANOFLANN_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/nanoflann-1.1.9)
