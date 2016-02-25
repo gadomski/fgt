@@ -1,6 +1,8 @@
 project(fgt CXX C)
 cmake_minimum_required(VERSION 2.8.12)
 
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
+
 if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 endif()
@@ -10,12 +12,24 @@ set(FGT_SOVERSION 0)
 configure_file(src/version.cpp.in
     ${PROJECT_BINARY_DIR}/version.cpp
     )
-message(STATUS "fgt version: ${FGT_VERSION}")
+message(STATUS "[fgt] Version: ${FGT_VERSION}")
+
+include(GetGitRevisionDescription)
+git_describe(fgt_git_version --abbrev=0)
+if(fgt_git_version)
+    string(SUBSTRING ${fgt_git_version} 1 -1 fgt_git_version)
+    if(NOT FGT_VERSION VERSION_EQUAL fgt_git_version)
+        message(FATAL_ERROR "[fgt] Version (${FGT_VERSION}) does not match latest git tag (${fgt_git_version})")
+    else()
+        git_describe(fgt_git_describe)
+        message(STATUS "[fgt] Git description: ${fgt_git_describe}")
+    endif()
+endif()
 
 option(WITH_BENCH "Build benchmark executable" ON)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
-message(STATUS "fgt with OpenMP: ${WITH_OPENMP}")
+message(STATUS "[fgt] With OpenMP: ${WITH_OPENMP}")
 
 set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/gtest-1.7.0)
 set(NANOFLANN_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/nanoflann-1.1.9)
