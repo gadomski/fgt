@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['ifgt',['ifgt',['../fgt_8hpp.html#ac1eb1fb51991868c88b3f851c944e2bb',1,'fgt::ifgt(const double *source, size_t rows_source, const double *target, size_t rows_target, size_t cols, double bandwidth, double epsilon)'],['../fgt_8hpp.html#a7aa390b114162003fade719fe2491e15',1,'fgt::ifgt(const double *source, size_t rows_source, const double *target, size_t rows_target, size_t cols, double bandwidth, double epsilon, const double *weights)']]]
+  ['cols',['cols',['../classfgt_1_1_transform.html#ae722e7011fcfc13421bc4317720918d7',1,'fgt::Transform']]],
+  ['compute',['compute',['../classfgt_1_1_transform.html#a8018a2d07956659d2d00d35d894a0a45',1,'fgt::Transform::compute(const double *target, size_t rows)'],['../classfgt_1_1_transform.html#aeb93288cce9aa478ad74cf5b69e7c752',1,'fgt::Transform::compute(const double *target, size_t rows, const double *weights)']]]
 ];
