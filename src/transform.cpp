@@ -15,29 +15,24 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-#include <cstddef>
-
 #include "fgt.hpp"
 
 namespace fgt {
 
-/// Tuning parameters for the IFGT.
-///
-/// In general, you shouldn't need to create these yourself.
-struct IfgtParameters {
-    /// The number of clusters that should be used for the IFGT.
-    size_t nclusters;
-    /// The cutoff radius.
-    double cutoff_radius;
-};
+Transform::Transform(const double* source, size_t rows, size_t cols,
+                     double bandwidth)
+    : m_source(source),
+      m_rows_source(rows),
+      m_cols(cols),
+      m_bandwidth(bandwidth) {}
 
-/// Chooses appropriate parameters for an IFGT.
-IfgtParameters ifgt_choose_parameters(size_t cols, double bandwidth,
-                                      double epsilon, size_t max_num_clusters,
-                                      size_t truncation_number_ul);
-/// Chooses the appropriate truncation number for IFGT, given a max clustering
-/// radius.
-size_t ifgt_choose_truncation_number(size_t cols, double bandwidth,
-                                     double epsilon, double max_radius,
-                                     size_t truncation_number_ul);
+std::vector<double> Transform::compute(const double* target, size_t rows) {
+    std::vector<double> weights(this->rows_source(), 1.0);
+    return compute(target, rows, weights.data());
+}
+
+std::vector<double> Transform::compute(const double* target, size_t rows,
+                                       const double* weights) {
+    return compute_impl(target, rows, weights);
+}
 }
