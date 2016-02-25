@@ -116,13 +116,13 @@ configure_file(cmake/fgt-config.cmake
     COPYONLY
     )
 write_basic_package_version_file(
-    ${PROJECT_BINARY_DIR}/fgt-version.cmake
+    ${PROJECT_BINARY_DIR}/fgt-config-version.cmake
     VERSION ${FGT_VERSION}
     COMPATIBILITY AnyNewerVersion
     )
 install(FILES
     ${PROJECT_BINARY_DIR}/fgt-config.cmake
-    ${PROJECT_BINARY_DIR}/fgt-version.cmake
+    ${PROJECT_BINARY_DIR}/fgt-config-version.cmake
     DESTINATION lib/cmake/fgt
     )
 install(EXPORT fgt-targets
