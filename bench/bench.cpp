@@ -50,28 +50,26 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    std::vector<double> source(rows * cols);
-    std::vector<double> target(rows * cols);
+    fgt::Matrix source(rows, cols);
+    fgt::Matrix target(rows, cols);
     std::default_random_engine generator;
     std::uniform_real_distribution<double> distribution(0.0, 1.0);
 
     for (size_t i = 0; i < rows; ++i) {
         for (size_t j = 0; j < cols; ++j) {
-            source[i * cols + j] = distribution(generator);
-            target[i * cols + j] = distribution(generator);
+            source(i, j) = distribution(generator);
+            target(i, j) = distribution(generator);
         }
     }
 
     std::vector<double> result;
     auto tic = std::chrono::high_resolution_clock::now();
     if (mode == "direct") {
-        fgt::direct(source.data(), rows, target.data(), rows, cols, bandwidth);
+        fgt::direct(source, target, bandwidth);
     } else if (mode == "direct_tree") {
-        fgt::direct_tree(source.data(), rows, target.data(), rows, cols,
-                         bandwidth, epsilon);
+        fgt::direct_tree(source, target, bandwidth, epsilon);
     } else if (mode == "ifgt") {
-        fgt::ifgt(source.data(), rows, target.data(), rows, cols, bandwidth,
-                  epsilon);
+        fgt::ifgt(source, target, bandwidth, epsilon);
     } else {
         std::cout << "Invalid mode: " << mode << "\n";
         return 1;

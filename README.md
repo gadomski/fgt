@@ -19,11 +19,9 @@ Include that file and you're off to the races:
 ```cpp
 #include <fgt.hpp>
 
-void my_great_function(const double* x, size_t x_rows,
-                       const double* y, size_t y_rows,
-                       size_t cols) {
+void my_great_function(const Eigen::MatrixXd& x, const Eigen::MatrixXd& y) {
     double bandwidth = 0.3;
-    std::vector<double> gauss_transform = fgt::direct(x, x_rows, y, y_rows, cols, bandwidth);
+    Eigen::VectorXd gauss_transform = fgt::direct(x, y, bandwidth);
 }
 ```
 
@@ -40,12 +38,10 @@ There's also a class-based interface:
 ```cpp
 #include <fgt.hpp>
 
-void my_great_function(const double* x, size_t x_rows,
-                       const double* y, size_t y_rows,
-                       size_t cols) {
+void my_great_function(const Eigen::MatrixXd& x, const Eigen::MatrixXd& y) {
     double bandwidth = 0.3;
-    fgt::Direct direct(x, x_rows, cols, bandwidth);
-    std::vector<double> result = direct.compute(y, y_rows);
+    fgt::Direct direct(x, bandwidth);
+    Eigen::VectorXd result = direct.compute(y);
 }
 ```
 
@@ -54,11 +50,11 @@ This lets you break up your transform into a pre-compute and a compute step, whi
 There is some benchmarking code available in the [bench](bench/) directory, which you can use to try to get a sense of the performance of the various modes.
 We found a crossover point at bandwidths of a bit more than 0.2 during local testing on a Mac laptop; YMMV.
 
-![Benchmarks conducted on a random dataset on my personal Mac laptop](img/2016-02-22-clang-700.1.81.x86_64-apple-darwin15.3.0.png)
+![Benchmarks conducted on a random dataset on my personal Mac laptop](img/2016-03-01-clang-700.1.81.x86_64-apple-darwin15.3.0.png)
 
 ## Installation
 
-**fgt** has no runtime dependencies, and only depends on [CMake](https://cmake.org/) for building.
+**fgt** has no runtime dependencies, and only depends on [CMake](https://cmake.org/) and [Eigen](http://eigen.tuxfamily.org/) for building.
 
 ### Homebrew
 
@@ -82,6 +78,17 @@ make
 ```
 
 **fgt** doesn't make any assumptions about whether you do or do not want shared libraries, so if you have a preference be sure to set `BUILD_SHARED_LIBS`.
+
+### Eigen ordering
+
+Eigen, by defaults, stores matrices in column-major order, but **fgt** works with [row-major](https://en.wikipedia.org/wiki/Row-major_order) matrices.
+If you want to avoid extra copies, pass in row-major matrices to **fgt** functions.
+You can use the `fgt::Matrix` typedef to help:
+
+```cpp
+fgt::Matrix my_matrix(1000, 3); // creates an uninitialized 1000x3 row-major matrix of doubles
+```
+
 
 ### OpenMP
 

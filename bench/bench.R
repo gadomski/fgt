@@ -1,5 +1,5 @@
 library(ggplot2)
-bench <- read.table("2016-02-22-clang-700.1.81-x86_64-apple-darwin15.3.0.txt",
+bench <- read.table("2016-03-01-clang-700.1.81-x86_64-apple-darwin15.3.0.txt",
                     col.names = c("mode", "rows", "cols", "bandwidth",
                                   "X1", "X2", "X3", "X4", "X5"))
 bench$rows <- factor(bench$rows)
@@ -14,4 +14,4 @@ p <- ggplot(bench, aes(bandwidth, runtime, colour = mode)) +
   xlab("Bandwidth") +
   ylab("Runtime (s)") +
   ggtitle("Benchmarks partitioned by number of points")
-ggsave("../img/2016-02-22-clang-700.1.81.x86_64-apple-darwin15.3.0.png", dpi = 100)
+ggsave("../img/2016-03-01-clang-700.1.81.x86_64-apple-darwin15.3.0.png", dpi = 100)

@@ -31,6 +31,9 @@ if(fgt_git_version)
     endif()
 endif()
 
+find_package(Eigen3 3.1 REQUIRED)
+message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION}")
+
 set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/gtest-1.7.0)
 set(NANOFLANN_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/nanoflann-1.1.9)
 
@@ -53,6 +56,8 @@ add_library(Library-C++
     ${PROJECT_BINARY_DIR}/version.cpp
     )
 target_include_directories(Library-C++
+    PUBLIC
+    ${EIGEN3_INCLUDE_DIR}
     INTERFACE
     ${CMAKE_INSTALL_PREFIX}/include
     PRIVATE
@@ -77,6 +82,9 @@ target_compile_options(Library-C++
     )
 if(${CMAKE_COMPILER_IS_GNUCXX})
     target_compile_options(Library-C++
+        PUBLIC
+        # For some deprecations inside Eigen
+        -Wno-deprecated-declarations
         PRIVATE
         # For pragma omp's
         -Wno-unknown-pragmas

@@ -12,6 +12,13 @@ function(fgt_test target)
         gtest_main
         Library-C++
         )
+    if(${CMAKE_COMPILER_IS_GNUCXX})
+        target_compile_options(${target}
+            PRIVATE
+            # For pragma omp's
+            -Wno-unknown-pragmas
+            )
+    endif()
     add_test(NAME ${target} COMMAND ${target})
 endfunction()
 

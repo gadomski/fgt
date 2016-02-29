@@ -24,25 +24,22 @@
 
 namespace fgt {
 
-std::vector<double> pick_cluster_centers(const double* points, size_t rows,
-                                         size_t cols, size_t nclusters) {
+Matrix pick_cluster_centers(const MatrixRef points, size_t nclusters) {
     std::default_random_engine generator;
-    std::uniform_int_distribution<size_t> distribution(0, rows - 1);
-    std::vector<double> clusters(nclusters * cols);
+    std::uniform_int_distribution<size_t> distribution(0, points.rows() - 1);
+    unsigned long cols = points.cols();
+    Matrix clusters(nclusters, cols);
     for (size_t j = 0; j < nclusters; ++j) {
         size_t index = distribution(generator);
         for (size_t k = 0; k < cols; ++k) {
-            clusters[j * cols + k] = points[index * cols + k];
+            clusters(j, k) = points(index, k);
         }
     }
     return clusters;
 }
 
-Clustering cluster(const double* points, size_t rows, size_t cols,
-                   size_t nclusters, double epsilon) {
-    std::vector<double> clusters =
-        pick_cluster_centers(points, rows, cols, nclusters);
-    return cluster(points, rows, cols, nclusters, epsilon, clusters);
+Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon) {
+    Matrix clusters = pick_cluster_centers(points, nclusters);
+    return cluster(points, nclusters, epsilon, clusters);
 }
-
 }
