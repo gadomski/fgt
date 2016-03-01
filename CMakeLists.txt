@@ -1,7 +1,7 @@
 project(fgt CXX C)
 cmake_minimum_required(VERSION 2.8.12)
 
-set(FGT_VERSION 0.3.3)
+set(FGT_VERSION 0.4.0)
 set(FGT_SOVERSION 0)
 configure_file(src/version.cpp.in
     ${PROJECT_BINARY_DIR}/version.cpp
