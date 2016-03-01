@@ -7,7 +7,7 @@ configure_file(src/version.cpp.in
     ${PROJECT_BINARY_DIR}/version.cpp
     )
 
-option(WITH_BENCH "Build benchmark executable" ON)
+option(WITH_BENCH "Build benchmark executable" OFF)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
 message(STATUS "[fgt] With OpenMP: ${WITH_OPENMP}")

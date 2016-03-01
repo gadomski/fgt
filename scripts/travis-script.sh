@@ -8,6 +8,7 @@ home=$(pwd)
 mkdir build
 cd build
 cmake .. -DWITH_TESTS=ON \
+  -DWITH_BENCH=ON \
   -DWITH_OPENMP=${FGT_WITH_OPENMP} \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
