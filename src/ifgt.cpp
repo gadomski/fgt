@@ -17,6 +17,7 @@
 
 #include <cmath>
 #include <limits>
+#include <vector>
 
 #include "cluster.hpp"
 #include "fgt.hpp"
@@ -25,6 +26,7 @@
 namespace fgt {
 namespace {
 
+// TODO make this configurable
 const size_t TRUNCATION_NUMBER_UL = 200;
 
 int nchoosek(int n, int k) {
@@ -42,19 +44,14 @@ int nchoosek(int n, int k) {
 }
 }
 
-std::vector<double> ifgt(const double* source, size_t rows_source,
-                         const double* target, size_t rows_target, size_t cols,
-                         double bandwidth, double epsilon) {
-    return Ifgt(source, rows_source, cols, bandwidth, epsilon)
-        .compute(target, rows_target);
+Vector ifgt(const MatrixRef source, const MatrixRef target, double bandwidth,
+            double epsilon) {
+    return Ifgt(source, bandwidth, epsilon).compute(target);
 }
 
-std::vector<double> ifgt(const double* source, size_t rows_source,
-                         const double* target, size_t rows_target, size_t cols,
-                         double bandwidth, double epsilon,
-                         const double* weights) {
-    return Ifgt(source, rows_source, cols, bandwidth, epsilon)
-        .compute(target, rows_target, weights);
+Vector ifgt(const MatrixRef source, const MatrixRef target, double bandwidth,
+            double epsilon, const VectorRef weights) {
+    return Ifgt(source, bandwidth, epsilon).compute(target, weights);
 }
 
 IfgtParameters ifgt_choose_parameters(size_t cols, double bandwidth,
@@ -113,25 +110,27 @@ size_t ifgt_choose_truncation_number(size_t cols, double bandwidth,
     return p;
 }
 
-Ifgt::Ifgt(const double* source, size_t rows, size_t cols, double bandwidth,
-           double epsilon)
-    : Transform(source, rows, cols, bandwidth),
+Ifgt::Ifgt(const MatrixRef source, double bandwidth, double epsilon)
+    : Transform(source, bandwidth),
       m_epsilon(epsilon),
       m_nclusters(0),
       m_clustering(),
       m_truncation_number(0),
       m_p_max_total(0),
       m_constant_series() {
+    // TODO max num clusters should be configurable
     size_t max_num_clusters(std::round(0.2 * 100 / bandwidth));
-    IfgtParameters params = ifgt_choose_parameters(
-        cols, bandwidth, epsilon, max_num_clusters, TRUNCATION_NUMBER_UL);
+    IfgtParameters params =
+        ifgt_choose_parameters(source.cols(), bandwidth, epsilon,
+                               max_num_clusters, TRUNCATION_NUMBER_UL);
     m_nclusters = params.nclusters;
-    m_clustering.reset(
-        new Clustering(cluster(source, rows, cols, m_nclusters, epsilon)));
+    // TODO make the clustering constructor do the work?
+    m_clustering.reset(new Clustering(cluster(source, m_nclusters, epsilon)));
     m_truncation_number = ifgt_choose_truncation_number(
-        cols, bandwidth, epsilon, m_clustering->max_radius,
+        source.cols(), bandwidth, epsilon, m_clustering->max_radius,
         TRUNCATION_NUMBER_UL);
-    m_p_max_total = nchoosek(m_truncation_number - 1 + cols, cols);
+    m_p_max_total =
+        nchoosek(m_truncation_number - 1 + source.cols(), source.cols());
     m_constant_series = compute_constant_series();
     m_ry_square.resize(m_nclusters);
     for (size_t j = 0; j < m_nclusters; ++j) {
@@ -142,11 +141,10 @@ Ifgt::Ifgt(const double* source, size_t rows, size_t cols, double bandwidth,
 
 Ifgt::~Ifgt() {}
 
-std::vector<double>
-Ifgt::compute_monomials(const std::vector<double>& d) const {
-    auto cols = this->cols();
+Vector Ifgt::compute_monomials(const VectorRef d) const {
+    unsigned long cols = this->source().cols();
     std::vector<size_t> heads(cols, 0);
-    std::vector<double> monomials(p_max_total(), 1.0);
+    Vector monomials = Vector::Ones(p_max_total());
     for (size_t k = 1, t = 1, tail = 1; k < m_truncation_number;
          ++k, tail = t) {
         for (size_t i = 0; i < cols; ++i) {
@@ -160,12 +158,12 @@ Ifgt::compute_monomials(const std::vector<double>& d) const {
     return monomials;
 }
 
-std::vector<double> Ifgt::compute_constant_series() const {
-    auto cols = this->cols();
+Vector Ifgt::compute_constant_series() const {
+    unsigned long cols = this->source().cols();
     std::vector<size_t> heads(cols + 1, 0);
     heads[cols] = std::numeric_limits<size_t>::max();
     std::vector<size_t> cinds(p_max_total(), 0);
-    std::vector<double> monomials(p_max_total(), 1.0);
+    Vector monomials = Vector::Ones(p_max_total());
 
     for (size_t k = 1, t = 1, tail = 1; k < m_truncation_number;
          ++k, tail = t) {
@@ -182,11 +180,12 @@ std::vector<double> Ifgt::compute_constant_series() const {
     return monomials;
 }
 
-std::vector<double> Ifgt::compute_impl(const double* target, size_t rows_target,
-                                       const double* weights) const {
+Vector Ifgt::compute_impl(const MatrixRef target,
+                          const VectorRef weights) const {
     auto source = this->source();
-    auto rows_source = this->rows_source();
-    auto cols = this->cols();
+    unsigned long rows_source = source.rows();
+    unsigned long rows_target = target.rows();
+    unsigned long cols = source.cols();
     auto bandwidth = this->bandwidth();
     auto nclusters = this->nclusters();
     auto p_max_total = this->p_max_total();
@@ -196,11 +195,10 @@ std::vector<double> Ifgt::compute_impl(const double* target, size_t rows_target,
     std::vector<double> C(nclusters * p_max_total, 0.0);
     for (size_t i = 0; i < rows_source; ++i) {
         double distance = 0.0;
-        std::vector<double> dx(cols, 0.0);
+        Vector dx = Vector::Zero(cols);
         for (size_t k = 0; k < cols; ++k) {
-            double delta =
-                source[i * cols + k] -
-                m_clustering->clusters[m_clustering->indices[i] * cols + k];
+            double delta = source(i, k) -
+                           m_clustering->clusters(m_clustering->indices[i], k);
             distance += delta * delta;
             dx[k] = delta / bandwidth;
         }
@@ -220,15 +218,14 @@ std::vector<double> Ifgt::compute_impl(const double* target, size_t rows_target,
         }
     }
 
-    std::vector<double> G(rows_target, 0.0);
+    Vector G = Vector::Zero(rows_target);
 #pragma omp parallel for
     for (size_t i = 0; i < rows_target; ++i) {
         for (size_t j = 0; j < nclusters; ++j) {
             double distance = 0.0;
-            std::vector<double> dy(cols, 0.0);
+            Vector dy = Vector::Zero(cols);
             for (size_t k = 0; k < cols; ++k) {
-                double delta =
-                    target[i * cols + k] - m_clustering->clusters[j * cols + k];
+                double delta = target(i, k) - m_clustering->clusters(j, k);
                 distance += delta * delta;
                 if (distance > m_ry_square[j]) {
                     break;

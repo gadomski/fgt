@@ -14,28 +14,20 @@ std::string project_source_filename(const std::string& filename) {
     return "@PROJECT_SOURCE_DIR@/" + filename;
 }
 
-template <typename T>
-struct Matrix {
-    std::vector<T> data;
-    size_t rows;
-    size_t cols;
-};
-
-template <typename T>
-Matrix<T> load_ascii_test_matrix(const std::string& filename) {
+Matrix load_ascii_test_matrix(const std::string& filename) {
     std::ifstream file(TEST_DATA_DIR + filename);
     if (!file.is_open()) {
         std::stringstream msg;
         msg << "Unable to open test data file: " << filename;
         throw std::runtime_error(msg.str());
     }
-    std::vector<T> data;
+    std::vector<double> data;
     size_t rows = 0;
     size_t cols = 0;
     std::string line;
     while (std::getline(file, line)) {
         std::stringstream ss(line);
-        T value = 0.0;
+        double value = 0.0;
         size_t nvalues = 0;
         while (ss >> value) {
             data.push_back(value);
@@ -50,21 +42,27 @@ Matrix<T> load_ascii_test_matrix(const std::string& filename) {
         }
         ++rows;
     }
-    return {data, rows, cols};
+    Matrix matrix(rows, cols);
+    for (size_t i = 0; i < rows; ++i) {
+        for (size_t j = 0; j < cols; ++j) {
+            matrix(i, j) = data[i * cols + j];
+        }
+    }
+    return matrix;
 }
 
 template <typename T>
-Matrix<T> load_binary_test_matrix(const std::string& filename, size_t rows,
-                                  size_t cols) {
+Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
+load_binary_test_matrix(const std::string& filename, size_t rows, size_t cols) {
     std::ifstream file(TEST_DATA_DIR + filename);
     if (!file.is_open()) {
         std::stringstream msg;
         msg << "Unable to open test data file: " << filename;
         throw std::runtime_error(msg.str());
     }
-    std::vector<T> data(rows * cols);
+    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> data(rows, cols);
     file.read(reinterpret_cast<char*>(data.data()), rows * cols * sizeof(T));
     file.close();
-    return {data, rows, cols};
+    return data;
 }
 }

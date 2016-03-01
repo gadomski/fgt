@@ -25,17 +25,16 @@ namespace fgt {
 namespace {
 
 struct MatrixAdaptor {
-    size_t kdtree_get_point_count() const { return m_rows; }
-    double kdtree_distance(const double* p1, const size_t idx_p2,
-                           size_t) const {
+    long kdtree_get_point_count() const { return m_rows; }
+    double kdtree_distance(const double* p1, const long idx_p2, long) const {
         double distance = 0.0;
-        for (size_t k = 0; k < m_cols; ++k) {
+        for (long k = 0; k < m_cols; ++k) {
             double temp = p1[k] - m_data[idx_p2 * m_cols + k];
             distance += temp * temp;
         }
         return distance;
     }
-    double kdtree_get_pt(const size_t idx, int dim) const {
+    double kdtree_get_pt(const long idx, int dim) const {
         return m_data[m_cols * idx + dim];
     }
     template <class BBOX>
@@ -44,24 +43,19 @@ struct MatrixAdaptor {
     }
 
     const double* m_data;
-    size_t m_rows;
-    size_t m_cols;
+    long m_rows;
+    long m_cols;
 };
 }
 
-std::vector<double> direct_tree(const double* source, size_t rows_source,
-                                const double* target, size_t rows_target,
-                                size_t cols, double bandwidth, double epsilon) {
-    return DirectTree(source, rows_source, cols, bandwidth, epsilon)
-        .compute(target, rows_target);
+Vector direct_tree(const MatrixRef source, const MatrixRef target,
+                   double bandwidth, double epsilon) {
+    return DirectTree(source, bandwidth, epsilon).compute(target);
 }
 
-std::vector<double> direct_tree(const double* source, size_t rows_source,
-                                const double* target, size_t rows_target,
-                                size_t cols, double bandwidth, double epsilon,
-                                const double* weights) {
-    return DirectTree(source, rows_source, cols, bandwidth, epsilon)
-        .compute(target, rows_target, weights);
+Vector direct_tree(const MatrixRef source, const MatrixRef target,
+                   double bandwidth, double epsilon, const VectorRef weights) {
+    return DirectTree(source, bandwidth, epsilon).compute(target, weights);
 }
 
 struct DirectTree::NanoflannTree {
@@ -69,32 +63,32 @@ struct DirectTree::NanoflannTree {
         nanoflann::L2_Simple_Adaptor<double, MatrixAdaptor>, MatrixAdaptor>
         tree_t;
 
-    NanoflannTree(const double* source, size_t rows, size_t cols)
-        : matrix_adaptor({source, rows, cols}), tree(cols, matrix_adaptor) {}
+    NanoflannTree(const MatrixRef source)
+        : matrix_adaptor({source.data(), source.rows(), source.cols()}),
+          tree(source.cols(), matrix_adaptor) {}
 
     MatrixAdaptor matrix_adaptor;
     tree_t tree;
 };
 
-DirectTree::DirectTree(const double* source, size_t rows, size_t cols,
-                       double bandwidth, double epsilon)
-    : Transform(source, rows, cols, bandwidth),
+DirectTree::DirectTree(const MatrixRef source, double bandwidth, double epsilon)
+    : Transform(source, bandwidth),
       m_epsilon(epsilon),
-      m_tree(new DirectTree::NanoflannTree(source, rows, cols)) {
+      m_tree(new DirectTree::NanoflannTree(source)) {
     m_tree->tree.buildIndex();
 }
 
 DirectTree::~DirectTree() {}
 
-std::vector<double> DirectTree::compute_impl(const double* target,
-                                             size_t rows_target,
-                                             const double* weights) const {
+Vector DirectTree::compute_impl(const MatrixRef target,
+                                const VectorRef weights) const {
     double h2 = bandwidth() * bandwidth();
     double cutoff_radius = bandwidth() * std::sqrt(std::log(1.0 / epsilon()));
     double r2 = cutoff_radius * cutoff_radius;
-    std::vector<double> g(rows_target, 0.0);
-    size_t rows_source = this->rows_source();
-    size_t cols = this->cols();
+    size_t rows_source = this->source().rows();
+    size_t rows_target = target.rows();
+    Vector g = Vector::Zero(rows_target);
+    size_t cols = this->source().cols();
 
     nanoflann::SearchParams params;
     params.sorted = false;
@@ -103,7 +97,7 @@ std::vector<double> DirectTree::compute_impl(const double* target,
     for (size_t j = 0; j < rows_target; ++j) {
         std::vector<std::pair<size_t, double>> indices_distances;
         indices_distances.reserve(rows_source);
-        size_t nfound = m_tree->tree.radiusSearch(&target[j * cols], r2,
+        size_t nfound = m_tree->tree.radiusSearch(&target.data()[j * cols], r2,
                                                   indices_distances, params);
         for (size_t i = 0; i < nfound; ++i) {
             auto entry = indices_distances[i];

@@ -6,29 +6,21 @@
 namespace fgt {
 
 TEST(Ifgt, Reference) {
-    auto source = load_ascii_test_matrix<double>("X.txt");
-    auto target = load_ascii_test_matrix<double>("Y.txt");
-    auto expected = direct(source.data.data(), source.rows, target.data.data(),
-                           target.rows, source.cols, 0.5);
-    auto actual = ifgt(source.data.data(), source.rows, target.data.data(),
-                       target.rows, source.cols, 0.5, 1e-4);
+    auto source = load_ascii_test_matrix("X.txt");
+    auto target = load_ascii_test_matrix("Y.txt");
+    auto expected = direct(source, target, 0.5);
+    auto actual = ifgt(source, target, 0.5, 1e-4);
     ASSERT_EQ(expected.size(), actual.size());
-    for (size_t i = 0; i < expected.size(); ++i) {
-        ASSERT_NEAR(expected[i], actual[i], 1e-2);
-    }
+    EXPECT_TRUE(expected.isApprox(actual, 1e-2));
 }
 
 TEST(Ifgt, ClassBased) {
-    auto source = load_ascii_test_matrix<double>("X.txt");
-    auto target = load_ascii_test_matrix<double>("Y.txt");
-    auto expected = direct(source.data.data(), source.rows, target.data.data(),
-                           target.rows, source.cols, 0.5);
-    auto actual = Ifgt(source.data.data(), source.rows, source.cols, 0.5, 1e-4)
-                      .compute(target.data.data(), target.rows);
+    auto source = load_ascii_test_matrix("X.txt");
+    auto target = load_ascii_test_matrix("Y.txt");
+    auto expected = direct(source, target, 0.5);
+    auto actual = Ifgt(source, 0.5, 1e-4).compute(target);
     ASSERT_EQ(expected.size(), actual.size());
-    for (size_t i = 0; i < expected.size(); ++i) {
-        ASSERT_NEAR(expected[i], actual[i], 1e-2);
-    }
+    EXPECT_TRUE(expected.isApprox(actual, 1e-2));
 }
 
 TEST(Ifgt, ChooseParameters) {

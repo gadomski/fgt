@@ -22,29 +22,38 @@
 
 namespace fgt {
 
-Clustering cluster(const double* points, size_t rows, size_t cols,
-                   size_t nclusters, double epsilon,
-                   const std::vector<double>& starting_clusters) {
-    std::vector<double> clusters(starting_clusters);
-    std::vector<double> temp_clusters(clusters);
-    std::vector<size_t> counts(nclusters);
-    std::vector<size_t> labels(rows);
+Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
+                   const MatrixRef starting_clusters) {
+    unsigned long rows = points.rows();
+    unsigned long cols = points.cols();
+    Matrix clusters(starting_clusters);
+    Matrix temp_clusters(clusters);
+    VectorXs counts(nclusters);
+    VectorXs labels(rows);
     double error = 0.0;
     double old_error = 0.0;
 
 #pragma omp parallel default(shared)
     {
-        std::vector<double> local_clusters(clusters);
-        std::vector<size_t> local_counts(counts);
+        Matrix local_clusters(clusters);
+        VectorXs local_counts(counts);
         do {
-            local_clusters.assign(nclusters * cols, 0.0);
-            local_counts.assign(nclusters, 0);
+            for (size_t i = 0; i < nclusters; ++i) {
+                local_counts[i] = 0;
+                for (size_t j = 0; j < cols; ++j) {
+                    local_clusters(i, j) = 0.0;
+                }
+            }
 #pragma omp single
             {
                 old_error = error;
                 error = 0.0;
-                temp_clusters.assign(nclusters * cols, 0.0);
-                counts.assign(nclusters, 0.0);
+                for (size_t i = 0; i < nclusters; ++i) {
+                    counts[i] = 0;
+                    for (size_t j = 0; j < cols; ++j) {
+                        temp_clusters(i, j) = 0.0;
+                    }
+                }
             }
 
 #pragma omp for reduction(+ : error) nowait
@@ -53,8 +62,7 @@ Clustering cluster(const double* points, size_t rows, size_t cols,
                 for (size_t j = 0; j < nclusters; ++j) {
                     double distance = 0;
                     for (size_t k = 0; k < cols; ++k) {
-                        distance += std::pow(
-                            points[i * cols + k] - clusters[j * cols + k], 2);
+                        distance += std::pow(points(i, k) - clusters(j, k), 2);
                     }
                     if (distance < min_distance) {
                         labels[i] = j;
@@ -63,8 +71,7 @@ Clustering cluster(const double* points, size_t rows, size_t cols,
                 }
 
                 for (size_t k = 0; k < cols; ++k) {
-                    local_clusters[labels[i] * cols + k] +=
-                        points[i * cols + k];
+                    local_clusters(labels[i], k) += points(i, k);
                 }
                 ++local_counts[labels[i]];
                 error += min_distance;
@@ -74,7 +81,7 @@ Clustering cluster(const double* points, size_t rows, size_t cols,
             for (size_t j = 0; j < nclusters; ++j) {
                 counts[j] += local_counts[j];
                 for (size_t k = 0; k < cols; ++k) {
-                    temp_clusters[j * cols + k] += local_clusters[j * cols + k];
+                    temp_clusters(j, k) += local_clusters(j, k);
                 }
             }
 
@@ -82,21 +89,20 @@ Clustering cluster(const double* points, size_t rows, size_t cols,
 #pragma omp single
             for (size_t j = 0; j < nclusters; ++j) {
                 for (size_t k = 0; k < cols; ++k) {
-                    clusters[j * cols + k] =
-                        counts[j] ? temp_clusters[j * cols + k] / counts[j]
-                                  : temp_clusters[j * cols + k];
+                    clusters(j, k) = counts[j] ? temp_clusters(j, k) / counts[j]
+                                               : temp_clusters(j, k);
                 }
             }
         } while (std::abs(error - old_error) > epsilon);
     }
 
     double max_radius = std::numeric_limits<double>::min();
-    std::vector<double> radii(nclusters, std::numeric_limits<double>::min());
+    Vector radii =
+        Vector::Constant(nclusters, std::numeric_limits<double>::min());
     for (size_t i = 0; i < rows; ++i) {
         double distance = 0.0;
         for (size_t k = 0; k < cols; ++k) {
-            distance += std::pow(
-                points[i * cols + k] - clusters[labels[i] * cols + k], 2);
+            distance += std::pow(points(i, k) - clusters(labels[i], k), 2);
         }
         distance = std::sqrt(distance);
         if (distance > radii[labels[i]]) {

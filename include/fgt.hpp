@@ -25,10 +25,27 @@
 
 #include <cstddef>
 #include <memory>
-#include <vector>
+
+#include <Eigen/Core>
 
 /// Top-level namespace for all things fgt.
 namespace fgt {
+
+/// Convenience typedef for our type of matrix.
+typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
+    Matrix;
+
+/// Convenience typedef for a reference to our type of Eigen::Matrix.
+///
+/// We accept references to our functions in case the argument isn't exactly a
+/// Eigen::Matrix, for whatever reason.
+typedef Eigen::Ref<const Matrix> MatrixRef;
+
+/// Convenience typedef for our flavor of Eigen::Vector.
+typedef Eigen::VectorXd Vector;
+
+/// Convenience typedef for a reference to a Vector.
+typedef Eigen::Ref<const Vector> VectorRef;
 
 /// Returns the version of the fgt library as a string.
 const char* version();
@@ -37,37 +54,27 @@ const char* version();
 bool with_openmp();
 
 /// Computes the direct Gauss transform with equal weights.
-std::vector<double> direct(const double* source, size_t rows_source,
-                           const double* target, size_t rows_target,
-                           size_t cols, double bandwidth);
+Vector direct(const MatrixRef source, const MatrixRef target, double bandwidth);
 
 /// Computes the direct Gauss transform with provided weights.
-std::vector<double> direct(const double* source, size_t rows_source,
-                           const double* target, size_t rows_target,
-                           size_t cols, double bandwidth,
-                           const double* weights);
+Vector direct(const MatrixRef source, const MatrixRef target, double bandwidth,
+              const VectorRef weights);
 
 /// Computes the direct Gauss transform using a kd-tree.
-std::vector<double> direct_tree(const double* source, size_t rows_source,
-                                const double* target, size_t rows_target,
-                                size_t cols, double bandwidth, double epsilon);
+Vector direct_tree(const MatrixRef source, const MatrixRef target,
+                   double bandwidth, double epsilon);
 
 /// Computes the direct Gauss transform using a kd-tree and weights.
-std::vector<double> direct_tree(const double* source, size_t rows_source,
-                                const double* target, size_t rows_target,
-                                size_t cols, double bandwidth, double epsilon,
-                                const double* weights);
+Vector direct_tree(const MatrixRef source, const MatrixRef target,
+                   double bandwidth, double epsilon, const VectorRef weights);
 
 /// Computes the Improved Fast Gauss Transform.
-std::vector<double> ifgt(const double* source, size_t rows_source,
-                         const double* target, size_t rows_target, size_t cols,
-                         double bandwidth, double epsilon);
+Vector ifgt(const MatrixRef source, const MatrixRef target, double bandwidth,
+            double epsilon);
 
 /// Computes the Improved Fast Gauss Transform with the provided weights.
-std::vector<double> ifgt(const double* source, size_t rows_source,
-                         const double* target, size_t rows_target, size_t cols,
-                         double bandwidth, double epsilon,
-                         const double* weights);
+Vector ifgt(const MatrixRef source, const MatrixRef target, double bandwidth,
+            double epsilon, const VectorRef weights);
 
 /// Abstract base class for all supported variants of the Gauss transform.
 ///
@@ -78,30 +85,23 @@ std::vector<double> ifgt(const double* source, size_t rows_source,
 class Transform {
 public:
     /// Constructs a new transform that can be re-used with different targets.
-    Transform(const double* source, size_t rows, size_t cols, double bandwidth);
+    Transform(const MatrixRef source, double bandwidth);
 
     /// Returns the pointer to the source dataset.
-    const double* source() const { return m_source; }
-    /// Returns the number of rows in the source dataset.
-    size_t rows_source() const { return m_rows_source; }
-    /// Returns the number of columns.
-    size_t cols() const { return m_cols; }
+    const MatrixRef source() const { return m_source; }
     /// Returns the bandwidth of the transform.
     double bandwidth() const { return m_bandwidth; }
 
     /// Computes the Gauss transform for the given target dataset.
-    std::vector<double> compute(const double* target, size_t rows);
+    Vector compute(const MatrixRef target);
     /// Computes the Gauss transform with the given weights.
-    std::vector<double> compute(const double* target, size_t rows,
-                                const double* weights);
+    Vector compute(const MatrixRef target, const VectorRef weights);
 
 private:
-    virtual std::vector<double> compute_impl(const double* target, size_t rows,
-                                             const double* weights) const = 0;
+    virtual Vector compute_impl(const MatrixRef target,
+                                const VectorRef weights) const = 0;
 
-    const double* m_source;
-    size_t m_rows_source;
-    size_t m_cols;
+    const MatrixRef m_source;
     double m_bandwidth;
 };
 
@@ -109,11 +109,11 @@ private:
 class Direct : public Transform {
 public:
     /// Creates a new direct transform.
-    Direct(const double* source, size_t rows, size_t cols, double bandwidth);
+    Direct(const MatrixRef source, double bandwidth);
 
 private:
-    virtual std::vector<double> compute_impl(const double* target, size_t rows,
-                                             const double* weights) const;
+    virtual Vector compute_impl(const MatrixRef target,
+                                const VectorRef weights) const;
 };
 
 /// Direct Gauss transform using a KD-tree truncation.
@@ -123,8 +123,7 @@ public:
     ///
     /// This constructor pre-computes the KD-tree, so subsequent calls to
     /// `compute()` will re-use the same tree.
-    DirectTree(const double* source, size_t rows, size_t cols, double bandwidth,
-               double epsilon);
+    DirectTree(const MatrixRef source, double bandwidth, double epsilon);
 
     /// Destroys a DirectTree.
     ///
@@ -137,8 +136,8 @@ public:
 private:
     struct NanoflannTree;
 
-    virtual std::vector<double> compute_impl(const double* target, size_t rows,
-                                             const double* weights) const;
+    virtual Vector compute_impl(const MatrixRef target,
+                                const VectorRef weights) const;
 
     double m_epsilon;
     std::unique_ptr<NanoflannTree> m_tree;
@@ -154,8 +153,7 @@ public:
     ///
     /// This constructor will precompute some values, including the clusters and
     /// monomials, in hopes of speeding up subsequent runs.
-    Ifgt(const double* source, size_t rows, size_t cols, double bandwidth,
-         double epsilon);
+    Ifgt(const MatrixRef source, double bandwidth, double epsilon);
 
     /// Destroys this transform.
     ///
@@ -172,17 +170,17 @@ public:
     size_t p_max_total() const { return m_p_max_total; }
 
 private:
-    virtual std::vector<double> compute_impl(const double* target, size_t rows,
-                                             const double* weights) const;
-    std::vector<double> compute_monomials(const std::vector<double>& d) const;
-    std::vector<double> compute_constant_series() const;
+    virtual Vector compute_impl(const MatrixRef target,
+                                const VectorRef weights) const;
+    Vector compute_monomials(const VectorRef d) const;
+    Vector compute_constant_series() const;
 
     double m_epsilon;
     size_t m_nclusters;
     std::unique_ptr<Clustering> m_clustering;
     size_t m_truncation_number;
     size_t m_p_max_total;
-    std::vector<double> m_constant_series;
-    std::vector<double> m_ry_square;
+    Vector m_constant_series;
+    Vector m_ry_square;
 };
 }

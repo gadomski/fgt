@@ -16,30 +16,31 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
 #include <cstddef>
-#include <vector>
+
+#include "fgt.hpp"
 
 namespace fgt {
+
+typedef Eigen::Matrix<size_t, Eigen::Dynamic, 1> VectorXs;
 
 /// The results from k-means clustering.
 struct Clustering {
     /// The maximum cluster radius.
     double max_radius;
     /// The cluster membership ids for each points.
-    std::vector<size_t> indices;
+    VectorXs indices;
     /// The centers of each cluster.
-    std::vector<double> clusters;
+    Matrix clusters;
     /// The number of points in each cluster.
-    std::vector<size_t> npoints;
+    VectorXs npoints;
     /// The radius of each cluster.
-    std::vector<double> radii;
+    Vector radii;
 };
 
 /// Runs k-means clustering on a set of points.
-Clustering cluster(const double* points, size_t rows, size_t cols,
-                   size_t nclusters, double epsilon);
+Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon);
 
 /// Runs k-means clustering, specifying the starting cluster centers.
-Clustering cluster(const double* points, size_t rows, size_t cols,
-                   size_t nclusters, double epsilon,
-                   const std::vector<double>& starting_clusters);
+Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
+                   const MatrixRef starting_clusters);
 }

@@ -19,20 +19,15 @@
 
 namespace fgt {
 
-Transform::Transform(const double* source, size_t rows, size_t cols,
-                     double bandwidth)
-    : m_source(source),
-      m_rows_source(rows),
-      m_cols(cols),
-      m_bandwidth(bandwidth) {}
+Transform::Transform(const MatrixRef source, double bandwidth)
+    : m_source(source), m_bandwidth(bandwidth) {}
 
-std::vector<double> Transform::compute(const double* target, size_t rows) {
-    std::vector<double> weights(this->rows_source(), 1.0);
-    return compute(target, rows, weights.data());
+Vector Transform::compute(const MatrixRef target) {
+    Vector weights = Vector::Ones(this->source().rows());
+    return compute(target, weights);
 }
 
-std::vector<double> Transform::compute(const double* target, size_t rows,
-                                       const double* weights) {
-    return compute_impl(target, rows, weights);
+Vector Transform::compute(const MatrixRef target, const VectorRef weights) {
+    return compute_impl(target, weights);
 }
 }

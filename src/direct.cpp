@@ -22,23 +22,23 @@
 
 namespace fgt {
 
-Direct::Direct(const double* source, size_t rows, size_t cols, double bandwidth)
-    : Transform(source, rows, cols, bandwidth) {}
+Direct::Direct(const MatrixRef source, double bandwidth)
+    : Transform(source, bandwidth) {}
 
-std::vector<double> Direct::compute_impl(const double* target,
-                                         size_t rows_target,
-                                         const double* weights) const {
+Vector Direct::compute_impl(const MatrixRef target,
+                            const VectorRef weights) const {
     double h2 = bandwidth() * bandwidth();
-    const double* source = this->source();
-    size_t rows_source = this->rows_source();
-    size_t cols = this->cols();
-    std::vector<double> g(rows_target, 0.0);
+    MatrixRef source = this->source();
+    size_t rows_source = source.rows();
+    size_t rows_target = target.rows();
+    size_t cols = source.cols();
+    Vector g = Vector::Zero(rows_target);
 #pragma omp parallel for
     for (size_t j = 0; j < rows_target; ++j) {
         for (size_t i = 0; i < rows_source; ++i) {
             double distance = 0.0;
             for (size_t k = 0; k < cols; ++k) {
-                double temp = source[cols * i + k] - target[cols * j + k];
+                double temp = source(i, k) - target(j, k);
                 distance += temp * temp;
             }
             g[j] += weights[i] * std::exp(-distance / h2);
@@ -47,18 +47,13 @@ std::vector<double> Direct::compute_impl(const double* target,
     return g;
 }
 
-std::vector<double> direct(const double* source, size_t rows_source,
-                           const double* target, size_t rows_target,
-                           size_t cols, double bandwidth) {
-    return Direct(source, rows_source, cols, bandwidth)
-        .compute(target, rows_target);
+Vector direct(const MatrixRef source, const MatrixRef target,
+              double bandwidth) {
+    return Direct(source, bandwidth).compute(target);
 }
 
-std::vector<double> direct(const double* source, size_t rows_source,
-                           const double* target, size_t rows_target,
-                           size_t cols, double bandwidth,
-                           const double* weights) {
-    return Direct(source, rows_source, cols, bandwidth)
-        .compute(target, rows_target, weights);
+Vector direct(const MatrixRef source, const MatrixRef target, double bandwidth,
+              const VectorRef weights) {
+    return Direct(source, bandwidth).compute(target, weights);
 }
 }
