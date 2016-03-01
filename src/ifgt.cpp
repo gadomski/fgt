@@ -192,7 +192,7 @@ Vector Ifgt::compute_impl(const MatrixRef target,
 
     double h2 = bandwidth * bandwidth;
 
-    std::vector<double> C(nclusters * p_max_total, 0.0);
+    Matrix C = Matrix::Zero(nclusters, p_max_total);
     for (size_t i = 0; i < rows_source; ++i) {
         double distance = 0.0;
         Vector dx = Vector::Zero(cols);
@@ -206,15 +206,14 @@ Vector Ifgt::compute_impl(const MatrixRef target,
         auto monomials = compute_monomials(dx);
         double f = weights[i] * std::exp(-distance / h2);
         for (size_t alpha = 0; alpha < p_max_total; ++alpha) {
-            C[m_clustering->indices[i] * p_max_total + alpha] +=
-                f * monomials[alpha];
+            C(m_clustering->indices[i], alpha) += f * monomials[alpha];
         }
     }
 
 #pragma omp parallel for
     for (size_t j = 0; j < nclusters; ++j) {
         for (size_t alpha = 0; alpha < p_max_total; ++alpha) {
-            C[j * p_max_total + alpha] *= m_constant_series[alpha];
+            C(j, alpha) *= m_constant_series[alpha];
         }
     }
 
@@ -235,9 +234,7 @@ Vector Ifgt::compute_impl(const MatrixRef target,
             if (distance <= m_ry_square[j]) {
                 auto monomials = compute_monomials(dy);
                 double g = std::exp(-distance / h2);
-                for (size_t alpha = 0; alpha < p_max_total; ++alpha) {
-                    G[i] += C[j * p_max_total + alpha] * g * monomials[alpha];
-                }
+                G[i] += C.row(j) * g * monomials;
             }
         }
     }

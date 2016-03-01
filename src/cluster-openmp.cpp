@@ -38,51 +38,37 @@ Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
         Matrix local_clusters(clusters);
         VectorXs local_counts(counts);
         do {
-            for (size_t i = 0; i < nclusters; ++i) {
-                local_counts[i] = 0;
-                for (size_t j = 0; j < cols; ++j) {
-                    local_clusters(i, j) = 0.0;
-                }
-            }
+            local_counts.setZero();
+            local_clusters.setZero();
 #pragma omp single
             {
                 old_error = error;
                 error = 0.0;
-                for (size_t i = 0; i < nclusters; ++i) {
-                    counts[i] = 0;
-                    for (size_t j = 0; j < cols; ++j) {
-                        temp_clusters(i, j) = 0.0;
-                    }
-                }
+                counts.setZero();
+                temp_clusters.setZero();
             }
 
 #pragma omp for reduction(+ : error) nowait
             for (size_t i = 0; i < rows; ++i) {
                 double min_distance = std::numeric_limits<double>::max();
                 for (size_t j = 0; j < nclusters; ++j) {
-                    double distance = 0;
-                    for (size_t k = 0; k < cols; ++k) {
-                        distance += std::pow(points(i, k) - clusters(j, k), 2);
-                    }
+                    double distance =
+                        (points.row(i) - clusters.row(j)).array().pow(2).sum();
                     if (distance < min_distance) {
                         labels[i] = j;
                         min_distance = distance;
                     }
                 }
 
-                for (size_t k = 0; k < cols; ++k) {
-                    local_clusters(labels[i], k) += points(i, k);
-                }
+                local_clusters.row(labels[i]) += points.row(i);
                 ++local_counts[labels[i]];
                 error += min_distance;
             }
 
 #pragma omp critical
-            for (size_t j = 0; j < nclusters; ++j) {
-                counts[j] += local_counts[j];
-                for (size_t k = 0; k < cols; ++k) {
-                    temp_clusters(j, k) += local_clusters(j, k);
-                }
+            {
+                counts += local_counts;
+                temp_clusters += local_clusters;
             }
 
 #pragma omp barrier
@@ -100,11 +86,8 @@ Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
     Vector radii =
         Vector::Constant(nclusters, std::numeric_limits<double>::min());
     for (size_t i = 0; i < rows; ++i) {
-        double distance = 0.0;
-        for (size_t k = 0; k < cols; ++k) {
-            distance += std::pow(points(i, k) - clusters(labels[i], k), 2);
-        }
-        distance = std::sqrt(distance);
+        double distance = std::sqrt(
+            (points.row(i) - clusters.row(labels[i])).array().pow(2).sum());
         if (distance > radii[labels[i]]) {
             radii[labels[i]] = distance;
         }

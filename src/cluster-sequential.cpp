@@ -36,29 +36,21 @@ Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
     do {
         old_error = error;
         error = 0.0;
-        for (size_t i = 0; i < nclusters; ++i) {
-            counts[i] = 0;
-            for (size_t j = 0; j < cols; ++j) {
-                temp_clusters(i, j) = 0.0;
-            }
-        }
+        counts.setZero();
+        temp_clusters.setZero();
 
         for (size_t i = 0; i < rows; ++i) {
             double min_distance = std::numeric_limits<double>::max();
             for (size_t j = 0; j < nclusters; ++j) {
-                double distance = 0;
-                for (size_t k = 0; k < cols; ++k) {
-                    distance += std::pow(points(i, k) - clusters(j, k), 2);
-                }
+                double distance =
+                    (points.row(i) - clusters.row(j)).array().pow(2).sum();
                 if (distance < min_distance) {
                     labels[i] = j;
                     min_distance = distance;
                 }
             }
 
-            for (size_t k = 0; k < cols; ++k) {
-                temp_clusters(labels[i], k) += points(i, k);
-            }
+            temp_clusters.row(labels[i]) += points.row(i);
             ++counts[labels[i]];
             error += min_distance;
         }
@@ -75,11 +67,8 @@ Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
     Vector radii =
         Vector::Constant(nclusters, std::numeric_limits<double>::min());
     for (size_t i = 0; i < rows; ++i) {
-        double distance = 0.0;
-        for (size_t k = 0; k < cols; ++k) {
-            distance += std::pow(points(i, k) - clusters(labels[i], k), 2);
-        }
-        distance = std::sqrt(distance);
+        double distance = std::sqrt(
+            (points.row(i) - clusters.row(labels[i])).array().pow(2).sum());
         if (distance > radii[labels[i]]) {
             radii[labels[i]] = distance;
         }
