@@ -81,7 +81,7 @@ make
 
 ### Eigen ordering
 
-Eigen, by defaults, stores matrices in column-major order, but **fgt** works with [row-major](https://en.wikipedia.org/wiki/Row-major_order) matrices.
+Eigen, by default, stores matrices in column-major order, but **fgt** works with [row-major](https://en.wikipedia.org/wiki/Row-major_order) matrices.
 If you want to avoid extra copies, pass in row-major matrices to **fgt** functions.
 You can use the `fgt::Matrix` typedef to help:
 
