@@ -101,7 +101,7 @@ Vector DirectTree::compute_impl(const MatrixRef target,
                                                   indices_distances, params);
         for (size_t i = 0; i < nfound; ++i) {
             auto entry = indices_distances[i];
-            g[j] += weights[i] * std::exp(-entry.second / h2);
+            g[j] += weights[entry.first] * std::exp(-entry.second / h2);
         }
     }
     return g;
