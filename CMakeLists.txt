@@ -118,8 +118,9 @@ if(WITH_TESTS)
 endif()
 
 include(CMakePackageConfigHelpers)
-configure_file(cmake/fgt-config.cmake.in
+configure_file(cmake/fgt-config.cmake
     ${PROJECT_BINARY_DIR}/fgt-config.cmake
+    COPYONLY
     )
 write_basic_package_version_file(
     ${PROJECT_BINARY_DIR}/fgt-config-version.cmake
