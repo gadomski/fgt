@@ -34,4 +34,14 @@ TEST(Ifgt, ChooseTruncationNumber) {
         ifgt_choose_truncation_number(2, 0.3, 1e-6, 0.1, 200);
     EXPECT_EQ(9, truncation_number);
 }
+
+TEST(Ifgt, HighBandwidth) {
+    auto source = load_ascii_test_matrix("X.txt");
+    auto target = load_ascii_test_matrix("Y.txt");
+    target = target.array() + 2;
+    auto expected = direct(source, target, 3.5);
+    auto actual = ifgt(source, target, 3.5, 1e-4);
+    ASSERT_EQ(expected.size(), actual.size());
+    EXPECT_TRUE(expected.isApprox(actual, 1e-2));
+}
 }

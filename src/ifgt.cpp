@@ -58,8 +58,7 @@ IfgtParameters ifgt_choose_parameters(size_t cols, double bandwidth,
                                       double epsilon, size_t max_num_clusters,
                                       size_t truncation_number_ul) {
     double h2 = bandwidth * bandwidth;
-    double radius = std::min(std::sqrt(cols),
-                             bandwidth * std::sqrt(std::log(1.0 / epsilon)));
+    double radius = bandwidth * std::sqrt(std::log(1.0 / epsilon));
     double complexity_min = std::numeric_limits<double>::max();
     size_t nclusters = 0;
 
