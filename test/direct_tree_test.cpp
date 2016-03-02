@@ -15,10 +15,10 @@ TEST(DirectTree, MatchesDirect) {
 TEST(DirectTree, WithWeights) {
     auto source = load_ascii_test_matrix("X.txt");
     auto target = load_ascii_test_matrix("Y.txt");
-    Vector weights = Vector::Ones(source.rows());
-    auto no_weights = direct_tree(source, target, 0.5, 1e-4);
-    auto with_weights = direct_tree(source, target, 0.5, 1e-4, weights);
-    EXPECT_TRUE(no_weights.isApprox(with_weights));
+    Vector weights = Vector::LinSpaced(source.rows(), 0.1, 0.9);
+    auto expected = direct(source, target, 0.5, weights);
+    auto actual = direct_tree(source, target, 0.5, 1e-4, weights);
+    EXPECT_TRUE(expected.isApprox(actual));
 }
 
 TEST(DirectTree, ClassBased) {
