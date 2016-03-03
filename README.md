@@ -92,7 +92,7 @@ fgt::Matrix my_matrix(1000, 3); // creates an uninitialized 1000x3 row-major mat
 
 ### OpenMP
 
-**fgt** comes with build-in OpenMP parallelization, which can lead to some significant speedups for large data sets.
+**fgt** comes with built-in OpenMP parallelization, which can lead to some significant speedups for large data sets.
 To enable OpenMP, make sure you're using an OpenMP-aware compiler (on OSX, you can get OpenMP clang via Homebrew: `brew install clang-omp`) and set the CMake variable `WITH_OPENMP` to ON, e.g.:
 
 ```sh
