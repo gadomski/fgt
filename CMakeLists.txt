@@ -108,7 +108,7 @@ endif()
 include(CMakePackageConfigHelpers)
 configure_file(cmake/fgt-config.cmake
     ${PROJECT_BINARY_DIR}/fgt-config.cmake
-    COPYONLY
+    @ONLY
     )
 write_basic_package_version_file(
     ${PROJECT_BINARY_DIR}/fgt-config-version.cmake
