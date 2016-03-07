@@ -31,6 +31,25 @@
 /// Top-level namespace for all things fgt.
 namespace fgt {
 
+/// fgt exceptions.
+class fgt_error : public std::runtime_error {
+public:
+    explicit fgt_error(const std::string what_arg)
+        : std::runtime_error(what_arg) {}
+};
+
+/// Thrown when an IFGT run asks for no clusters.
+///
+/// This usually means the data parameters aren't set up well for IFGT, for
+/// whatever reason.
+class ifgt_no_clusters : public fgt_error {
+public:
+    ifgt_no_clusters()
+        : fgt_error("IFGT decided that it didn't need any clusters. These "
+                    "parameters cannot be used for IFGT, try another method "
+                    "instead.") {}
+};
+
 /// Convenience typedef for our type of matrix.
 typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
     Matrix;
