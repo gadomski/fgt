@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ifgt',['Ifgt',['../classfgt_1_1_ifgt.html',1,'fgt']]]
+  ['fgt_5ferror',['fgt_error',['../classfgt_1_1fgt__error.html',1,'fgt']]]
 ];
