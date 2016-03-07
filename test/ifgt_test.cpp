@@ -44,4 +44,10 @@ TEST(Ifgt, HighBandwidth) {
     ASSERT_EQ(expected.size(), actual.size());
     EXPECT_TRUE(expected.isApprox(actual, 1e-2));
 }
+
+TEST(Ifgt, UTM) {
+    auto source = load_ascii_test_matrix("utm.txt");
+    auto target = source;
+    ASSERT_THROW(ifgt(source, target, 100, 1e-4), ifgt_no_clusters);
+}
 }

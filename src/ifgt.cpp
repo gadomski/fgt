@@ -122,6 +122,9 @@ Ifgt::Ifgt(const MatrixRef source, double bandwidth, double epsilon)
     IfgtParameters params =
         ifgt_choose_parameters(source.cols(), bandwidth, epsilon,
                                max_num_clusters, TRUNCATION_NUMBER_UL);
+    if (params.nclusters == 0) {
+        throw ifgt_no_clusters();
+    }
     m_nclusters = params.nclusters;
     // TODO make the clustering constructor do the work?
     m_clustering.reset(new Clustering(cluster(source, m_nclusters, epsilon)));
