@@ -13,8 +13,7 @@ option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
 message(STATUS "[fgt] With OpenMP: ${WITH_OPENMP}")
 
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 endif()
@@ -51,6 +50,12 @@ target_include_directories(Library-C++
     PRIVATE
     include
     ${NANOFLANN_SOURCE_DIR}/include
+    )
+target_compile_features(Library-C++
+    PUBLIC
+    cxx_generalized_initializers
+    cxx_right_angle_brackets
+    cxx_auto_type
     )
 set_target_properties(Library-C++ PROPERTIES
     OUTPUT_NAME fgt
