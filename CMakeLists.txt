@@ -1,5 +1,5 @@
 project(fgt CXX C)
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.1)
 
 set(FGT_VERSION 0.4.2)
 set(FGT_SOVERSION 0)
