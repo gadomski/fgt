@@ -7,9 +7,11 @@ The Gauss transform is a common operation that computes the per-point similarity
 ![The Gauss transform](img/gauss-transform.png)
 
 This a C++ library for computing the Gauss transform using the direct method as well as a few shortcuts.
-This code lives on [Github](https://github.com/gadomski/fgt), has [some Doxygen documentation](http://gadomski.github.io/fgt), and is tested [with Travis](https://travis-ci.org/gadomski/fgt).
+This code lives on [Github](https://github.com/gadomski/fgt), has [some Doxygen documentation](http://gadomski.github.io/fgt), and is tested with [Travis](https://travis-ci.org/gadomski/fgt) and [AppVeyor](https://ci.appveyor.com/project/gadomski/fgt/branch/master).
 
-![Build Status](https://travis-ci.org/gadomski/fgt.svg?branch=master)
+![Travis Build Status](https://travis-ci.org/gadomski/fgt.svg?branch=master)
+![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/7t6ojbj2lj052wx2/branch/master?svg=true)
+
 
 ## Usage
 
