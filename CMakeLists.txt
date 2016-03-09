@@ -61,7 +61,7 @@ target_compile_features(Library-C++
     )
 target_compile_options(Library-C++
     PRIVATE
-    -pedantic -Wall
+    -Wall
     )
 set_target_properties(Library-C++ PROPERTIES
     OUTPUT_NAME fgt
@@ -77,6 +77,7 @@ endif()
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 	target_compile_options(Library-C++
 		PRIVATE
+		-pedantic
 		# The no-nested-anon-types is for nanoflann
 		-Wno-nested-anon-types
 		)
@@ -86,8 +87,23 @@ elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
         # For some deprecations inside Eigen
         -Wno-deprecated-declarations
         PRIVATE
+		-pedantic
         # For pragma omp's
         -Wno-unknown-pragmas
+        )
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+    target_compile_options(Library-C++
+        PRIVATE
+        # Eigen does relative includes
+		/wd4464
+		# This is the famous "unreferenced inline function has been removed"
+		/wd4514
+		# Yo, I don't care if that function wasn't inlined
+		/wd4710
+		# Padding
+		/wd4820
+		# Automatic inline expansion
+		/wd4711
         )
 endif()
 install(FILES
@@ -116,6 +132,9 @@ if(WITH_TESTS)
 
     add_subdirectory(test)
 endif()
+
+include(GenerateExportHeader)
+generate_export_header(Library-C++)
 
 include(CMakePackageConfigHelpers)
 configure_file(cmake/fgt-config.cmake

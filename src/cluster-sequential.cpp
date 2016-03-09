@@ -22,10 +22,10 @@
 
 namespace fgt {
 
-Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
-                   const MatrixRef starting_clusters) {
-    unsigned long cols = points.cols();
-    unsigned long rows = points.rows();
+Clustering cluster(const MatrixRef points, Matrix::Index nclusters,
+                   double epsilon, const MatrixRef starting_clusters) {
+    auto cols = points.cols();
+    auto rows = points.rows();
     Matrix clusters(starting_clusters);
     Matrix temp_clusters(nclusters, cols);
     VectorXs counts(nclusters);
@@ -39,9 +39,9 @@ Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
         counts.setZero();
         temp_clusters.setZero();
 
-        for (size_t i = 0; i < rows; ++i) {
+        for (Matrix::Index i = 0; i < rows; ++i) {
             double min_distance = std::numeric_limits<double>::max();
-            for (size_t j = 0; j < nclusters; ++j) {
+            for (Matrix::Index j = 0; j < nclusters; ++j) {
                 double distance =
                     (points.row(i) - clusters.row(j)).array().pow(2).sum();
                 if (distance < min_distance) {
@@ -55,8 +55,8 @@ Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
             error += min_distance;
         }
 
-        for (size_t j = 0; j < nclusters; ++j) {
-            for (size_t k = 0; k < cols; ++k) {
+        for (Matrix::Index j = 0; j < nclusters; ++j) {
+            for (Matrix::Index k = 0; k < cols; ++k) {
                 clusters(j, k) = counts[j] ? temp_clusters(j, k) / counts[j]
                                            : temp_clusters(j, k);
             }
@@ -66,7 +66,7 @@ Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
     double max_radius = std::numeric_limits<double>::min();
     Vector radii =
         Vector::Constant(nclusters, std::numeric_limits<double>::min());
-    for (size_t i = 0; i < rows; ++i) {
+    for (Matrix::Index i = 0; i < rows; ++i) {
         double distance = std::sqrt(
             (points.row(i) - clusters.row(labels[i])).array().pow(2).sum());
         if (distance > radii[labels[i]]) {
