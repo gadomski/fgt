@@ -29,14 +29,14 @@ namespace {
 // TODO make this configurable
 const size_t TRUNCATION_NUMBER_UL = 200;
 
-int nchoosek(int n, int k) {
-    int n_k = n - k;
+Matrix::Index nchoosek(Matrix::Index n, Matrix::Index k) {
+    Matrix::Index n_k = n - k;
     if (k < n_k) {
         k = n_k;
         n_k = n - k;
     }
-    int nchsk = 1;
-    for (int i = 1; i <= n_k; ++i) {
+    Matrix::Index nchsk = 1;
+    for (Matrix::Index i = 1; i <= n_k; ++i) {
         nchsk *= ++k;
         nchsk /= i;
     }
@@ -54,21 +54,22 @@ Vector ifgt(const MatrixRef source, const MatrixRef target, double bandwidth,
     return Ifgt(source, bandwidth, epsilon).compute(target, weights);
 }
 
-IfgtParameters ifgt_choose_parameters(size_t cols, double bandwidth,
-                                      double epsilon, size_t max_num_clusters,
-                                      size_t truncation_number_ul) {
+IfgtParameters ifgt_choose_parameters(Matrix::Index cols, double bandwidth,
+                                      double epsilon,
+                                      Matrix::Index max_num_clusters,
+                                      Matrix::Index truncation_number_ul) {
     double h2 = bandwidth * bandwidth;
     double radius = bandwidth * std::sqrt(std::log(1.0 / epsilon));
     double complexity_min = std::numeric_limits<double>::max();
-    size_t nclusters = 0;
+    Matrix::Index nclusters = 0;
 
-    for (size_t i = 0; i < max_num_clusters; ++i) {
+    for (Matrix::Index i = 0; i < max_num_clusters; ++i) {
         double rx = std::pow(double(i + 1), -1.0 / double(cols));
         double rx2 = rx * rx;
         double n = std::min(double(i + 1), std::pow(radius / rx, double(cols)));
         double error = std::numeric_limits<double>::max();
         double temp = 1.0;
-        size_t p = 0;
+        Matrix::Index p = 0;
         while ((error > epsilon) && (p <= truncation_number_ul)) {
             ++p;
             double b =
@@ -88,15 +89,16 @@ IfgtParameters ifgt_choose_parameters(size_t cols, double bandwidth,
     return {nclusters, radius};
 }
 
-size_t ifgt_choose_truncation_number(size_t cols, double bandwidth,
-                                     double epsilon, double rx,
-                                     size_t truncation_number_ul) {
+Matrix::Index
+ifgt_choose_truncation_number(Matrix::Index cols, double bandwidth,
+                              double epsilon, double rx,
+                              Matrix::Index truncation_number_ul) {
     double h2 = bandwidth * bandwidth;
     double rx2 = rx * rx;
     double r = std::min(std::sqrt(cols),
                         bandwidth * std::sqrt(std::log(1.0 / epsilon)));
     double error = std::numeric_limits<double>::max();
-    size_t p = 0;
+    Matrix::Index p = 0;
     double temp = 1.0;
     while ((error > epsilon) && (p <= truncation_number_ul)) {
         ++p;
@@ -118,7 +120,8 @@ Ifgt::Ifgt(const MatrixRef source, double bandwidth, double epsilon)
       m_p_max_total(0),
       m_constant_series() {
     // TODO max num clusters should be configurable
-    size_t max_num_clusters(std::round(0.2 * 100 / bandwidth));
+    Matrix::Index max_num_clusters(
+        Matrix::Index(std::round(0.2 * 100 / bandwidth)));
     IfgtParameters params =
         ifgt_choose_parameters(source.cols(), bandwidth, epsilon,
                                max_num_clusters, TRUNCATION_NUMBER_UL);
@@ -135,7 +138,7 @@ Ifgt::Ifgt(const MatrixRef source, double bandwidth, double epsilon)
         nchoosek(m_truncation_number - 1 + source.cols(), source.cols());
     m_constant_series = compute_constant_series();
     m_ry_square.resize(m_nclusters);
-    for (size_t j = 0; j < m_nclusters; ++j) {
+    for (Matrix::Index j = 0; j < m_nclusters; ++j) {
         double ry = params.cutoff_radius + m_clustering->radii[j];
         m_ry_square[j] = ry * ry;
     }
@@ -144,15 +147,15 @@ Ifgt::Ifgt(const MatrixRef source, double bandwidth, double epsilon)
 Ifgt::~Ifgt() {}
 
 Vector Ifgt::compute_monomials(const VectorRef d) const {
-    unsigned long cols = this->source().cols();
-    std::vector<size_t> heads(cols, 0);
+    auto cols = this->source().cols();
+    std::vector<Matrix::Index> heads(unsigned(cols), 0);
     Vector monomials = Vector::Ones(p_max_total());
-    for (size_t k = 1, t = 1, tail = 1; k < m_truncation_number;
+    for (Matrix::Index k = 1, t = 1, tail = 1; k < m_truncation_number;
          ++k, tail = t) {
-        for (size_t i = 0; i < cols; ++i) {
-            size_t head = heads[i];
-            heads[i] = t;
-            for (size_t j = head; j < tail; ++j, ++t) {
+        for (Matrix::Index i = 0; i < cols; ++i) {
+            Matrix::Index head = heads[unsigned(i)];
+            heads[unsigned(i)] = t;
+            for (Matrix::Index j = head; j < tail; ++j, ++t) {
                 monomials[t] = d[i] * monomials[j];
             }
         }
@@ -161,21 +164,22 @@ Vector Ifgt::compute_monomials(const VectorRef d) const {
 }
 
 Vector Ifgt::compute_constant_series() const {
-    unsigned long cols = this->source().cols();
-    std::vector<size_t> heads(cols + 1, 0);
-    heads[cols] = std::numeric_limits<size_t>::max();
-    std::vector<size_t> cinds(p_max_total(), 0);
+    auto cols = this->source().cols();
+    std::vector<Matrix::Index> heads(unsigned(cols + 1), 0);
+    heads[unsigned(cols)] = std::numeric_limits<Matrix::Index>::max();
+    std::vector<Matrix::Index> cinds(unsigned(p_max_total()), 0);
     Vector monomials = Vector::Ones(p_max_total());
 
-    for (size_t k = 1, t = 1, tail = 1; k < m_truncation_number;
+    for (Matrix::Index k = 1, t = 1, tail = 1; k < m_truncation_number;
          ++k, tail = t) {
-        for (size_t i = 0; i < cols; ++i) {
-            size_t head = heads[i];
-            heads[i] = t;
-            for (size_t j = head; j < tail; ++j, ++t) {
-                cinds[t] = (j < heads[i + 1]) ? cinds[j] + 1 : 1;
+        for (Matrix::Index i = 0; i < cols; ++i) {
+            Matrix::Index head = heads[unsigned(i)];
+            heads[unsigned(i)] = t;
+            for (Matrix::Index j = head; j < tail; ++j, ++t) {
+                cinds[unsigned(t)] =
+                    (j < heads[unsigned(i) + 1]) ? cinds[unsigned(j)] + 1 : 1;
                 monomials[t] = 2.0 * monomials[j];
-                monomials[t] /= double(cinds[t]);
+                monomials[t] /= double(cinds[unsigned(t)]);
             }
         }
     }
@@ -185,9 +189,9 @@ Vector Ifgt::compute_constant_series() const {
 Vector Ifgt::compute_impl(const MatrixRef target,
                           const VectorRef weights) const {
     auto source = this->source();
-    unsigned long rows_source = source.rows();
-    unsigned long rows_target = target.rows();
-    unsigned long cols = source.cols();
+    auto rows_source = source.rows();
+    auto rows_target = target.rows();
+    auto cols = source.cols();
     auto bandwidth = this->bandwidth();
     auto nclusters = this->nclusters();
     auto p_max_total = this->p_max_total();
@@ -195,10 +199,10 @@ Vector Ifgt::compute_impl(const MatrixRef target,
     double h2 = bandwidth * bandwidth;
 
     Matrix C = Matrix::Zero(nclusters, p_max_total);
-    for (size_t i = 0; i < rows_source; ++i) {
+    for (Matrix::Index i = 0; i < rows_source; ++i) {
         double distance = 0.0;
         Vector dx = Vector::Zero(cols);
-        for (size_t k = 0; k < cols; ++k) {
+        for (Matrix::Index k = 0; k < cols; ++k) {
             double delta = source(i, k) -
                            m_clustering->clusters(m_clustering->indices[i], k);
             distance += delta * delta;
@@ -207,25 +211,25 @@ Vector Ifgt::compute_impl(const MatrixRef target,
 
         auto monomials = compute_monomials(dx);
         double f = weights[i] * std::exp(-distance / h2);
-        for (size_t alpha = 0; alpha < p_max_total; ++alpha) {
+        for (Matrix::Index alpha = 0; alpha < p_max_total; ++alpha) {
             C(m_clustering->indices[i], alpha) += f * monomials[alpha];
         }
     }
 
 #pragma omp parallel for
-    for (size_t j = 0; j < nclusters; ++j) {
-        for (size_t alpha = 0; alpha < p_max_total; ++alpha) {
+    for (Matrix::Index j = 0; j < nclusters; ++j) {
+        for (Matrix::Index alpha = 0; alpha < p_max_total; ++alpha) {
             C(j, alpha) *= m_constant_series[alpha];
         }
     }
 
     Vector G = Vector::Zero(rows_target);
 #pragma omp parallel for
-    for (size_t i = 0; i < rows_target; ++i) {
-        for (size_t j = 0; j < nclusters; ++j) {
+    for (Matrix::Index i = 0; i < rows_target; ++i) {
+        for (Matrix::Index j = 0; j < nclusters; ++j) {
             double distance = 0.0;
             Vector dy = Vector::Zero(cols);
-            for (size_t k = 0; k < cols; ++k) {
+            for (Matrix::Index k = 0; k < cols; ++k) {
                 double delta = target(i, k) - m_clustering->clusters(j, k);
                 distance += delta * delta;
                 if (distance > m_ry_square[j]) {

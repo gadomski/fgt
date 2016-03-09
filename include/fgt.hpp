@@ -26,7 +26,18 @@
 #include <cstddef>
 #include <memory>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4365) // unsigned/signed
+#pragma warning(disable : 5031) // pragma warning mismatch
+#pragma warning(disable : 4820) // padding
+#pragma warning(disable : 4626) // assignment operator deleted
+#pragma warning(disable : 5027) // move assignment operator deleted
+#endif
 #include <Eigen/Core>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 /// Top-level namespace for all things fgt.
 namespace fgt {
@@ -106,6 +117,16 @@ public:
     /// Constructs a new transform that can be re-used with different targets.
     Transform(const MatrixRef source, double bandwidth);
 
+    /// Explicitly deleted copy constructor.
+    Transform(const Transform&) = delete;
+    /// Explicitly deleted assgnment operator.
+    Transform& operator=(const Transform&) = delete;
+    /// Explicitly deleted move assignment operator.
+    Transform& operator=(Transform&&) = delete;
+
+    /// Destroys a transform.
+    virtual ~Transform() {}
+
     /// Returns the pointer to the source dataset.
     const MatrixRef source() const { return m_source; }
     /// Returns the bandwidth of the transform.
@@ -130,6 +151,13 @@ public:
     /// Creates a new direct transform.
     Direct(const MatrixRef source, double bandwidth);
 
+    /// Explicitly deleted copy constructor.
+    Direct(const Direct&) = delete;
+    /// Explicitly deleted assgnment operator.
+    Direct& operator=(const Direct&) = delete;
+    /// Explicitly deleted move assignment operator.
+    Direct& operator=(Direct&&) = delete;
+
 private:
     virtual Vector compute_impl(const MatrixRef target,
                                 const VectorRef weights) const;
@@ -144,10 +172,17 @@ public:
     /// `compute()` will re-use the same tree.
     DirectTree(const MatrixRef source, double bandwidth, double epsilon);
 
+    /// Explicitly deleted copy constructor.
+    DirectTree(const DirectTree&) = delete;
+    /// Explicitly deleted assgnment operator.
+    DirectTree& operator=(const DirectTree&) = delete;
+    /// Explicitly deleted move assignment operator.
+    DirectTree& operator=(DirectTree&&) = delete;
+
     /// Destroys a DirectTree.
     ///
     /// Required because of the unique pointer to a incomplete class.
-    ~DirectTree();
+    virtual ~DirectTree();
 
     /// Returns the error tolerance value.
     double epsilon() const { return m_epsilon; }
@@ -174,19 +209,26 @@ public:
     /// monomials, in hopes of speeding up subsequent runs.
     Ifgt(const MatrixRef source, double bandwidth, double epsilon);
 
+    /// Explicitly deleted copy constructor.
+    Ifgt(const Ifgt&) = delete;
+    /// Explicitly deleted assgnment operator.
+    Ifgt& operator=(const Ifgt&) = delete;
+    /// Explicitly deleted move assignment operator.
+    Ifgt& operator=(Ifgt&&) = delete;
+
     /// Destroys this transform.
     ///
     /// Required because PIMPL.
-    ~Ifgt();
+    virtual ~Ifgt();
 
     /// Returns the error tolerance value.
     double epsilon() const { return m_epsilon; }
     /// Returns the number of clusters.
-    size_t nclusters() const { return m_nclusters; }
+    Matrix::Index nclusters() const { return m_nclusters; }
     /// Returns the truncation number.
-    size_t truncation_number() const { return m_truncation_number; }
+    Matrix::Index truncation_number() const { return m_truncation_number; }
     /// Returns the length of each monomial.
-    size_t p_max_total() const { return m_p_max_total; }
+    Matrix::Index p_max_total() const { return m_p_max_total; }
 
 private:
     virtual Vector compute_impl(const MatrixRef target,
@@ -195,10 +237,10 @@ private:
     Vector compute_constant_series() const;
 
     double m_epsilon;
-    size_t m_nclusters;
+    Matrix::Index m_nclusters;
     std::unique_ptr<Clustering> m_clustering;
-    size_t m_truncation_number;
-    size_t m_p_max_total;
+    Matrix::Index m_truncation_number;
+    Matrix::Index m_p_max_total;
     Vector m_constant_series;
     Vector m_ry_square;
 };

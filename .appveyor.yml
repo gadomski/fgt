@@ -1,0 +1,32 @@
+version: 1.0.{build}
+
+branches:
+  except:
+    - gh-pages
+
+skip_commits:
+  message: /(\[skip ci\]|\[ci skip\])/
+
+os: Visual Studio 2015
+platform: x64
+configuration: Release
+
+matrix:
+  fast_finish: true
+
+install:
+  - ps: cd C:\projects
+  - ps: wget http://bitbucket.org/eigen/eigen/get/3.2.8.zip -OutFile eigen.zip
+  - cmd: 7z x eigen.zip -y > nul
+  - ps: cd fgt
+
+before_build:
+  - cmd: cmake -G "Visual Studio 14 2015 Win64" -DEIGEN3_INCLUDE_DIR=C:\projects\eigen-eigen-07105f7124f9 -Dgtest_force_shared_crt=ON .
+
+build:
+  parallel: true
+  project: fgt.sln
+  verbosity: minimal
+
+test_script:
+  - ctest -V --output-on-failure -C Release

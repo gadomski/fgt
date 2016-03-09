@@ -54,7 +54,7 @@ Matrix load_ascii_test_matrix(const std::string& filename) {
 template <typename T>
 Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
 load_binary_test_matrix(const std::string& filename, size_t rows, size_t cols) {
-    std::ifstream file(TEST_DATA_DIR + filename);
+    std::ifstream file(TEST_DATA_DIR + filename, std::ios::binary);
     if (!file.is_open()) {
         std::stringstream msg;
         msg << "Unable to open test data file: " << filename;

@@ -29,12 +29,12 @@ Vector Direct::compute_impl(const MatrixRef target,
                             const VectorRef weights) const {
     double h2 = bandwidth() * bandwidth();
     MatrixRef source = this->source();
-    size_t rows_source = source.rows();
-    size_t rows_target = target.rows();
+    auto rows_source = source.rows();
+    auto rows_target = target.rows();
     Vector g = Vector::Zero(rows_target);
 #pragma omp parallel for
-    for (size_t j = 0; j < rows_target; ++j) {
-        for (size_t i = 0; i < rows_source; ++i) {
+    for (Matrix::Index j = 0; j < rows_target; ++j) {
+        for (Matrix::Index i = 0; i < rows_source; ++i) {
             double distance =
                 (source.row(i) - target.row(j)).array().pow(2).sum();
             g[j] += weights[i] * std::exp(-distance / h2);

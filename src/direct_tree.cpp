@@ -17,7 +17,18 @@
 
 #include <cmath>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4820) // paddding
+#pragma warning(disable : 4626) // assignment implicitly deleted
+#pragma warning(disable : 5027) // move assignment implicitly deleted
+#pragma warning(disable : 4127) // conditional expression is constant
+#pragma warning(disable : 4365) // signed/unsigned
+#endif
 #include "nanoflann.hpp"
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include "fgt.hpp"
 
@@ -25,26 +36,27 @@ namespace fgt {
 namespace {
 
 struct MatrixAdaptor {
-    long kdtree_get_point_count() const { return m_rows; }
-    double kdtree_distance(const double* p1, const long idx_p2, long) const {
+    size_t kdtree_get_point_count() const { return size_t(m_rows); }
+    double kdtree_distance(const double* p1, const Matrix::Index idx_p2,
+                           Matrix::Index) const {
         double distance = 0.0;
-        for (long k = 0; k < m_cols; ++k) {
+        for (Matrix::Index k = 0; k < m_cols; ++k) {
             double temp = p1[k] - m_data[idx_p2 * m_cols + k];
             distance += temp * temp;
         }
         return distance;
     }
-    double kdtree_get_pt(const long idx, int dim) const {
+    double kdtree_get_pt(const Matrix::Index idx, Matrix::Index dim) const {
         return m_data[m_cols * idx + dim];
     }
     template <class BBOX>
-    bool kdtree_get_bbox(BBOX& bb) const {
+    bool kdtree_get_bbox(BBOX&) const {
         return false;
     }
 
     const double* m_data;
-    long m_rows;
-    long m_cols;
+    Matrix::Index m_rows;
+    Matrix::Index m_cols;
 };
 }
 
@@ -65,7 +77,11 @@ struct DirectTree::NanoflannTree {
 
     NanoflannTree(const MatrixRef source)
         : matrix_adaptor({source.data(), source.rows(), source.cols()}),
-          tree(source.cols(), matrix_adaptor) {}
+          tree(int(source.cols()), matrix_adaptor) {}
+
+    NanoflannTree(const NanoflannTree&) = delete;
+    NanoflannTree& operator=(const NanoflannTree&) = delete;
+    NanoflannTree& operator=(NanoflannTree&&) = delete;
 
     MatrixAdaptor matrix_adaptor;
     tree_t tree;
@@ -85,23 +101,23 @@ Vector DirectTree::compute_impl(const MatrixRef target,
     double h2 = bandwidth() * bandwidth();
     double cutoff_radius = bandwidth() * std::sqrt(std::log(1.0 / epsilon()));
     double r2 = cutoff_radius * cutoff_radius;
-    size_t rows_source = this->source().rows();
-    size_t rows_target = target.rows();
+    Matrix::Index rows_source = this->source().rows();
+    Matrix::Index rows_target = target.rows();
     Vector g = Vector::Zero(rows_target);
-    size_t cols = this->source().cols();
+    Matrix::Index cols = this->source().cols();
 
     nanoflann::SearchParams params;
     params.sorted = false;
 
 #pragma omp parallel for
-    for (size_t j = 0; j < rows_target; ++j) {
+    for (Matrix::Index j = 0; j < rows_target; ++j) {
         std::vector<std::pair<size_t, double>> indices_distances;
-        indices_distances.reserve(rows_source);
+        indices_distances.reserve(unsigned(rows_source));
         size_t nfound = m_tree->tree.radiusSearch(&target.data()[j * cols], r2,
                                                   indices_distances, params);
         for (size_t i = 0; i < nfound; ++i) {
             auto entry = indices_distances[i];
-            g[j] += weights[entry.first] * std::exp(-entry.second / h2);
+            g[j] += weights[signed(entry.first)] * std::exp(-entry.second / h2);
         }
     }
     return g;

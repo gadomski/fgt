@@ -21,7 +21,7 @@
 
 namespace fgt {
 
-typedef Eigen::Matrix<size_t, Eigen::Dynamic, 1> VectorXs;
+typedef Eigen::Matrix<Matrix::Index, Eigen::Dynamic, 1> VectorXs;
 
 /// The results from k-means clustering.
 struct Clustering {
@@ -38,9 +38,10 @@ struct Clustering {
 };
 
 /// Runs k-means clustering on a set of points.
-Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon);
+Clustering cluster(const MatrixRef points, Matrix::Index nclusters,
+                   double epsilon);
 
 /// Runs k-means clustering, specifying the starting cluster centers.
-Clustering cluster(const MatrixRef points, size_t nclusters, double epsilon,
-                   const MatrixRef starting_clusters);
+Clustering cluster(const MatrixRef points, Matrix::Index nclusters,
+                   double epsilon, const MatrixRef starting_clusters);
 }
