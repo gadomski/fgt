@@ -59,6 +59,10 @@ target_compile_features(Library-C++
     cxx_right_angle_brackets
     cxx_auto_type
     )
+target_compile_options(Library-C++
+    PRIVATE
+    -pedantic -Wall
+    )
 set_target_properties(Library-C++ PROPERTIES
     OUTPUT_NAME fgt
     VERSION ${FGT_VERSION}
@@ -70,12 +74,13 @@ if(WITH_OPENMP)
         FGT_WITH_OPENMP
         )
 endif()
-target_compile_options(Library-C++
-    PRIVATE
-    # The no-nested-anon-types is for nanoflann
-    -pedantic -Wall -Wno-nested-anon-types
-    )
-if(${CMAKE_COMPILER_IS_GNUCXX})
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+	target_compile_options(Library-C++
+		PRIVATE
+		# The no-nested-anon-types is for nanoflann
+		-Wno-nested-anon-types
+		)
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     target_compile_options(Library-C++
         PUBLIC
         # For some deprecations inside Eigen
