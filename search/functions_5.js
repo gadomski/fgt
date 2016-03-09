@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nclusters',['nclusters',['../classfgt_1_1_ifgt.html#a038567214802ce2472af6bac7daeb6db',1,'fgt::Ifgt']]]
+  ['nclusters',['nclusters',['../classfgt_1_1_ifgt.html#ade2ded2c00f96518a2773004b408730b',1,'fgt::Ifgt']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['transform',['Transform',['../classfgt_1_1_transform.html#ab801df3da354d77062e9711ab91a23b8',1,'fgt::Transform']]],
-  ['truncation_5fnumber',['truncation_number',['../classfgt_1_1_ifgt.html#a407cfb415325e0bbd4497628bbab97a9',1,'fgt::Ifgt']]]
+  ['source',['source',['../classfgt_1_1_transform.html#a6c04dff8503c179f0ee64a54efde6d1b',1,'fgt::Transform']]]
 ];
