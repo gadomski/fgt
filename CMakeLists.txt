@@ -1,6 +1,8 @@
 project(fgt CXX C)
 cmake_minimum_required(VERSION 3.1)
 
+message(STATUS "[fgt] Compiler: ${CMAKE_CXX_COMPILER_ID}")
+
 set(FGT_VERSION 0.4.2)
 set(FGT_SOVERSION 0)
 configure_file(src/version.cpp.in
