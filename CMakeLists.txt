@@ -1,5 +1,7 @@
 project(fgt CXX C)
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.1)
+
+message(STATUS "[fgt] Compiler: ${CMAKE_CXX_COMPILER_ID}")
 
 set(FGT_VERSION 0.4.2)
 set(FGT_SOVERSION 0)
@@ -13,8 +15,7 @@ option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
 message(STATUS "[fgt] With OpenMP: ${WITH_OPENMP}")
 
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 endif()
@@ -52,6 +53,16 @@ target_include_directories(Library-C++
     include
     ${NANOFLANN_SOURCE_DIR}/include
     )
+target_compile_features(Library-C++
+    PUBLIC
+    cxx_generalized_initializers
+    cxx_right_angle_brackets
+    cxx_auto_type
+    )
+target_compile_options(Library-C++
+    PRIVATE
+    -pedantic -Wall
+    )
 set_target_properties(Library-C++ PROPERTIES
     OUTPUT_NAME fgt
     VERSION ${FGT_VERSION}
@@ -63,12 +74,13 @@ if(WITH_OPENMP)
         FGT_WITH_OPENMP
         )
 endif()
-target_compile_options(Library-C++
-    PRIVATE
-    # The no-nested-anon-types is for nanoflann
-    -pedantic -Wall -Wno-nested-anon-types
-    )
-if(${CMAKE_COMPILER_IS_GNUCXX})
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+	target_compile_options(Library-C++
+		PRIVATE
+		# The no-nested-anon-types is for nanoflann
+		-Wno-nested-anon-types
+		)
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     target_compile_options(Library-C++
         PUBLIC
         # For some deprecations inside Eigen
