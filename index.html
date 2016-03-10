@@ -94,6 +94,9 @@ The Gauss transform</div></div>
  <div class="image">
 <img src="https://ci.appveyor.com/api/projects/status/7t6ojbj2lj052wx2/branch/master?svg=true"  alt="AppVeyor Build status"/>
 </div>
+ <div class="image">
+<img src="https://badge.fury.io/gh/gadomski%2Ffgt.svg"  alt="GitHub version"/>
+</div>
 <h2>Usage</h2>
 <p>There is one C++ header file, <code><a class="el" href="fgt_8hpp.html" title="The header file for the fgt library. ">fgt.hpp</a></code>, which has everything you need. Include that file and you're off to the races:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="fgt_8hpp.html">fgt.hpp</a>&gt;</span></div><div class="line"></div><div class="line"><span class="keywordtype">void</span> my_great_function(<span class="keyword">const</span> Eigen::MatrixXd&amp; x, <span class="keyword">const</span> Eigen::MatrixXd&amp; y) {</div><div class="line">    <span class="keywordtype">double</span> bandwidth = 0.3;</div><div class="line">    Eigen::VectorXd gauss_transform = <a class="code" href="namespacefgt.html#a9e7b961f16e3b919e0f22917142bca17">fgt::direct</a>(x, y, bandwidth);</div><div class="line">}</div></div><!-- fragment --><p>The library provides a few different ways to calculate the Gauss transform:</p>
