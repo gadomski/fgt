@@ -1,5 +1,5 @@
 project(fgt CXX C)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.0)
 
 message(STATUS "[fgt] Compiler: ${CMAKE_CXX_COMPILER_ID}")
 
@@ -53,13 +53,9 @@ target_include_directories(Library-C++
     include
     ${NANOFLANN_SOURCE_DIR}/include
     )
-target_compile_features(Library-C++
-    PUBLIC
-    cxx_generalized_initializers
-    cxx_right_angle_brackets
-    cxx_auto_type
-    )
 target_compile_options(Library-C++
+    PUBLIC
+    -std=c++11
     PRIVATE
     -Wall
     )

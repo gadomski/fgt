@@ -3,6 +3,11 @@
 
 set -ex
 
-wget https://github.com/Viq111/travis-container-packets/releases/download/cmake-3.1.2/cmake.tar.bz2
-tar xjf cmake.tar.bz2
-rm cmake.tar.bz2
+home=$(pwd)
+
+wget https://cmake.org/files/v3.0/cmake-3.0.2.tar.gz --no-check-certificate
+tar xzf cmake-3.0.2.tar.gz
+rm cmake-3.0.2.tar.gz
+cd cmake-3.0.2
+./bootstrap
+make
