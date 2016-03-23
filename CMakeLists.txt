@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 
 message(STATUS "[fgt] Compiler: ${CMAKE_CXX_COMPILER_ID}")
 
-set(FGT_VERSION 0.4.3)
+set(FGT_VERSION 0.4.4)
 set(FGT_SOVERSION 0)
 configure_file(src/version.cpp.in
     ${PROJECT_BINARY_DIR}/version.cpp
