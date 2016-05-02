@@ -11,7 +11,6 @@ This code lives on [Github](https://github.com/gadomski/fgt), has [some Doxygen 
 
 ![Travis Build Status](https://travis-ci.org/gadomski/fgt.svg?branch=master)
 ![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/7t6ojbj2lj052wx2/branch/master?svg=true)
-![GitHub version](https://badge.fury.io/gh/gadomski%2Ffgt.svg)
 
 ## Usage
 
