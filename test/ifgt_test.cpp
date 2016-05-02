@@ -50,4 +50,9 @@ TEST(Ifgt, UTM) {
     auto target = source;
     ASSERT_THROW(ifgt(source, target, 100, 1e-4), ifgt_no_clusters);
 }
+
+TEST(Ifgt, ManyDimensionsManyPoints) {
+    Matrix source = Matrix::Random(10, 60);
+    ASSERT_THROW(Ifgt(source, 0.4, 1e-4), fgt_error);
+}
 }
