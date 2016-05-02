@@ -1,14 +1,16 @@
-project(fgt CXX C)
+if(POLICY CMP0048)
+    cmake_policy(SET CMP0048 NEW) # PROJECT_VERSION
+endif()
+project(fgt LANGUAGES CXX C VERSION 0.4.5)
 cmake_minimum_required(VERSION 3.0)
 
 message(STATUS "[fgt] Compiler: ${CMAKE_CXX_COMPILER_ID}")
 
-set(FGT_VERSION 0.4.4)
-set(FGT_SOVERSION 0)
+set(PROJECT_SOVERSION 0)
 configure_file(src/version.cpp.in
     ${PROJECT_BINARY_DIR}/version.cpp
     )
-message(STATUS "[fgt] Version: ${FGT_VERSION}")
+message(STATUS "[fgt] Version: ${PROJECT_VERSION}")
 
 option(WITH_BENCH "Build benchmark executable" OFF)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
@@ -61,8 +63,8 @@ target_compile_options(Library-C++
     )
 set_target_properties(Library-C++ PROPERTIES
     OUTPUT_NAME fgt
-    VERSION ${FGT_VERSION}
-    SOVERSION ${FGT_SOVERSION}
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_SOVERSION}
     )
 if(WITH_OPENMP)
     target_compile_definitions(Library-C++
@@ -139,7 +141,7 @@ configure_file(cmake/fgt-config.cmake
     )
 write_basic_package_version_file(
     ${PROJECT_BINARY_DIR}/fgt-config-version.cmake
-    VERSION ${FGT_VERSION}
+    VERSION ${PROJECT_VERSION}
     COMPATIBILITY AnyNewerVersion
     )
 install(FILES
