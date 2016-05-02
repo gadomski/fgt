@@ -30,17 +30,25 @@ namespace {
 const size_t TRUNCATION_NUMBER_UL = 200;
 
 Matrix::Index nchoosek(Matrix::Index n, Matrix::Index k) {
+    auto k_orig = k;
     Matrix::Index n_k = n - k;
     if (k < n_k) {
         k = n_k;
         n_k = n - k;
     }
-    Matrix::Index nchsk = 1;
+    double nchsk = 1;
     for (Matrix::Index i = 1; i <= n_k; ++i) {
         nchsk *= ++k;
         nchsk /= i;
     }
-    return nchsk;
+    if (nchsk > std::numeric_limits<Matrix::Index>::max()) {
+        std::stringstream ss;
+        ss << "n choose k for " << n << " and " << k_orig
+           << " caused an overflow. Dimensionality of the data might be "
+              "too high.";
+        throw fgt_error(ss.str());
+    }
+    return Matrix::Index(nchsk);
 }
 }
 
