@@ -1,7 +1,7 @@
 if(POLICY CMP0048)
     cmake_policy(SET CMP0048 NEW) # PROJECT_VERSION
 endif()
-project(fgt LANGUAGES CXX C VERSION 0.4.5)
+project(fgt LANGUAGES CXX C VERSION 0.4.4)
 cmake_minimum_required(VERSION 3.0)
 
 message(STATUS "[fgt] Compiler: ${CMAKE_CXX_COMPILER_ID}")
