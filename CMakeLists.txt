@@ -58,12 +58,6 @@ target_include_directories(Library-C++
     include
     ${NANOFLANN_SOURCE_DIR}/include
     )
-target_compile_options(Library-C++
-    PUBLIC
-    -std=c++11
-    PRIVATE
-    -Wall
-    )
 set_target_properties(Library-C++ PROPERTIES
     OUTPUT_NAME fgt
     VERSION ${PROJECT_VERSION}
@@ -77,7 +71,10 @@ if(WITH_OPENMP)
 endif()
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     target_compile_options(Library-C++
+        PUBLIC
+        -std=c++11
         PRIVATE
+        -Wall
         -pedantic
         # The no-nested-anon-types is for nanoflann
         -Wno-nested-anon-types
@@ -85,9 +82,11 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     target_compile_options(Library-C++
         PUBLIC
+        -std=c++11
         # For some deprecations inside Eigen
         -Wno-deprecated-declarations
         PRIVATE
+        -Wall
         -pedantic
         # For pragma omp's
         -Wno-unknown-pragmas
