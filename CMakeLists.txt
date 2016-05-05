@@ -1,11 +1,9 @@
-if(POLICY CMP0048)
-    cmake_policy(SET CMP0048 NEW) # PROJECT_VERSION
-endif()
-project(fgt LANGUAGES CXX C VERSION 0.4.4)
-cmake_minimum_required(VERSION 3.0)
+project(fgt CXX C)
+cmake_minimum_required(VERSION 2.8.12)
 
 message(STATUS "[fgt] Compiler: ${CMAKE_CXX_COMPILER_ID}")
 
+set(PROJECT_VERSION 0.4.4)
 set(PROJECT_SOVERSION 0)
 configure_file(src/version.cpp.in
     ${PROJECT_BINARY_DIR}/version.cpp
