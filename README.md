@@ -113,6 +113,7 @@ This will build an OpenMP-enabled **fgt** library.
 
 **fgt** comes with a unit-test suite.
 To run, simply execute `make test`.
+You probably want `CMAKE_BUILD_TYPE=Release`, otherwise the tests will take a while.
 
 ### Using in a downstream project
 
