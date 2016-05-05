@@ -21,6 +21,9 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 endif()
+if(POLICY CMP0054)
+    cmake_policy(SET CMP0054 NEW) # Quotes variables in IF statments
+endif()
 
 find_package(Eigen3 3.1 REQUIRED)
 message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION}")
@@ -55,12 +58,6 @@ target_include_directories(Library-C++
     include
     ${NANOFLANN_SOURCE_DIR}/include
     )
-target_compile_options(Library-C++
-    PUBLIC
-    -std=c++11
-    PRIVATE
-    -Wall
-    )
 set_target_properties(Library-C++ PROPERTIES
     OUTPUT_NAME fgt
     VERSION ${PROJECT_VERSION}
@@ -74,7 +71,10 @@ if(WITH_OPENMP)
 endif()
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     target_compile_options(Library-C++
+        PUBLIC
+        -std=c++11
         PRIVATE
+        -Wall
         -pedantic
         # The no-nested-anon-types is for nanoflann
         -Wno-nested-anon-types
@@ -82,16 +82,18 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     target_compile_options(Library-C++
         PUBLIC
+        -std=c++11
         # For some deprecations inside Eigen
         -Wno-deprecated-declarations
         PRIVATE
+        -Wall
         -pedantic
         # For pragma omp's
         -Wno-unknown-pragmas
         )
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     target_compile_options(Library-C++
-        PRIVATE
+        PUBLIC
         # Eigen does relative includes
         /wd4464
         # This is the famous "unreferenced inline function has been removed"

@@ -68,7 +68,7 @@ brew install fgt
 
 ### From source
 
-To build **fgt** from source, clone the repository and execute the traditional CMake build incantation:
+To build **fgt** from source on a *nix system, clone the repository and execute the traditional CMake build incantation:
 
 ```sh
 git clone https://github.com/gadomski/fgt
@@ -79,6 +79,12 @@ make
 ```
 
 **fgt** doesn't make any assumptions about whether you do or do not want shared libraries, so if you have a preference be sure to set `BUILD_SHARED_LIBS`.
+
+If building with MSVC, we recommend:
+
+- Setting `BUILD_SHARED_LIBS=OFF`, at least if you want to run the test suite out-of-the-box.
+- Setting `gtest_force_shared_crt=ON`.
+  This allows an out-of-the-box build without any Visual Studio config mucking.
 
 ### Eigen ordering
 
@@ -107,6 +113,7 @@ This will build an OpenMP-enabled **fgt** library.
 
 **fgt** comes with a unit-test suite.
 To run, simply execute `make test`.
+You probably want `CMAKE_BUILD_TYPE=Release`, otherwise the tests will take a while.
 
 ### Using in a downstream project
 
