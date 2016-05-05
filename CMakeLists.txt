@@ -21,6 +21,9 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
 endif()
+if(POLICY CMP0054)
+    cmake_policy(SET CMP0054 NEW) # Quotes variables in IF statments
+endif()
 
 find_package(Eigen3 3.1 REQUIRED)
 message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION}")
