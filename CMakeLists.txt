@@ -93,7 +93,7 @@ elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
         )
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     target_compile_options(Library-C++
-        PRIVATE
+        PUBLIC
         # Eigen does relative includes
         /wd4464
         # This is the famous "unreferenced inline function has been removed"
