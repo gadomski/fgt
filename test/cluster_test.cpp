@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
-#include "test/support.hpp"
 #include "cluster.hpp"
+#include "test/support.hpp"
 
 namespace fgt {
 
