@@ -8,19 +8,23 @@ namespace fgt {
 TEST(Ifgt, Reference) {
     auto source = load_ascii_test_matrix("X.txt");
     auto target = load_ascii_test_matrix("Y.txt");
-    auto expected = direct(source, target, 0.5);
-    auto actual = ifgt(source, target, 0.5, 1e-4);
+    double bandwidth = 0.5;
+    double epsilon = 1e-4;
+    auto expected = direct(source, target, bandwidth);
+    auto actual = ifgt(source, target, bandwidth, epsilon);
     ASSERT_EQ(expected.size(), actual.size());
-    EXPECT_TRUE(expected.isApprox(actual, 1e-2));
+    EXPECT_LT((expected - actual).array().abs().maxCoeff() / actual.size(), epsilon);
 }
 
 TEST(Ifgt, ClassBased) {
     auto source = load_ascii_test_matrix("X.txt");
     auto target = load_ascii_test_matrix("Y.txt");
-    auto expected = direct(source, target, 0.5);
-    auto actual = Ifgt(source, 0.5, 1e-4).compute(target);
+    double bandwidth = 0.5;
+    double epsilon = 1e-4;
+    auto expected = direct(source, target, bandwidth);
+    auto actual = Ifgt(source, bandwidth, epsilon).compute(target);
     ASSERT_EQ(expected.size(), actual.size());
-    EXPECT_TRUE(expected.isApprox(actual, 1e-2));
+    EXPECT_LT((expected - actual).array().abs().maxCoeff() / actual.size(), epsilon);
 }
 
 TEST(Ifgt, ChooseParameters) {
@@ -39,10 +43,12 @@ TEST(Ifgt, HighBandwidth) {
     auto source = load_ascii_test_matrix("X.txt");
     auto target = load_ascii_test_matrix("Y.txt");
     target = target.array() + 2;
-    auto expected = direct(source, target, 3.5);
-    auto actual = ifgt(source, target, 3.5, 1e-4);
+    double bandwidth = 3.5;
+    double epsilon = 1e-4;
+    auto expected = direct(source, target, bandwidth);
+    auto actual = ifgt(source, target, bandwidth, epsilon);
     ASSERT_EQ(expected.size(), actual.size());
-    EXPECT_TRUE(expected.isApprox(actual, 1e-2));
+    EXPECT_LT((expected - actual).array().abs().maxCoeff() / actual.size(), epsilon);
 }
 
 TEST(Ifgt, UTM) {
