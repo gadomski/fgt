@@ -7,25 +7,31 @@ namespace fgt {
 TEST(DirectTree, MatchesDirect) {
     auto source = load_ascii_test_matrix("X.txt");
     auto target = load_ascii_test_matrix("Y.txt");
-    auto expected = direct(source, target, 0.5);
-    auto actual = direct_tree(source, target, 0.5, 1e-4);
-    EXPECT_TRUE(actual.isApprox(expected, 1e-4));
+    double bandwidth = 0.5;
+    auto expected = direct(source, target, bandwidth);
+    double epsilon = 1e-4;
+    auto actual = direct_tree(source, target, bandwidth, epsilon);
+    EXPECT_LT((expected - actual).array().abs().maxCoeff() / actual.size(), epsilon);
 }
 
 TEST(DirectTree, WithWeights) {
     auto source = load_ascii_test_matrix("X.txt");
     auto target = load_ascii_test_matrix("Y.txt");
     Vector weights = Vector::LinSpaced(source.rows(), 0.1, 0.9);
-    auto expected = direct(source, target, 0.5, weights);
-    auto actual = direct_tree(source, target, 0.5, 1e-4, weights);
-    EXPECT_TRUE(expected.isApprox(actual));
+    double bandwidth = 0.5;
+    auto expected = direct(source, target, bandwidth, weights);
+    double epsilon = 1e-4;
+    auto actual = direct_tree(source, target, bandwidth, epsilon, weights);
+    EXPECT_LT((expected - actual).array().abs().maxCoeff() / weights.sum(), epsilon);
 }
 
 TEST(DirectTree, ClassBased) {
     auto source = load_ascii_test_matrix("X.txt");
     auto target = load_ascii_test_matrix("Y.txt");
-    auto expected = direct(source, target, 0.5);
-    auto actual = DirectTree(source, 0.5, 1e-4).compute(target);
-    EXPECT_TRUE(actual.isApprox(expected, 1e-4));
+    double bandwidth = 0.5;
+    auto expected = direct(source, target, bandwidth);
+    double epsilon = 1e-4;
+    auto actual = DirectTree(source, bandwidth, epsilon).compute(target);
+    EXPECT_LT((expected - actual).array().abs().maxCoeff() / actual.size(), epsilon);
 }
 }
