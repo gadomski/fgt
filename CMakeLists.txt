@@ -16,6 +16,7 @@ configure_file(src/version.cpp.in
     )
 message(STATUS "[fgt] Version: ${PROJECT_VERSION}")
 
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(WITH_BENCH "Build benchmark executable" OFF)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
