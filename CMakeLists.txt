@@ -19,6 +19,10 @@ message(STATUS "[fgt] Version: ${PROJECT_VERSION}")
 option(WITH_BENCH "Build benchmark executable" OFF)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
+
+if(NOT ${BUILD_SHARED_LIBS} AND ${WITH_OPENMP})
+    message(FATAL_ERROR "Static builds with OpenMP disallowed because they don't propagate well to downstreams. Either set WITH_OPENMP=OFF or build shared.")
+endif()
 message(STATUS "[fgt] With OpenMP: ${WITH_OPENMP}")
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
