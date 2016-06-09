@@ -90,7 +90,7 @@ struct DirectTree::NanoflannTree {
 DirectTree::DirectTree(const MatrixRef source, double bandwidth, double epsilon)
     : Transform(source, bandwidth),
       m_epsilon(epsilon),
-      m_tree(new DirectTree::NanoflannTree(source)) {
+      m_tree(new DirectTree::NanoflannTree(this->source())) {
     m_tree->tree.buildIndex();
 }
 
