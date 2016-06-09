@@ -141,7 +141,7 @@ private:
     virtual Vector compute_impl(const MatrixRef target,
                                 const VectorRef weights) const = 0;
 
-    const MatrixRef m_source;
+    const Matrix m_source;
     double m_bandwidth;
 };
 
