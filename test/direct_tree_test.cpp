@@ -34,4 +34,13 @@ TEST(DirectTree, ClassBased) {
     auto actual = DirectTree(source, bandwidth, epsilon).compute(target);
     EXPECT_LT((expected - actual).array().abs().maxCoeff() / actual.size(), epsilon);
 }
+
+TEST(DirectTree, Fish) {
+    auto source = load_ascii_test_matrix("fish.txt");
+    auto target = load_ascii_test_matrix("fish-transformed.txt");
+    double bandwidth = 1.0;
+    auto expected = direct(source, target, bandwidth);
+    auto actual = direct_tree(source, target, bandwidth, 1e-5);
+    EXPECT_TRUE(expected.isApprox(actual, 1e-4));
+}
 }
