@@ -8,6 +8,9 @@ if(POLICY CMP0048)
 else()
     project(fgt CXX C)
 endif()
+if(POLICY CMP0054)
+    cmake_policy(SET CMP0054 NEW) # Quoted variable in if statements
+endif()
 
 message(STATUS "[fgt] Compiler: ${CMAKE_CXX_COMPILER_ID}")
 
