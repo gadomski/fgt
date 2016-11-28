@@ -66,13 +66,9 @@ add_library(Library-C++
     ${PROJECT_BINARY_DIR}/version.cpp
     )
 target_include_directories(Library-C++
-    PUBLIC
-    ${EIGEN3_INCLUDE_DIR}
-    INTERFACE
-    ${CMAKE_INSTALL_PREFIX}/include
-    PRIVATE
-    include
-    ${NANOFLANN_SOURCE_DIR}/include
+    PUBLIC ${EIGEN3_INCLUDE_DIR}
+    INTERFACE $<INSTALL_INTERFACE:include>
+    PRIVATE include ${NANOFLANN_SOURCE_DIR}/include
     )
 set_target_properties(Library-C++ PROPERTIES
     OUTPUT_NAME fgt
