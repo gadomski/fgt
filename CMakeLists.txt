@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.12)
-set(PROJECT_VERSION 0.4.5)
+set(PROJECT_VERSION 0.4.6)
 set(PROJECT_SOVERSION 0)
 
 if(POLICY CMP0048)
