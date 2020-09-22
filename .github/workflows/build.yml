@@ -10,6 +10,7 @@ jobs:
       fail-fast: true
       matrix:
         platform: ['ubuntu-latest', 'macos-latest', 'windows-latest']
+        openmp: ['ON','OFF']
 
     env:
       PLATFORM: ${{ matrix.platform }}
@@ -28,7 +29,7 @@ jobs:
         shell: bash -l {0}
         run: |
             conda update -n base -c defaults conda -y
-            conda install ninja cmake ninja eigen compilers jsoncpp -y
+            conda install ninja cmake ninja eigen compilers jsoncpp openmp -y
 
       - name: CMake
         shell: bash -l {0}
@@ -45,7 +46,10 @@ jobs:
                 -DWITH_TESTS=ON \
                 -Dgtest_force_shared_crt=ON \
                 -DCMAKE_BUILD_TYPE=Release \
+                -DWITH_OPENMP=${{ matrix.openmp }} \
                 -DBUILD_SHARED_LIBS=ON
+
+            echo "::set-env name=OMP_NUM_THREADS::4"
 
       - name: Build
         shell: bash -l {0}
