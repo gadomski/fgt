@@ -138,7 +138,9 @@ endif()
 
 if(WITH_TESTS)
     enable_testing()
-    add_subdirectory(${GTEST_SOURCE_DIR})
+    set(GOOGLETEST_VERSION 1.10.0)
+    add_subdirectory("${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0/googletest")
+
     set_target_properties(gtest PROPERTIES MACOSX_RPATH ON)
     set_target_properties(gtest_main PROPERTIES MACOSX_RPATH ON)
 
