@@ -11,10 +11,6 @@ jobs:
       matrix:
         platform: ['ubuntu-latest', 'macos-latest', 'windows-latest']
         openmp: ['ON','OFF']
-        exclude:
-          # excludes openmp on osx and windows
-          - platform: [ 'macos-latest', 'windows-latest']
-            openmp: ['ON']
 
     env:
       PLATFORM: ${{ matrix.platform }}
