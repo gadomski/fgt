@@ -43,8 +43,9 @@ jobs:
                 -G Ninja \
                 -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX \
                 -DWITH_TESTS=ON \
+                -Dgtest_force_shared_crt=ON \
                 -DCMAKE_BUILD_TYPE=Release \
-                -DBUILD_SHARED_LIBS=OFF
+                -DBUILD_SHARED_LIBS=ON
 
       - name: Build
         shell: bash -l {0}
