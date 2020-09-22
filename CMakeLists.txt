@@ -56,6 +56,7 @@ if(WITH_OPENMP)
 endif()
 
 add_library(Library-C++
+    STATIC
     src/cluster.cpp
     src/direct.cpp
     src/direct_tree.cpp
