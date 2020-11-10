@@ -1,6 +1,5 @@
 on:
   push:
-    branches: '*'
 
 jobs:
   base:
