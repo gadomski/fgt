@@ -139,7 +139,9 @@ if(WITH_TESTS)
     add_subdirectory("${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0/googletest")
 
     set_target_properties(gtest PROPERTIES MACOSX_RPATH ON)
+    target_compile_options(gtest PUBLIC -std=c++11)
     set_target_properties(gtest_main PROPERTIES MACOSX_RPATH ON)
+    target_compile_options(gtest_main PUBLIC -std=c++11)
 
     add_subdirectory(test)
 endif()
