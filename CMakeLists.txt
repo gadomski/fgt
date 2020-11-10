@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.12)
-set(PROJECT_VERSION 0.4.6)
+set(PROJECT_VERSION 0.4.8)
 set(PROJECT_SOVERSION 0)
 
 if(POLICY CMP0048)
@@ -24,7 +24,7 @@ option(WITH_BENCH "Build benchmark executable" OFF)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
 
-if(NOT ${BUILD_SHARED_LIBS} AND ${WITH_OPENMP})
+if(NOT "${BUILD_SHARED_LIBS}" AND "${WITH_OPENMP}")
     message(FATAL_ERROR "Static builds with OpenMP disallowed because they don't propagate well to downstreams. Either set WITH_OPENMP=OFF or build shared.")
 endif()
 message(STATUS "[fgt] With OpenMP: ${WITH_OPENMP}")
@@ -40,7 +40,7 @@ endif()
 find_package(Eigen3 3.1 REQUIRED)
 message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION}")
 
-set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/gtest-1.7.0)
+set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0)
 set(NANOFLANN_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/nanoflann-1.1.9)
 
 set(cluster_src src/cluster-sequential.cpp)
