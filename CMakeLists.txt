@@ -19,11 +19,7 @@ configure_file(src/version.cpp.in
     )
 message(STATUS "[fgt] Version: ${PROJECT_VERSION}")
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-else()
-    option(BUILD_SHARED_LIBS "Build shared libraries" ON)
-endif()
+
 option(WITH_BENCH "Build benchmark executable" OFF)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
@@ -56,6 +52,7 @@ if(WITH_OPENMP)
 endif()
 
 add_library(Library-C++
+    STATIC
     src/cluster.cpp
     src/direct.cpp
     src/direct_tree.cpp
@@ -138,9 +135,13 @@ endif()
 
 if(WITH_TESTS)
     enable_testing()
-    add_subdirectory(${GTEST_SOURCE_DIR})
+    set(GOOGLETEST_VERSION 1.10.0)
+    add_subdirectory("${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0/googletest")
+
     set_target_properties(gtest PROPERTIES MACOSX_RPATH ON)
+    target_compile_options(gtest PUBLIC -std=c++11)
     set_target_properties(gtest_main PROPERTIES MACOSX_RPATH ON)
+    target_compile_options(gtest_main PUBLIC -std=c++11)
 
     add_subdirectory(test)
 endif()

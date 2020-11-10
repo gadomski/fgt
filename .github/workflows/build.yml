@@ -1,0 +1,78 @@
+on:
+  push:
+    branches: '*'
+
+jobs:
+  base:
+    name: FGT ${{ matrix.platform }} - OpenMP ${{ matrix.openmp }}
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      fail-fast: true
+      matrix:
+        platform: ['ubuntu-latest', 'macos-latest', 'windows-latest']
+        openmp: ['ON','OFF']
+        exclude:
+          # excludes openmp on osx
+          - platform: 'macos-latest'
+            openmp: 'ON'
+
+          - platform: 'windows-latest'
+            openmp: 'ON'
+
+    env:
+      PLATFORM: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: goanpeca/setup-miniconda@v1
+        with:
+          channels: conda-forge
+          auto-update-conda: true
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: matrix.platform == 'windows-latest'
+
+      - name: Setup
+        shell: bash -l {0}
+        run: |
+            conda update -n base -c defaults conda -y
+            conda install ninja cmake ninja eigen compilers jsoncpp openmp -y
+
+      - name: CMake
+        shell: bash -l {0}
+        run: |
+            mkdir build
+            cd build
+            if [ "$PLATFORM" == "windows-latest" ]; then
+                export CC=cl.exe
+                export CXX=cl.exe
+            fi
+            cmake .. \
+                -G Ninja \
+                -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX \
+                -DWITH_TESTS=ON \
+                -Dgtest_force_shared_crt=ON \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DWITH_OPENMP=${{ matrix.openmp }} \
+                -DBUILD_SHARED_LIBS=ON
+
+            echo "::set-env name=OMP_NUM_THREADS::4"
+
+      - name: Build
+        shell: bash -l {0}
+        working-directory: ./build
+        run: |
+            ninja
+
+      - name: Paths
+        shell: bash -l {0}
+        if: matrix.platform == 'windows-latest'
+        run: |
+            echo "::add-path::D:/a/fgt/fgt/build/bin"
+
+      - name: Test
+        shell: bash -l {0}
+        working-directory: ./build
+        run: |
+            ctest
+
