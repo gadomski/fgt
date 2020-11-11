@@ -1,6 +1,5 @@
 on:
   push:
-    branches: '*'
 
 jobs:
   base:
@@ -68,7 +67,7 @@ jobs:
         shell: bash -l {0}
         if: matrix.platform == 'windows-latest'
         run: |
-            echo "::add-path::D:/a/fgt/fgt/build/bin"
+            echo "D:/a/fgt/fgt/build/bin" >> $GITHUB_PATH
 
       - name: Test
         shell: bash -l {0}
