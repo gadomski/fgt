@@ -54,7 +54,9 @@ jobs:
                 -DWITH_OPENMP=${{ matrix.openmp }} \
                 -DBUILD_SHARED_LIBS=ON
 
-            echo "::set-env name=OMP_NUM_THREADS::4"
+            echo "D:/a/fgt/fgt/build/bin" >> $GITHUB_PATH
+
+            echo "OMP_NUM_THREADS=4" >> $GITHUB_ENV
 
       - name: Build
         shell: bash -l {0}
