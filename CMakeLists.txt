@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.12)
-set(PROJECT_VERSION 0.4.8)
+set(PROJECT_VERSION 0.4.9)
 set(PROJECT_SOVERSION 0)
 
 if(POLICY CMP0048)
@@ -62,10 +62,10 @@ add_library(Library-C++
     ${cluster_src}
     ${PROJECT_BINARY_DIR}/version.cpp
     )
-target_include_directories(Library-C++
-    PUBLIC ${EIGEN3_INCLUDE_DIR}
-    INTERFACE $<INSTALL_INTERFACE:include>
-    PRIVATE include ${NANOFLANN_SOURCE_DIR}/include
+target_include_directories(Library-C++ INTERFACE
+    "$<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>"
+    "$<INSTALL_INTERFACE:include>"
+    PRIVATE include ${NANOFLANN_SOURCE_DIR}/include ${EIGEN3_INCLUDE_DIR}
     )
 set_target_properties(Library-C++ PROPERTIES
     OUTPUT_NAME fgt

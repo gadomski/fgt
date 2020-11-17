@@ -6,6 +6,7 @@ function(fgt_test target)
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/src
         ${PROJECT_BINARY_DIR}
+        ${EIGEN3_INCLUDE_DIR}
         )
     target_link_libraries(${target}
         PRIVATE
