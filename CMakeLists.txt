@@ -51,17 +51,30 @@ if(WITH_OPENMP)
     set(cluster_src src/cluster-openmp.cpp)
 endif()
 
-add_library(Library-C++
-    STATIC
-    src/cluster.cpp
-    src/direct.cpp
-    src/direct_tree.cpp
-    src/ifgt.cpp
-    src/openmp.cpp
-    src/transform.cpp
-    ${cluster_src}
-    ${PROJECT_BINARY_DIR}/version.cpp
-    )
+if(WIN32)
+    add_library(Library-C++
+	STATIC
+        src/cluster.cpp
+        src/direct.cpp
+        src/direct_tree.cpp
+        src/ifgt.cpp
+        src/openmp.cpp
+        src/transform.cpp
+        ${cluster_src}
+        ${PROJECT_BINARY_DIR}/version.cpp
+        )
+else()
+    add_library(Library-C++
+        src/cluster.cpp
+        src/direct.cpp
+        src/direct_tree.cpp
+        src/ifgt.cpp
+        src/openmp.cpp
+        src/transform.cpp
+        ${cluster_src}
+        ${PROJECT_BINARY_DIR}/version.cpp
+        )
+endif()
 target_include_directories(Library-C++ INTERFACE
     "$<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>"
     "$<INSTALL_INTERFACE:include>"
