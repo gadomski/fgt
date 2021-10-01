@@ -52,7 +52,7 @@ if(WITH_OPENMP)
 endif()
 
 if(WIN32)
-    add_library(Library-C++
+    add_library(fgt
 	STATIC
         src/cluster.cpp
         src/direct.cpp
@@ -64,7 +64,7 @@ if(WIN32)
         ${PROJECT_BINARY_DIR}/version.cpp
         )
 else()
-    add_library(Library-C++
+    add_library(fgt
         src/cluster.cpp
         src/direct.cpp
         src/direct_tree.cpp
@@ -75,24 +75,24 @@ else()
         ${PROJECT_BINARY_DIR}/version.cpp
         )
 endif()
-target_include_directories(Library-C++ INTERFACE
+target_include_directories(fgt INTERFACE
     "$<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>"
     "$<INSTALL_INTERFACE:include>"
     PRIVATE include ${NANOFLANN_SOURCE_DIR}/include ${EIGEN3_INCLUDE_DIR}
     )
-set_target_properties(Library-C++ PROPERTIES
+set_target_properties(fgt PROPERTIES
     OUTPUT_NAME fgt
     VERSION ${PROJECT_VERSION}
     SOVERSION ${PROJECT_SOVERSION}
     )
 if(WITH_OPENMP)
-    target_compile_definitions(Library-C++
+    target_compile_definitions(fgt
         PUBLIC
         FGT_WITH_OPENMP
         )
 endif()
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-    target_compile_options(Library-C++
+    target_compile_options(fgt
         PUBLIC
         -std=c++11
         PRIVATE
@@ -102,7 +102,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
         -Wno-nested-anon-types
         )
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-    target_compile_options(Library-C++
+    target_compile_options(fgt
         PUBLIC
         -std=c++11
         # For some deprecations inside Eigen
@@ -114,7 +114,7 @@ elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
         -Wno-unknown-pragmas
         )
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-    target_compile_options(Library-C++
+    target_compile_options(fgt
         PUBLIC
         # Eigen does relative includes
         /wd4464
@@ -132,7 +132,7 @@ install(FILES
     include/fgt.hpp
     DESTINATION include
     )
-install(TARGETS Library-C++
+install(TARGETS fgt
     DESTINATION lib
     EXPORT fgt-targets
     )
@@ -160,7 +160,7 @@ if(WITH_TESTS)
 endif()
 
 include(GenerateExportHeader)
-generate_export_header(Library-C++)
+generate_export_header(fgt)
 
 include(CMakePackageConfigHelpers)
 configure_file(cmake/fgt-config.cmake
