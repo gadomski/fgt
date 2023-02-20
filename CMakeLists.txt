@@ -37,7 +37,7 @@ if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW) # Quotes variables in IF statments
 endif()
 
-if${CMAKE_VERSION} VERSION_LESS "3.1.0")
+if(${CMAKE_VERSION} VERSION_LESS "3.1.0")
   find_package(Eigen3 3.1 REQUIRED)
 else()
   find_package (Eigen3 3.1 REQUIRED NO_MODULE)
