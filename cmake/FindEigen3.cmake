@@ -15,7 +15,7 @@
 # Copyright (c) 2009 Benoit Jacob <jacob.benoit.1@gmail.com>
 # Redistribution and use is allowed according to the terms of the 2-clause BSD license.
 
-if${CMAKE_VERSION} VERSION_LESS "3.1.0")
+if(${CMAKE_VERSION} VERSION_LESS "3.1.0")
 
 if(NOT Eigen3_FIND_VERSION)
   if(NOT Eigen3_FIND_VERSION_MAJOR)
