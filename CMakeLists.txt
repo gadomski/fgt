@@ -37,7 +37,12 @@ if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW) # Quotes variables in IF statments
 endif()
 
-find_package(Eigen3 3.1 REQUIRED)
+if${CMAKE_VERSION} VERSION_LESS "3.1.0")
+  find_package(Eigen3 3.1 REQUIRED)
+else()
+  find_package (Eigen3 3.1 REQUIRED NO_MODULE)
+  link_libraries(Eigen3::Eigen)
+endif()
 message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION}")
 
 set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0)
