@@ -72,7 +72,7 @@ Vector direct_tree(const MatrixRef source, const MatrixRef target,
 
 Matrix mat_direct_tree(const MatrixRef source, const MatrixRef target,
                    double bandwidth, double epsilon) {
-    return DirectTree(source, bandwidth, epsilon).compute(target);
+    return DirectTree(source, bandwidth, epsilon).matrix_compute(target);
 }
 
 struct DirectTree::NanoflannTree {
