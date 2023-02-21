@@ -23,6 +23,7 @@ message(STATUS "[fgt] Version: ${PROJECT_VERSION}")
 option(WITH_BENCH "Build benchmark executable" OFF)
 option(WITH_OPENMP "Use OpenMP parallelization" OFF)
 option(WITH_TESTS "Build test suite" ON)
+option(WITH_EIGEN_NOMODULE "Find Eigen3 with NO_MODULE" OFF)
 
 if(NOT "${BUILD_SHARED_LIBS}" AND "${WITH_OPENMP}")
     message(FATAL_ERROR "Static builds with OpenMP disallowed because they don't propagate well to downstreams. Either set WITH_OPENMP=OFF or build shared.")
@@ -37,11 +38,11 @@ if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW) # Quotes variables in IF statments
 endif()
 
-if(${CMAKE_VERSION} VERSION_LESS "3.1.0")
-  find_package(Eigen3 3.1 REQUIRED)
-else()
-  find_package (Eigen3 3.1 REQUIRED NO_MODULE)
+if(WITH_EIGEN_NOMODULE)
+  find_package(Eigen3 3.1 REQUIRED NO_MODULE)
   link_libraries(Eigen3::Eigen)
+else()
+  find_package(Eigen3 3.1 REQUIRED)
 endif()
 message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION}")
 
@@ -80,6 +81,9 @@ else()
         ${PROJECT_BINARY_DIR}/version.cpp
         )
 endif()
+
+add_library(Fgt::Lib ALIAS Library-C++) # to match exported target
+
 target_include_directories(Library-C++ INTERFACE
     "$<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>"
     "$<INSTALL_INTERFACE:include>"
