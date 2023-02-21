@@ -69,4 +69,8 @@ Vector direct(const MatrixRef source, const MatrixRef target, double bandwidth,
               const VectorRef weights) {
     return Direct(source, bandwidth).compute(target, weights);
 }
+
+Matrix mat_direct(const MatrixRef source, const MatrixRef target, double bandwidth) {
+  return Direct(source, bandwidth).matrix_compute(target);
+}
 }

@@ -70,6 +70,11 @@ Vector direct_tree(const MatrixRef source, const MatrixRef target,
     return DirectTree(source, bandwidth, epsilon).compute(target, weights);
 }
 
+Matrix mat_direct_tree(const MatrixRef source, const MatrixRef target,
+                   double bandwidth, double epsilon) {
+    return DirectTree(source, bandwidth, epsilon).compute(target);
+}
+
 struct DirectTree::NanoflannTree {
     typedef nanoflann::KDTreeSingleIndexAdaptor<
         nanoflann::L2_Simple_Adaptor<double, MatrixAdaptor>, MatrixAdaptor>

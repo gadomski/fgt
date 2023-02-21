@@ -106,6 +106,13 @@ Vector ifgt(const MatrixRef source, const MatrixRef target, double bandwidth,
 Vector ifgt(const MatrixRef source, const MatrixRef target, double bandwidth,
             double epsilon, const VectorRef weights);
 
+/// Computes the direct Gauss transform matrix.
+Matrix mat_direct(const MatrixRef source, const MatrixRef target, double bandwidth);
+
+/// Computes the direct Gauss transform matrix using a kd-tree.
+Matrix mat_direct_tree(const MatrixRef source, const MatrixRef target,
+                   double bandwidth, double epsilon);
+
 /// Abstract base class for all supported variants of the Gauss transform.
 ///
 /// Some flavors of transform can pre-compute some data, e.g. the `DirectTree`
