@@ -135,7 +135,7 @@ Matrix DirectTree::matrix_compute_impl(const MatrixRef target) const {
     Matrix::Index rows_source = this->source().rows();
     Matrix::Index rows_target = target.rows();
     Matrix g = Matrix::Zero(rows_target, rows_source);
-    Vector v = Vector::Zero(rows_source);
+    // Vector v = Vector::Zero(rows_source);
     Matrix::Index cols = this->source().cols();
 
     nanoflann::SearchParams params;
@@ -143,7 +143,8 @@ Matrix DirectTree::matrix_compute_impl(const MatrixRef target) const {
 
 #pragma omp parallel for
     for (Matrix::Index j = 0; j < rows_target; ++j) {
-        v.setZero();
+        // v.setZero();
+        Vector v = g.row(j);
         std::vector<std::pair<size_t, double>> indices_distances;
         indices_distances.reserve(unsigned(rows_source));
         size_t nfound = m_tree->tree.radiusSearch(&target.data()[j * cols], r2,
@@ -153,7 +154,7 @@ Matrix DirectTree::matrix_compute_impl(const MatrixRef target) const {
             // g(j, entry.first) = std::exp(-entry.second / h2);
             v[signed(entry.first)] = std::exp(-entry.second / h2);
         }
-        g.row(j) = v;
+        // g.row(j) = v;
     }
     return g;
 }
