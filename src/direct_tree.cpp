@@ -134,7 +134,7 @@ Matrix DirectTree::matrix_compute_impl(const MatrixRef target) const {
     double r2 = cutoff_radius * cutoff_radius;
     Matrix::Index rows_source = this->source().rows();
     Matrix::Index rows_target = target.rows();
-    Matrix g = Vector::Zero(rows_target, rows_source);
+    Matrix g = Matrix::Zero(rows_target, rows_source);
     Matrix::Index cols = this->source().cols();
 
     nanoflann::SearchParams params;
