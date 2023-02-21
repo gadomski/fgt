@@ -49,13 +49,17 @@ Matrix Direct::matrix_compute_impl(const MatrixRef target) const {
     auto rows_source = source.rows();
     auto rows_target = target.rows();
     Matrix g = Matrix::Zero(rows_target, rows_source);
+    Vector v = Vector::Zero(rows_source);
 #pragma omp parallel for
     for (Matrix::Index j = 0; j < rows_target; ++j) {
+        v.setZero();
         for (Matrix::Index i = 0; i < rows_source; ++i) {
             double distance =
                 (source.row(i) - target.row(j)).array().pow(2).sum();
-            g(j, i) = std::exp(-distance / h2);
+            // g(j, i) = std::exp(-distance / h2);
+            v[i] = std::exp(-distance / h2);
         }
+        g.row(j) = v;
     }
     return g;
 }
