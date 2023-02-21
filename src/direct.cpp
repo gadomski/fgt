@@ -43,6 +43,23 @@ Vector Direct::compute_impl(const MatrixRef target,
     return g;
 }
 
+Matrix Direct::matrix_compute_impl(const MatrixRef target) const {
+    double h2 = bandwidth() * bandwidth();
+    MatrixRef source = this->source();
+    auto rows_source = source.rows();
+    auto rows_target = target.rows();
+    Matrix g = Matrix::Zero(rows_target, rows_source);
+#pragma omp parallel for
+    for (Matrix::Index j = 0; j < rows_target; ++j) {
+        for (Matrix::Index i = 0; i < rows_source; ++i) {
+            double distance =
+                (source.row(i) - target.row(j)).array().pow(2).sum();
+            g(j, i) = std::exp(-distance / h2);
+        }
+    }
+    return g;
+}
+
 Vector direct(const MatrixRef source, const MatrixRef target,
               double bandwidth) {
     return Direct(source, bandwidth).compute(target);
