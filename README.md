@@ -1,5 +1,7 @@
 # fgt
 
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/gadomski/fgt/build.yml?style=for-the-badge)](https://github.com/gadomski/fgt/actions/workflows/build.yml)
+
 Fast Gauss transforms.
 
 The Gauss transform is a common operation that computes the per-point similarity between two data sets:
@@ -7,10 +9,7 @@ The Gauss transform is a common operation that computes the per-point similarity
 ![The Gauss transform](img/gauss-transform.png)
 
 This a C++ library for computing the Gauss transform using the direct method as well as a few shortcuts.
-This code lives on [Github](https://github.com/gadomski/fgt), has [some Doxygen documentation](http://gadomski.github.io/fgt), and is tested with [Travis](https://travis-ci.org/gadomski/fgt) and [AppVeyor](https://ci.appveyor.com/project/gadomski/fgt/branch/master).
-
-![Travis Build Status](https://travis-ci.org/gadomski/fgt.svg?branch=master)
-![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/7t6ojbj2lj052wx2/branch/master?svg=true)
+This code lives on [Github](https://github.com/gadomski/fgt) and has [some Doxygen documentation](http://gadomski.github.io/fgt).
 
 ## Usage
 
@@ -80,12 +79,6 @@ make
 
 **fgt** doesn't make any assumptions about whether you do or do not want shared libraries, so if you have a preference be sure to set `BUILD_SHARED_LIBS`.
 
-If building with MSVC, we recommend:
-
-- Setting `BUILD_SHARED_LIBS=OFF`, at least if you want to run the test suite out-of-the-box.
-- Setting `gtest_force_shared_crt=ON`.
-  This allows an out-of-the-box build without any Visual Studio config mucking.
-
 ### Eigen ordering
 
 Eigen, by default, stores matrices in column-major order, but **fgt** works with [row-major](https://en.wikipedia.org/wiki/Row-major_order) matrices.
@@ -95,7 +88,6 @@ You can use the `fgt::Matrix` typedef to help:
 ```cpp
 fgt::Matrix my_matrix(1000, 3); // creates an uninitialized 1000x3 row-major matrix of doubles
 ```
-
 
 ### OpenMP
 
