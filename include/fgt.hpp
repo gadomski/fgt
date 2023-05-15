@@ -106,6 +106,13 @@ Vector ifgt(const MatrixRef source, const MatrixRef target, double bandwidth,
 Vector ifgt(const MatrixRef source, const MatrixRef target, double bandwidth,
             double epsilon, const VectorRef weights);
 
+/// Computes the direct Gauss transform matrix.
+Matrix mat_direct(const MatrixRef source, const MatrixRef target, double bandwidth);
+
+/// Computes the direct Gauss transform matrix using a kd-tree.
+Matrix mat_direct_tree(const MatrixRef source, const MatrixRef target,
+                   double bandwidth, double epsilon);
+
 /// Abstract base class for all supported variants of the Gauss transform.
 ///
 /// Some flavors of transform can pre-compute some data, e.g. the `DirectTree`
@@ -136,10 +143,13 @@ public:
     Vector compute(const MatrixRef target);
     /// Computes the Gauss transform with the given weights.
     Vector compute(const MatrixRef target, const VectorRef weights);
+    /// Computes the Gauss transform without weights essentially returning a matrix.
+    Matrix matrix_compute(const MatrixRef target);
 
 private:
     virtual Vector compute_impl(const MatrixRef target,
                                 const VectorRef weights) const = 0;
+    virtual Matrix matrix_compute_impl(const MatrixRef target) const = 0;
 
     const Matrix m_source;
     double m_bandwidth;
@@ -161,6 +171,7 @@ public:
 private:
     virtual Vector compute_impl(const MatrixRef target,
                                 const VectorRef weights) const;
+    virtual Matrix matrix_compute_impl(const MatrixRef target) const;
 };
 
 /// Direct Gauss transform using a KD-tree truncation.
@@ -192,6 +203,7 @@ private:
 
     virtual Vector compute_impl(const MatrixRef target,
                                 const VectorRef weights) const;
+    virtual Matrix matrix_compute_impl(const MatrixRef target) const;
 
     double m_epsilon;
     std::unique_ptr<NanoflannTree> m_tree;
@@ -233,6 +245,7 @@ public:
 private:
     virtual Vector compute_impl(const MatrixRef target,
                                 const VectorRef weights) const;
+    virtual Matrix matrix_compute_impl(const MatrixRef target) const;
     Vector compute_monomials(const VectorRef d) const;
     Vector compute_constant_series() const;
 

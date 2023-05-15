@@ -255,4 +255,8 @@ Vector Ifgt::compute_impl(const MatrixRef target,
 
     return G;
 }
+
+Matrix Ifgt::matrix_compute_impl(const MatrixRef target) const {
+  throw fgt_error("Function not yet implemented.");
+}
 }

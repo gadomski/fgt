@@ -30,4 +30,8 @@ Vector Transform::compute(const MatrixRef target) {
 Vector Transform::compute(const MatrixRef target, const VectorRef weights) {
     return compute_impl(target, weights);
 }
+
+Matrix Transform::matrix_compute(const MatrixRef target) {
+  return matrix_compute_impl(target);
+}
 }
