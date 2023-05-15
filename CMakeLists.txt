@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.1.0)
 set(PROJECT_VERSION 0.4.9)
 set(PROJECT_SOVERSION 0)
+set(CMAKE_CXX_STANDARD 17)
 
 if(POLICY CMP0048)
     cmake_policy(SET CMP0048 NEW) # Project version
@@ -93,8 +94,6 @@ if(WITH_OPENMP)
 endif()
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     target_compile_options(Library-C++
-        PUBLIC
-        -std=c++11
         PRIVATE
         -Wall
         -pedantic
@@ -103,9 +102,8 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
         )
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     target_compile_options(Library-C++
-        PUBLIC
-        -std=c++11
         # For some deprecations inside Eigen
+        PUBLIC
         -Wno-deprecated-declarations
         PRIVATE
         -Wall
