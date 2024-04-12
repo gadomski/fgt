@@ -5,6 +5,5 @@ dependencies:
   - eigen
   - cmake
   - ninja
-  - compilers
   - jsoncpp
 

@@ -9,6 +9,9 @@ jobs:
   base:
     name: ${{ matrix.platform }} with OpenMP ${{ matrix.openmp }}
     runs-on: ${{ matrix.platform }}
+    defaults:
+      run:
+        shell: bash -l {0}
     strategy:
       fail-fast: true
       matrix:
@@ -22,7 +25,7 @@ jobs:
     env:
       PLATFORM: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ilammy/msvc-dev-cmd@v1
         if: matrix.platform == 'windows-latest'
 
