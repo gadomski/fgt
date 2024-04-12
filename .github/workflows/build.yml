@@ -12,24 +12,24 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        platform: ['ubuntu-latest', 'macos-latest']
+        platform: ['ubuntu-latest', 'macos-14', 'windows-latest']
         openmp: ['ON','OFF']
         exclude:
-          - platform: 'macos-latest'
+          - platform: 'macos-14'
+            openmp: 'ON'
+          - platform: 'windows-latest'
             openmp: 'ON'
     env:
       PLATFORM: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: mamba-org/setup-micromamba@v1
         with:
-          channels: conda-forge
-          auto-update-conda: true
-      - name: Setup
-        shell: bash -l {0}
-        run: |
-            conda update -n base -c defaults conda -y
-            conda install ninja cmake ninja eigen compilers jsoncpp openmp -y
+          init-shell: bash
+          environment-file: scripts/environment.yml
+          environment-name: "fgt-build"
+          cache-environment: true
+          cache-downloads: true
       - name: CMake
         shell: bash -l {0}
         run: |
