@@ -35,23 +35,17 @@ jobs:
           environment-file: scripts/${{ matrix.platform }}-environment.yml
           environment-name: "fgt-build"
           cache-downloads: true
-      - name: CMake
+      - name: Build Directory
         shell: bash -l {0}
         run: |
-            if ["$RUNNER_OS" = "Windows"]; then
-              export CC=cl.exe
-              export CXX=cl.exe
-            fi
-            mkdir build
-            cd build
-            cmake .. \
-                -G Ninja \
-                -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX \
-                -DWITH_TESTS=ON \
-                -DCMAKE_BUILD_TYPE=Release \
-                -DWITH_OPENMP=${{ matrix.openmp }} \
-                -Dgtest_force_shared_crt=ON \
-                -DBUILD_SHARED_LIBS=ON
+          mkdir build
+      - name: CMake
+        shell: bash -l {0}
+        working-directory: ./build
+        env:
+          WITH_OPENMP: ${{ matrix.openmp }}
+        run: |
+          source ./scripts/cmake/${{ matrix.platform }}-cmake.sh
       - name: Build
         shell: bash -l {0}
         working-directory: ./build
