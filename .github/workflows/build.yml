@@ -28,7 +28,6 @@ jobs:
           init-shell: bash
           environment-file: scripts/environment.yml
           environment-name: "fgt-build"
-          cache-environment: true
           cache-downloads: true
       - name: CMake
         shell: bash -l {0}
