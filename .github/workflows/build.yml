@@ -7,7 +7,7 @@ on:
 
 jobs:
   base:
-    name: ${{ matrix.platform }} with OpenMP ${{ matrix.openmp }}
+    name: FGT ${{ matrix.platform }} with OpenMP ${{ matrix.openmp }}
     runs-on: ${{ matrix.platform }}
     defaults:
       run:
@@ -46,6 +46,7 @@ jobs:
                 -DWITH_TESTS=ON \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DWITH_OPENMP=${{ matrix.openmp }} \
+                -Dgtest_force_shared_crt=ON \
                 -DBUILD_SHARED_LIBS=ON
       - name: Build
         shell: bash -l {0}
