@@ -38,7 +38,7 @@ jobs:
       - name: CMake
         shell: bash -l {0}
         run: |
-            if ["$RUNNER_OS" == "Windows"]; then
+            if ["$RUNNER_OS" = "Windows"]; then
               export CC=cl.exe
               export CXX=cl.exe
             fi
