@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.13)
 set(PROJECT_VERSION 0.4.10)
 set(PROJECT_SOVERSION 0)
 set(CMAKE_CXX_STANDARD 17)
@@ -38,7 +38,7 @@ if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW) # Quotes variables in IF statments
 endif()
 
-find_package(Eigen3 3.1 REQUIRED)
+find_package(Eigen3 3.1 REQUIRED CONFIG)
 message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION}")
 
 set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0)
