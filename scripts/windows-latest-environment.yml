@@ -6,4 +6,5 @@ dependencies:
   - cmake
   - ninja
   - jsoncpp
+  - compilers
 

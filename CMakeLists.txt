@@ -3,12 +3,8 @@ set(PROJECT_VERSION 0.4.10)
 set(PROJECT_SOVERSION 0)
 set(CMAKE_CXX_STANDARD 17)
 
-if(POLICY CMP0048)
-    cmake_policy(SET CMP0048 NEW) # Project version
-    project(fgt LANGUAGES CXX C VERSION ${PROJECT_VERSION})
-else()
-    project(fgt CXX C)
-endif()
+project(fgt LANGUAGES CXX C VERSION ${PROJECT_VERSION})
+
 if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW) # Quoted variable in if statements
 endif()
@@ -39,7 +35,7 @@ if(POLICY CMP0054)
 endif()
 
 find_package(Eigen3 3.1 REQUIRED CONFIG)
-message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION}")
+message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION_STRING}")
 
 set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0)
 set(NANOFLANN_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/nanoflann-1.1.9)
