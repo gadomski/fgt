@@ -43,8 +43,9 @@ jobs:
         shell: bash -l {0}
         env:
           WITH_OPENMP: ${{ matrix.openmp }}
+        working-directory: ./build
         run: |
-          source ../scripts/cmake/${{ matrix.platform }}-cmake.sh
+          source ./scripts/cmake/${{ matrix.platform }}-cmake.sh
       - name: Build
         shell: bash -l {0}
         working-directory: ./build
