@@ -58,4 +58,5 @@ jobs:
       - name: Test
         shell: bash -l {0}
         working-directory: ./build
-        run: ctest -VV --output-on-failure
+        run: |
+          source ../scripts/test/${{ matrix.platform }}-cmake.sh

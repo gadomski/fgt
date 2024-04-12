@@ -21,7 +21,10 @@ function(fgt_test target)
             -Wno-unknown-pragmas
             )
     endif()
-    add_test(NAME ${target} COMMAND ${target})
+    add_test(NAME ${target}
+             COMMAND ${target}
+             WORKING_DIRECTORY
+                "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/..")
 endfunction()
 
 configure_file(
