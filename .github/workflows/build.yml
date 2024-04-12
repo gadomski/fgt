@@ -34,6 +34,7 @@ jobs:
           init-shell: bash
           environment-file: scripts/${{ matrix.platform }}-environment.yml
           environment-name: "fgt-build"
+          cache-environment: true
           cache-downloads: true
       - name: Create Build Directory
         shell: bash -l {0}
@@ -45,7 +46,7 @@ jobs:
           WITH_OPENMP: ${{ matrix.openmp }}
         working-directory: ./build
         run: |
-          source ./scripts/cmake/${{ matrix.platform }}-cmake.sh
+          source ../scripts/cmake/${{ matrix.platform }}-cmake.sh
       - name: Build
         shell: bash -l {0}
         working-directory: ./build
