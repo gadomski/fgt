@@ -58,4 +58,4 @@ jobs:
       - name: Test
         shell: bash -l {0}
         working-directory: ./build
-        run: ctest
+        run: ctest -VV --output-on-failure
