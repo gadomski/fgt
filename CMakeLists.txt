@@ -50,7 +50,7 @@ endif()
 
 if(WIN32)
     add_library(Library-C++
-        OBJECT
+        STATIC
         src/cluster.cpp
         src/direct.cpp
         src/direct_tree.cpp
