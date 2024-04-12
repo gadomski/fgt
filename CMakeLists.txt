@@ -66,7 +66,7 @@ if(WIN32)
         )
 else()
     add_library(Library-C++
-        DYNAMIC
+        SHARED
         src/cluster.cpp
         src/direct.cpp
         src/direct_tree.cpp
