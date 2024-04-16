@@ -7,41 +7,46 @@ on:
 
 jobs:
   base:
-    name: ${{ matrix.platform }} with OpenMP ${{ matrix.openmp }}
+    name: FGT ${{ matrix.platform }} with OpenMP ${{ matrix.openmp }}
     runs-on: ${{ matrix.platform }}
+    defaults:
+      run:
+        shell: bash -l {0}
     strategy:
       fail-fast: true
       matrix:
-        platform: ['ubuntu-latest', 'macos-latest']
+        platform: ['ubuntu-latest', 'macos-14', 'windows-latest']
         openmp: ['ON','OFF']
         exclude:
-          - platform: 'macos-latest'
+          - platform: 'macos-14'
+            openmp: 'ON'
+          - platform: 'windows-latest'
             openmp: 'ON'
     env:
       PLATFORM: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: matrix.platform == 'windows-latest'
+
+      - uses: mamba-org/setup-micromamba@v1
         with:
-          channels: conda-forge
-          auto-update-conda: true
-      - name: Setup
+          init-shell: bash
+          environment-file: scripts/${{ matrix.platform }}-environment.yml
+          environment-name: "fgt-build"
+          cache-environment: true
+          cache-downloads: true
+      - name: Create Build Directory
         shell: bash -l {0}
         run: |
-            conda update -n base -c defaults conda -y
-            conda install ninja cmake ninja eigen compilers jsoncpp openmp -y
+          mkdir build
       - name: CMake
         shell: bash -l {0}
+        env:
+          WITH_OPENMP: ${{ matrix.openmp }}
+        working-directory: ./build
         run: |
-            mkdir build
-            cd build
-            cmake .. \
-                -G Ninja \
-                -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX \
-                -DWITH_TESTS=ON \
-                -DCMAKE_BUILD_TYPE=Release \
-                -DWITH_OPENMP=${{ matrix.openmp }} \
-                -DBUILD_SHARED_LIBS=ON
+          source ../scripts/cmake/${{ matrix.platform }}.sh
       - name: Build
         shell: bash -l {0}
         working-directory: ./build
@@ -53,4 +58,5 @@ jobs:
       - name: Test
         shell: bash -l {0}
         working-directory: ./build
-        run: ctest
+        run: |
+          source ../scripts/test/${{ matrix.platform }}.sh

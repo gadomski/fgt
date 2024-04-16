@@ -1,0 +1,11 @@
+name: fgt-build
+channels:
+  - conda-forge
+dependencies:
+  - eigen
+  - cmake
+  - ninja
+  - compilers
+  - jsoncpp
+  - openmp
+

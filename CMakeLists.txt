@@ -1,14 +1,10 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.13)
 set(PROJECT_VERSION 0.4.10)
 set(PROJECT_SOVERSION 0)
 set(CMAKE_CXX_STANDARD 17)
 
-if(POLICY CMP0048)
-    cmake_policy(SET CMP0048 NEW) # Project version
-    project(fgt LANGUAGES CXX C VERSION ${PROJECT_VERSION})
-else()
-    project(fgt CXX C)
-endif()
+project(fgt LANGUAGES CXX C VERSION ${PROJECT_VERSION})
+
 if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW) # Quoted variable in if statements
 endif()
@@ -38,8 +34,8 @@ if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW) # Quotes variables in IF statments
 endif()
 
-find_package(Eigen3 3.1 REQUIRED)
-message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION}")
+find_package(Eigen3 3.1 REQUIRED CONFIG)
+message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION_STRING}")
 
 set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0)
 set(NANOFLANN_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/nanoflann-1.1.9)
@@ -54,7 +50,7 @@ endif()
 
 if(WIN32)
     add_library(Library-C++
-	STATIC
+        STATIC
         src/cluster.cpp
         src/direct.cpp
         src/direct_tree.cpp
@@ -66,6 +62,7 @@ if(WIN32)
         )
 else()
     add_library(Library-C++
+        SHARED
         src/cluster.cpp
         src/direct.cpp
         src/direct_tree.cpp
@@ -148,11 +145,6 @@ if(WITH_TESTS)
     enable_testing()
     set(GOOGLETEST_VERSION 1.10.0)
     add_subdirectory("${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0/googletest")
-
-    set_target_properties(gtest PROPERTIES MACOSX_RPATH ON)
-    target_compile_options(gtest PUBLIC -std=c++11)
-    set_target_properties(gtest_main PROPERTIES MACOSX_RPATH ON)
-    target_compile_options(gtest_main PUBLIC -std=c++11)
 
     add_subdirectory(test)
 endif()
