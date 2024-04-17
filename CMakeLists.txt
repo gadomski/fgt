@@ -37,7 +37,7 @@ endif()
 find_package(Eigen3 3.1 REQUIRED CONFIG)
 message(STATUS "[fgt] Eigen3 version: ${EIGEN3_VERSION_STRING}")
 
-set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0)
+set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/googletest-1.14.0)
 set(NANOFLANN_SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/nanoflann-1.1.9)
 
 set(cluster_src src/cluster-sequential.cpp)
@@ -144,7 +144,7 @@ endif()
 if(WITH_TESTS)
     enable_testing()
     set(GOOGLETEST_VERSION 1.10.0)
-    add_subdirectory("${PROJECT_SOURCE_DIR}/vendor/googletest-release-1.10.0/googletest")
+    add_subdirectory("${PROJECT_SOURCE_DIR}/vendor/googletest-1.14.0/googletest")
 
     add_subdirectory(test)
 endif()
